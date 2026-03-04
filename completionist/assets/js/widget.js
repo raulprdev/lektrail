@@ -20,13 +20,21 @@
         });
     }
 
-    function renderWidget(container, posts) {
+    function renderStats() {
         var readCount = window.CompletionistStorage ? CompletionistStorage.getReadCount() : 0;
-        var unread = filterUnread(posts);
+        return '<div class="completionist-stats">' +
+            '<span class="completionist-count">' + readCount + '</span> posts read' +
+            '</div>';
+    }
 
-        var html = '<div class="completionist-stats">';
-        html += '<span class="completionist-count">' + readCount + '</span> posts read';
-        html += '</div>';
+    function renderLoading(container) {
+        container.innerHTML = renderStats() +
+            '<div class="completionist-loading">Loading suggestions...</div>';
+    }
+
+    function renderWidget(container, posts) {
+        var unread = filterUnread(posts);
+        var html = renderStats();
 
         if (unread.length > 0) {
             html += '<div class="completionist-suggestions">';
@@ -48,6 +56,8 @@
 
         var count = parseInt(container.dataset.count, 10) || 5;
         var endpoint = container.dataset.endpoint;
+
+        renderLoading(container);
 
         fetchSuggestions(endpoint, count, function(posts) {
             renderWidget(container, posts);
