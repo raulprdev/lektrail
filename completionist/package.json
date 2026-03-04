@@ -1,0 +1,19 @@
+{
+  "name": "completionist",
+  "version": "1.0.0",
+  "description": "Track reading progress and suggest unread posts",
+  "private": true,
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0"
+  },
+  "jest": {
+    "testEnvironment": "jsdom",
+    "testMatch": ["**/tests/js/**/*.test.js"],
+    "verbose": true
+  }
+}

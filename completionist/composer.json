@@ -1,0 +1,26 @@
+{
+    "name": "completionist/completionist",
+    "description": "Track reading progress and suggest unread posts",
+    "type": "wordpress-plugin",
+    "license": "GPL-2.0-or-later",
+    "require": {
+        "php": ">=7.4"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.6"
+    },
+    "autoload": {
+        "psr-4": {
+            "Completionist\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Completionist\\Tests\\": "tests/php/",
+            "Completionist\\Tests\\Mocks\\": "tests/php/Mocks/"
+        }
+    },
+    "scripts": {
+        "test": "phpunit"
+    }
+}
