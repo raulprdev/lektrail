@@ -1,0 +1,35 @@
+# Dependencies
+vendor/
+node_modules/
+
+# Build artifacts
+*.log
+*.cache
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# WordPress specific
+wp-content/debug.log
+
+# PHP specific
+*.phar
+
+# Testing
+coverage/
+.phpunit.result.cache
+
+# Distribution
+*.zip
