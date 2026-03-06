@@ -5,6 +5,32 @@
     var MAX_COMPLETED = 5;
     var MAX_SUGGESTIONS = 5;
 
+    function fetchPostsByIds(endpoint, ids, callback) {
+        if (!ids.length) {
+            callback([]);
+            return;
+        }
+
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', endpoint + '?include=' + ids.join(','));
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                var posts = JSON.parse(xhr.responseText);
+                var normalized = posts.map(function(post) {
+                    return {
+                        id: post.id,
+                        title: post.title.rendered,
+                        url: post.link
+                    };
+                });
+                callback(normalized);
+            } else {
+                callback([]);
+            }
+        };
+        xhr.send();
+    }
+
     function fetchSuggestions(endpoint, count, callback) {
         var xhr = new XMLHttpRequest();
         xhr.open('GET', endpoint + '&count=' + count);
@@ -12,6 +38,8 @@
             if (xhr.status === 200) {
                 var response = JSON.parse(xhr.responseText);
                 callback(response.success ? response.data : []);
+            } else {
+                callback([]);
             }
         };
         xhr.send();
@@ -25,12 +53,6 @@
             getReadIds: function() { return []; },
             isTracked: function() { return false; }
         };
-    }
-
-    function filterByIds(posts, ids) {
-        return posts.filter(function(post) {
-            return ids.indexOf(post.id) !== -1;
-        });
     }
 
     function filterUntracked(posts) {
@@ -70,19 +92,11 @@
         return html;
     }
 
-    function renderWidget(container, posts) {
-        var storage = getStorage();
-        var viewedIds = storage.getViewedIds();
-        var readIds = storage.getReadIds();
-
-        var viewedPosts = filterByIds(posts, viewedIds).slice(0, MAX_CONTINUE_READING);
-        var readPosts = filterByIds(posts, readIds).slice(0, MAX_COMPLETED);
-        var suggestions = filterUntracked(posts).slice(0, MAX_SUGGESTIONS);
-
+    function renderWidget(container, viewedPosts, readPosts, suggestions) {
         var html = renderStats();
-        html += renderSection('Continue reading', viewedPosts, 'completionist-continue');
-        html += renderSection('Completed', readPosts, 'completionist-completed');
-        html += renderSection('Suggested reading', suggestions, 'completionist-suggestions');
+        html += renderSection('Continue reading', viewedPosts.slice(0, MAX_CONTINUE_READING), 'completionist-continue');
+        html += renderSection('Completed', readPosts.slice(0, MAX_COMPLETED), 'completionist-completed');
+        html += renderSection('Suggested reading', filterUntracked(suggestions).slice(0, MAX_SUGGESTIONS), 'completionist-suggestions');
 
         container.innerHTML = html;
     }
@@ -91,13 +105,41 @@
         var container = document.getElementById('completionist-widget');
         if (!container) return;
 
+        var storage = getStorage();
         var count = parseInt(container.dataset.count, 10) || 10;
-        var endpoint = container.dataset.endpoint;
+        var suggestionsEndpoint = container.dataset.endpoint;
+        var postsEndpoint = container.dataset.postsEndpoint || '/wp-json/wp/v2/posts';
+
+        var viewedIds = storage.getViewedIds();
+        var readIds = storage.getReadIds();
 
         renderLoading(container);
 
-        fetchSuggestions(endpoint, count, function(posts) {
-            renderWidget(container, posts);
+        var viewedPosts = [];
+        var readPosts = [];
+        var suggestions = [];
+        var pending = 3;
+
+        function checkComplete() {
+            pending--;
+            if (pending === 0) {
+                renderWidget(container, viewedPosts, readPosts, suggestions);
+            }
+        }
+
+        fetchPostsByIds(postsEndpoint, viewedIds, function(posts) {
+            viewedPosts = posts;
+            checkComplete();
+        });
+
+        fetchPostsByIds(postsEndpoint, readIds, function(posts) {
+            readPosts = posts;
+            checkComplete();
+        });
+
+        fetchSuggestions(suggestionsEndpoint, count, function(posts) {
+            suggestions = posts;
+            checkComplete();
         });
     }
 

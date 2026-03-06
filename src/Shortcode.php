@@ -23,9 +23,10 @@ class Shortcode {
         $this->assets->enqueueWidget();
 
         return sprintf(
-            '<div id="completionist-widget" data-count="%d" data-endpoint="%s"></div>',
+            '<div id="completionist-widget" data-count="%d" data-endpoint="%s" data-posts-endpoint="%s"></div>',
             $count,
-            esc_url(SuggestionsEndpoint::url())
+            esc_url(SuggestionsEndpoint::url()),
+            esc_url(rest_url('wp/v2/posts'))
         );
     }
 }
