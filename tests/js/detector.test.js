@@ -1,5 +1,7 @@
 const fs = require('fs');
 const path = require('path');
+const { mockStorage } = require('./helpers/test-helpers');
+const { mockDom } = require('./helpers/detector-helpers');
 
 const detectorCode = fs.readFileSync(
     path.join(__dirname, '../../assets/js/detector.js'),
@@ -13,43 +15,6 @@ beforeEach(() => {
     eval(detectorCode);
     D = window.CompletionistDetector;
 });
-
-function mockDom(options = {}) {
-    const elements = {};
-
-    if (options.postId !== undefined) {
-        elements['[data-completionist-post]'] = {
-            dataset: { completionistPost: String(options.postId) }
-        };
-    }
-
-    if (options.article) {
-        elements['article'] = { style: {}, appendChild: jest.fn() };
-    }
-
-    return {
-        querySelector: selector => elements[selector] || null,
-        createElement: () => ({ style: {} }),
-        dispatchEvent: jest.fn()
-    };
-}
-
-function mockStorage(options = {}) {
-    const viewedIds = options.viewedIds ? [...options.viewedIds] : [];
-    const readIds = options.readIds ? [...options.readIds] : [];
-
-    return {
-        hasViewed: id => viewedIds.includes(id),
-        hasRead: id => readIds.includes(id),
-        isTracked: id => viewedIds.includes(id) || readIds.includes(id),
-        addViewed: jest.fn(id => { if (!viewedIds.includes(id)) viewedIds.push(id); }),
-        addRead: jest.fn(id => {
-            const idx = viewedIds.indexOf(id);
-            if (idx !== -1) viewedIds.splice(idx, 1);
-            if (!readIds.includes(id)) readIds.push(id);
-        })
-    };
-}
 
 describe('shouldTrack', () => {
     test('true when post is untracked', () => {

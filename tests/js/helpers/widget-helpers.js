@@ -1,14 +1,4 @@
-function mockStorage(options = {}) {
-    const viewedIds = options.viewedIds || [];
-    const readIds = options.readIds || [];
-    return {
-        getViewedCount: () => viewedIds.length,
-        getReadCount: () => readIds.length,
-        getViewedIds: () => viewedIds,
-        getReadIds: () => readIds,
-        isTracked: id => viewedIds.includes(id) || readIds.includes(id)
-    };
-}
+const { mockStorage } = require('./test-helpers');
 
 function mockXhr() {
     return {

@@ -2,7 +2,6 @@ const fs = require('fs');
 const path = require('path');
 const {
     mockStorage,
-    mockXhr,
     setupWidgetTest,
     wpPost,
     triggerXhrResponses
@@ -13,9 +12,11 @@ const widgetCode = fs.readFileSync(
     'utf8'
 );
 
-describe('Widget: stats display', () => {
-    afterEach(() => delete window.CompletionistStorage);
+afterEach(() => {
+    delete window.CompletionistStorage;
+});
 
+describe('Widget: stats display', () => {
     test('shows viewed and read counts immediately', () => {
         const { container } = setupWidgetTest();
         window.CompletionistStorage = mockStorage({ viewedIds: [1, 2], readIds: [3, 4, 5] });
@@ -49,8 +50,6 @@ describe('Widget: stats display', () => {
 });
 
 describe('Widget: continue reading section', () => {
-    afterEach(() => delete window.CompletionistStorage);
-
     test('displays viewed posts fetched by IDs', () => {
         const { container, xhrInstances } = setupWidgetTest();
         window.CompletionistStorage = mockStorage({ viewedIds: [1] });
@@ -111,8 +110,6 @@ describe('Widget: continue reading section', () => {
 });
 
 describe('Widget: completed section', () => {
-    afterEach(() => delete window.CompletionistStorage);
-
     test('displays read posts fetched by IDs', () => {
         const { container, xhrInstances } = setupWidgetTest();
         window.CompletionistStorage = mockStorage({ readIds: [1] });
@@ -157,8 +154,6 @@ describe('Widget: completed section', () => {
 });
 
 describe('Widget: suggested reading section', () => {
-    afterEach(() => delete window.CompletionistStorage);
-
     test('displays untracked posts', () => {
         const { container, xhrInstances } = setupWidgetTest();
         window.CompletionistStorage = mockStorage();
@@ -231,8 +226,6 @@ describe('Widget: suggested reading section', () => {
 });
 
 describe('Widget: all sections together', () => {
-    afterEach(() => delete window.CompletionistStorage);
-
     test('displays all three sections correctly', () => {
         const { container, xhrInstances } = setupWidgetTest();
         window.CompletionistStorage = mockStorage({ viewedIds: [1], readIds: [2] });
