@@ -4,6 +4,10 @@ namespace Completionist;
 
 class Assets {
 
+    public const HANDLE_STORAGE = 'completionist-storage';
+    public const HANDLE_DETECTOR = 'completionist-detector';
+    public const HANDLE_WIDGET = 'completionist-widget';
+
     private ScriptLoader $scripts;
     private string $pluginPath;
     private string $pluginUrl;
@@ -20,15 +24,15 @@ class Assets {
         $this->enqueueStorage();
 
         $this->scripts->enqueueScript(
-            'completionist-detector',
+            self::HANDLE_DETECTOR,
             $this->pluginUrl . 'assets/js/detector.js',
-            ['completionist-storage'],
+            [self::HANDLE_STORAGE],
             $this->fileVersion('assets/js/detector.js'),
             true
         );
 
         $this->scripts->addInlineScript(
-            'completionist-detector',
+            self::HANDLE_DETECTOR,
             sprintf('document.body.dataset.completionistPost = %d;', $postId),
             'before'
         );
@@ -38,9 +42,9 @@ class Assets {
         $this->enqueueStorage();
 
         $this->scripts->enqueueScript(
-            'completionist-widget',
+            self::HANDLE_WIDGET,
             $this->pluginUrl . 'assets/js/widget.js',
-            ['completionist-storage'],
+            [self::HANDLE_STORAGE],
             $this->fileVersion('assets/js/widget.js'),
             true
         );
@@ -51,10 +55,10 @@ class Assets {
             $settings->maxRead(),
             $settings->maxSuggestions()
         );
-        $this->scripts->addInlineScript('completionist-widget', $config, 'before');
+        $this->scripts->addInlineScript(self::HANDLE_WIDGET, $config, 'before');
 
         $this->scripts->enqueueStyle(
-            'completionist-widget',
+            self::HANDLE_WIDGET,
             $this->pluginUrl . 'assets/css/widget.css',
             [],
             $this->fileVersion('assets/css/widget.css')
@@ -63,7 +67,7 @@ class Assets {
 
     private function enqueueStorage(): void {
         $this->scripts->enqueueScript(
-            'completionist-storage',
+            self::HANDLE_STORAGE,
             $this->pluginUrl . 'assets/js/storage.js',
             [],
             $this->fileVersion('assets/js/storage.js'),

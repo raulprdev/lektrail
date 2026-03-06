@@ -37,14 +37,14 @@ class AssetsTest extends TestCase {
     public function testEnqueueDetectorLoadsStorageFirst(): void {
         $this->assets->enqueueDetector(123);
 
-        $this->assertArrayHasKey('completionist-storage', $this->loader->scripts);
-        $this->assertArrayHasKey('completionist-detector', $this->loader->scripts);
+        $this->assertArrayHasKey(Assets::HANDLE_STORAGE, $this->loader->scripts);
+        $this->assertArrayHasKey(Assets::HANDLE_DETECTOR, $this->loader->scripts);
     }
 
     public function testEnqueueDetectorAddsPostIdInlineScript(): void {
         $this->assets->enqueueDetector(456);
 
-        $inline = $this->loader->inlineScripts['completionist-detector'];
+        $inline = $this->loader->inlineScripts[Assets::HANDLE_DETECTOR];
         $this->assertStringContainsString('456', $inline['code']);
         $this->assertEquals('before', $inline['position']);
     }
@@ -52,8 +52,8 @@ class AssetsTest extends TestCase {
     public function testEnqueueWidgetLoadsStyleAndScript(): void {
         $this->assets->enqueueWidget(new Settings());
 
-        $this->assertArrayHasKey('completionist-widget', $this->loader->scripts);
-        $this->assertArrayHasKey('completionist-widget', $this->loader->styles);
+        $this->assertArrayHasKey(Assets::HANDLE_WIDGET, $this->loader->scripts);
+        $this->assertArrayHasKey(Assets::HANDLE_WIDGET, $this->loader->styles);
     }
 
     public function testEnqueueWidgetPassesSettingsToScript(): void {
@@ -65,7 +65,7 @@ class AssetsTest extends TestCase {
 
         $this->assets->enqueueWidget($settings);
 
-        $inline = $this->loader->inlineScripts['completionist-widget'];
+        $inline = $this->loader->inlineScripts[Assets::HANDLE_WIDGET];
         $this->assertStringContainsString('maxViewed: 7', $inline['code']);
         $this->assertStringContainsString('maxRead: 12', $inline['code']);
         $this->assertStringContainsString('maxSuggestions: 8', $inline['code']);
