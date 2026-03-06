@@ -6,7 +6,16 @@
     function getData() {
         try {
             var data = JSON.parse(localStorage.getItem(STORAGE_KEY));
-            return data || { viewed: [], read: [] };
+            if (!data) return { viewed: [], read: [] };
+
+            if (data.reads && !data.read) {
+                return { viewed: [], read: data.reads };
+            }
+
+            return {
+                viewed: data.viewed || [],
+                read: data.read || []
+            };
         } catch (e) {
             return { viewed: [], read: [] };
         }

@@ -158,3 +158,18 @@ describe('Storage: clear', () => {
         expect(CompletionistStorage.getReadCount()).toBe(0);
     });
 });
+
+describe('Storage: migration from old format', () => {
+    test('migrates old reads array to new read array', () => {
+        localStorage.setItem('completionist', JSON.stringify({
+            reads: [{ postId: 123, readAt: '2024-01-01' }]
+        }));
+
+        const script = new Function(storageCode);
+        script();
+
+        expect(CompletionistStorage.getReadCount()).toBe(1);
+        expect(CompletionistStorage.hasRead(123)).toBe(true);
+        expect(CompletionistStorage.getViewedCount()).toBe(0);
+    });
+});
