@@ -14,6 +14,7 @@ const widgetCode = fs.readFileSync(
 
 afterEach(() => {
     delete window.CompletionistStorage;
+    delete window.CompletionistConfig;
 });
 
 describe('Widget: stats display', () => {

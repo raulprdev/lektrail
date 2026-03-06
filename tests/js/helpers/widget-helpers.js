@@ -14,16 +14,25 @@ function createWidgetContainer(options = {}) {
     return {
         innerHTML: '',
         dataset: {
-            count: options.count || '5',
             endpoint: options.endpoint || '/api',
             postsEndpoint: options.postsEndpoint || '/wp-json/wp/v2/posts'
         }
     };
 }
 
-function setupWidgetTest() {
+function mockConfig(options = {}) {
+    return {
+        maxViewed: options.maxViewed || 3,
+        maxRead: options.maxRead || 5,
+        maxSuggestions: options.maxSuggestions || 5
+    };
+}
+
+function setupWidgetTest(configOptions = {}) {
     const container = createWidgetContainer();
     const xhrInstances = [];
+
+    window.CompletionistConfig = mockConfig(configOptions);
 
     document.getElementById = jest.fn(id => {
         if (id === 'completionist-widget') return container;
@@ -75,6 +84,7 @@ function triggerXhrResponses(xhrInstances, config) {
 module.exports = {
     mockStorage,
     mockXhr,
+    mockConfig,
     createWidgetContainer,
     setupWidgetTest,
     wpPost,

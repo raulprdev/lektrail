@@ -5,12 +5,13 @@ namespace Completionist;
 class Shortcode {
 
     public const TAG = 'completionist';
-    public const DEFAULT_COUNT = 5;
 
     private Assets $assets;
+    private SettingsRepository $settings;
 
-    public function __construct(Assets $assets) {
+    public function __construct(Assets $assets, SettingsRepository $settings) {
         $this->assets = $assets;
+        $this->settings = $settings;
     }
 
     public function register(Hooks $hooks): void {
@@ -18,13 +19,11 @@ class Shortcode {
     }
 
     public function render(array $atts): string {
-        $count = isset($atts['count']) ? (int) $atts['count'] : self::DEFAULT_COUNT;
-
-        $this->assets->enqueueWidget();
+        $settings = $this->settings->load();
+        $this->assets->enqueueWidget($settings);
 
         return sprintf(
-            '<div id="completionist-widget" data-count="%d" data-endpoint="%s" data-posts-endpoint="%s"></div>',
-            $count,
+            '<div id="completionist-widget" data-endpoint="%s" data-posts-endpoint="%s"></div>',
             esc_url(SuggestionsEndpoint::url()),
             esc_url(rest_url('wp/v2/posts'))
         );

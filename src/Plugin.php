@@ -21,9 +21,9 @@ class Plugin {
         $this->assets = new Assets($scripts, $pluginPath, $pluginUrl, $version);
         $this->posts = new WordPressPostQuery();
         $this->response = new WordPressJsonResponse();
-        $this->suggestions = new SuggestionsEndpoint($this->posts, $this->response);
-        $this->shortcode = new Shortcode($this->assets);
         $this->settings = new WordPressSettingsRepository($options);
+        $this->suggestions = new SuggestionsEndpoint($this->posts, $this->response);
+        $this->shortcode = new Shortcode($this->assets, $this->settings);
         $this->adminPage = new AdminPage($this->settings);
     }
 
@@ -35,7 +35,8 @@ class Plugin {
     }
 
     public function maybeEnqueueDetector(): void {
-        if (!is_singular('post')) {
+        $postTypes = $this->settings->load()->postTypes();
+        if (!is_singular($postTypes)) {
             return;
         }
         $this->assets->enqueueDetector(get_the_ID());

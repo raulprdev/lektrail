@@ -1,9 +1,13 @@
 (function() {
     'use strict';
 
-    var MAX_CONTINUE_READING = 3;
-    var MAX_COMPLETED = 5;
-    var MAX_SUGGESTIONS = 5;
+    function getConfig() {
+        return window.CompletionistConfig || {
+            maxViewed: 3,
+            maxRead: 5,
+            maxSuggestions: 5
+        };
+    }
 
     function fetchPostsByIds(endpoint, ids, callback) {
         if (!ids.length) {
@@ -97,9 +101,10 @@
     }
 
     function renderWidget(container, viewedPosts, readPosts, suggestions) {
-        var viewedSlice = viewedPosts.slice(0, MAX_CONTINUE_READING);
-        var readSlice = readPosts.slice(0, MAX_COMPLETED);
-        var suggestionsSlice = filterUntracked(suggestions).slice(0, MAX_SUGGESTIONS);
+        var config = getConfig();
+        var viewedSlice = viewedPosts.slice(0, config.maxViewed);
+        var readSlice = readPosts.slice(0, config.maxRead);
+        var suggestionsSlice = filterUntracked(suggestions).slice(0, config.maxSuggestions);
 
         var html = renderStats();
         html += renderSection('Continue reading', viewedSlice, 'completionist-continue');
@@ -119,7 +124,7 @@
         if (!container) return;
 
         var storage = getStorage();
-        var count = parseInt(container.dataset.count, 10) || 10;
+        var config = getConfig();
         var suggestionsEndpoint = container.dataset.endpoint;
         var postsEndpoint = container.dataset.postsEndpoint || '/wp-json/wp/v2/posts';
 
@@ -150,7 +155,7 @@
             checkComplete();
         });
 
-        fetchSuggestions(suggestionsEndpoint, count, function(posts) {
+        fetchSuggestions(suggestionsEndpoint, config.maxSuggestions, function(posts) {
             suggestions = posts;
             checkComplete();
         });

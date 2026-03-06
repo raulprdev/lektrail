@@ -34,7 +34,7 @@ class Assets {
         );
     }
 
-    public function enqueueWidget(): void {
+    public function enqueueWidget(Settings $settings): void {
         $this->enqueueStorage();
 
         $this->scripts->enqueueScript(
@@ -44,6 +44,14 @@ class Assets {
             $this->fileVersion('assets/js/widget.js'),
             true
         );
+
+        $config = sprintf(
+            'window.CompletionistConfig = {maxViewed: %d, maxRead: %d, maxSuggestions: %d};',
+            $settings->maxViewed(),
+            $settings->maxRead(),
+            $settings->maxSuggestions()
+        );
+        $this->scripts->addInlineScript('completionist-widget', $config, 'before');
 
         $this->scripts->enqueueStyle(
             'completionist-widget',

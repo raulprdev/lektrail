@@ -3,6 +3,7 @@
 namespace Completionist\Tests;
 
 use Completionist\Assets;
+use Completionist\Settings;
 use Completionist\Tests\Mocks\MockScriptLoader;
 use PHPUnit\Framework\TestCase;
 
@@ -49,9 +50,24 @@ class AssetsTest extends TestCase {
     }
 
     public function testEnqueueWidgetLoadsStyleAndScript(): void {
-        $this->assets->enqueueWidget();
+        $this->assets->enqueueWidget(new Settings());
 
         $this->assertArrayHasKey('completionist-widget', $this->loader->scripts);
         $this->assertArrayHasKey('completionist-widget', $this->loader->styles);
+    }
+
+    public function testEnqueueWidgetPassesSettingsToScript(): void {
+        $settings = Settings::fromArray([
+            'max_viewed' => 7,
+            'max_read' => 12,
+            'max_suggestions' => 8,
+        ]);
+
+        $this->assets->enqueueWidget($settings);
+
+        $inline = $this->loader->inlineScripts['completionist-widget'];
+        $this->assertStringContainsString('maxViewed: 7', $inline['code']);
+        $this->assertStringContainsString('maxRead: 12', $inline['code']);
+        $this->assertStringContainsString('maxSuggestions: 8', $inline['code']);
     }
 }
