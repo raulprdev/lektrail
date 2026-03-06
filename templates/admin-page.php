@@ -1,13 +1,13 @@
 <?php defined('ABSPATH') || exit; ?>
 <div class="wrap">
-    <h1>Completionist Settings</h1>
+    <h1><?= esc_html__('Completionist Settings', 'completionist') ?></h1>
 
     <form method="post" action="options.php">
         <?php settings_fields(\Completionist\AdminPage::MENU_SLUG); ?>
 
         <table class="form-table">
             <tr>
-                <th scope="row">Post Types to Track</th>
+                <th scope="row"><?= esc_html__('Post Types to Track', 'completionist') ?></th>
                 <td>
                     <?php foreach (get_post_types(['public' => true], 'objects') as $postType): ?>
                         <label>
@@ -21,7 +21,7 @@
                 </td>
             </tr>
             <tr>
-                <th scope="row">Max "Continue Reading" Posts</th>
+                <th scope="row"><?= esc_html__('Max "Continue Reading" Posts', 'completionist') ?></th>
                 <td>
                     <input type="number"
                            name="<?= \Completionist\WordPressSettingsRepository::OPTION_KEY ?>[max_viewed]"
@@ -30,7 +30,7 @@
                 </td>
             </tr>
             <tr>
-                <th scope="row">Max "Completed" Posts</th>
+                <th scope="row"><?= esc_html__('Max "Completed" Posts', 'completionist') ?></th>
                 <td>
                     <input type="number"
                            name="<?= \Completionist\WordPressSettingsRepository::OPTION_KEY ?>[max_read]"
@@ -39,7 +39,7 @@
                 </td>
             </tr>
             <tr>
-                <th scope="row">Max Suggestions</th>
+                <th scope="row"><?= esc_html__('Max Suggestions', 'completionist') ?></th>
                 <td>
                     <input type="number"
                            name="<?= \Completionist\WordPressSettingsRepository::OPTION_KEY ?>[max_suggestions]"
@@ -48,11 +48,11 @@
                 </td>
             </tr>
             <tr>
-                <th scope="row">Privacy Notice</th>
+                <th scope="row"><?= esc_html__('Privacy Notice', 'completionist') ?></th>
                 <td>
                     <textarea name="<?= \Completionist\WordPressSettingsRepository::OPTION_KEY ?>[privacy_notice]"
                               rows="3" class="large-text"><?= esc_textarea($settings->privacyNotice()) ?></textarea>
-                    <p class="description">Displayed to users. Explains that reading progress is tracked in local storage.</p>
+                    <p class="description"><?= esc_html__('Displayed to users. Explains that reading progress is tracked in local storage.', 'completionist') ?></p>
                 </td>
             </tr>
         </table>
