@@ -32,6 +32,8 @@ function mockConfig(options = {}) {
         maxViewed: options.maxViewed || 3,
         maxRead: options.maxRead || 5,
         maxSuggestions: options.maxSuggestions || 5,
+        viewedEnabled: options.viewedEnabled !== false,
+        completedEnabled: options.completedEnabled !== false,
         labels: Object.assign({}, defaultLabels, options.labels || {})
     };
 }

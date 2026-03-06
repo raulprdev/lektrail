@@ -14,6 +14,8 @@ class Settings {
     public const DEFAULT_LABEL_SUGGESTIONS = 'Suggested reading';
     public const DEFAULT_LABEL_EMPTY = 'Start reading to track your progress!';
     public const DEFAULT_LABEL_LOADING = 'Loading suggestions...';
+    public const DEFAULT_VIEWED_ENABLED = true;
+    public const DEFAULT_COMPLETED_ENABLED = true;
 
     private array $postTypes;
     private int $maxViewed;
@@ -25,6 +27,8 @@ class Settings {
     private string $labelSuggestions;
     private string $labelEmpty;
     private string $labelLoading;
+    private bool $viewedEnabled;
+    private bool $completedEnabled;
 
     public function __construct(
         array $postTypes = self::DEFAULT_POST_TYPES,
@@ -36,7 +40,9 @@ class Settings {
         string $labelCompleted = self::DEFAULT_LABEL_COMPLETED,
         string $labelSuggestions = self::DEFAULT_LABEL_SUGGESTIONS,
         string $labelEmpty = self::DEFAULT_LABEL_EMPTY,
-        string $labelLoading = self::DEFAULT_LABEL_LOADING
+        string $labelLoading = self::DEFAULT_LABEL_LOADING,
+        bool $viewedEnabled = self::DEFAULT_VIEWED_ENABLED,
+        bool $completedEnabled = self::DEFAULT_COMPLETED_ENABLED
     ) {
         $this->postTypes = $postTypes;
         $this->maxViewed = $maxViewed;
@@ -48,6 +54,8 @@ class Settings {
         $this->labelSuggestions = $labelSuggestions;
         $this->labelEmpty = $labelEmpty;
         $this->labelLoading = $labelLoading;
+        $this->viewedEnabled = $viewedEnabled;
+        $this->completedEnabled = $completedEnabled;
     }
 
     public static function fromArray(array $data, array $defaults = []): self {
@@ -61,7 +69,9 @@ class Settings {
             $data['label_completed'] ?? $defaults['label_completed'] ?? self::DEFAULT_LABEL_COMPLETED,
             $data['label_suggestions'] ?? $defaults['label_suggestions'] ?? self::DEFAULT_LABEL_SUGGESTIONS,
             $data['label_empty'] ?? $defaults['label_empty'] ?? self::DEFAULT_LABEL_EMPTY,
-            $data['label_loading'] ?? $defaults['label_loading'] ?? self::DEFAULT_LABEL_LOADING
+            $data['label_loading'] ?? $defaults['label_loading'] ?? self::DEFAULT_LABEL_LOADING,
+            $data['viewed_enabled'] ?? $defaults['viewed_enabled'] ?? self::DEFAULT_VIEWED_ENABLED,
+            $data['completed_enabled'] ?? $defaults['completed_enabled'] ?? self::DEFAULT_COMPLETED_ENABLED
         );
     }
 
@@ -77,6 +87,8 @@ class Settings {
             'label_suggestions' => $this->labelSuggestions,
             'label_empty' => $this->labelEmpty,
             'label_loading' => $this->labelLoading,
+            'viewed_enabled' => $this->viewedEnabled,
+            'completed_enabled' => $this->completedEnabled,
         ];
     }
 
@@ -120,11 +132,21 @@ class Settings {
         return $this->labelLoading;
     }
 
+    public function viewedEnabled(): bool {
+        return $this->viewedEnabled;
+    }
+
+    public function completedEnabled(): bool {
+        return $this->completedEnabled;
+    }
+
     public function toJsConfig(): array {
         return [
             'maxViewed' => $this->maxViewed,
             'maxRead' => $this->maxRead,
             'maxSuggestions' => $this->maxSuggestions,
+            'viewedEnabled' => $this->viewedEnabled,
+            'completedEnabled' => $this->completedEnabled,
             'labels' => [
                 'continue' => $this->labelContinue,
                 'completed' => $this->labelCompleted,

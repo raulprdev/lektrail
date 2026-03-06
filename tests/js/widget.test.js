@@ -247,6 +247,62 @@ describe('Widget: all sections together', () => {
     });
 });
 
+describe('Widget: section enable/disable', () => {
+    test('hides viewed section when disabled', () => {
+        const { container, xhrInstances } = setupWidgetTest({ viewedEnabled: false });
+        window.CompletionistStorage = mockStorage({ viewedIds: [1], readIds: [2] });
+
+        eval(widgetCode);
+        triggerXhrResponses(xhrInstances, {
+            viewed: { ids: [1], posts: [wpPost(1, 'Viewed Post')] },
+            read: { ids: [2], posts: [wpPost(2, 'Read Post')] },
+            suggestions: [{ id: 3, title: 'New Post' }]
+        });
+
+        expect(container.innerHTML).not.toContain('Continue reading');
+        expect(container.innerHTML).not.toContain('Viewed Post');
+        expect(container.innerHTML).toContain('Completed');
+        expect(container.innerHTML).toContain('Suggested reading');
+    });
+
+    test('hides completed section when disabled', () => {
+        const { container, xhrInstances } = setupWidgetTest({ completedEnabled: false });
+        window.CompletionistStorage = mockStorage({ viewedIds: [1], readIds: [2] });
+
+        eval(widgetCode);
+        triggerXhrResponses(xhrInstances, {
+            viewed: { ids: [1], posts: [wpPost(1, 'Viewed Post')] },
+            read: { ids: [2], posts: [wpPost(2, 'Read Post')] },
+            suggestions: [{ id: 3, title: 'New Post' }]
+        });
+
+        expect(container.innerHTML).toContain('Continue reading');
+        expect(container.innerHTML).not.toContain('Completed');
+        expect(container.innerHTML).not.toContain('Read Post');
+        expect(container.innerHTML).toContain('Suggested reading');
+    });
+
+    test('shows only suggestions when both viewed and completed disabled', () => {
+        const { container, xhrInstances } = setupWidgetTest({
+            viewedEnabled: false,
+            completedEnabled: false
+        });
+        window.CompletionistStorage = mockStorage({ viewedIds: [1], readIds: [2] });
+
+        eval(widgetCode);
+        triggerXhrResponses(xhrInstances, {
+            viewed: { ids: [1], posts: [wpPost(1, 'Viewed Post')] },
+            read: { ids: [2], posts: [wpPost(2, 'Read Post')] },
+            suggestions: [{ id: 3, title: 'New Post' }]
+        });
+
+        expect(container.innerHTML).not.toContain('Continue reading');
+        expect(container.innerHTML).not.toContain('Completed');
+        expect(container.innerHTML).toContain('Suggested reading');
+        expect(container.innerHTML).toContain('New Post');
+    });
+});
+
 describe('Widget: configurable labels', () => {
     test('uses custom labels from config', () => {
         const { container, xhrInstances } = setupWidgetTest();
@@ -255,6 +311,8 @@ describe('Widget: configurable labels', () => {
             maxViewed: 3,
             maxRead: 5,
             maxSuggestions: 5,
+            viewedEnabled: true,
+            completedEnabled: true,
             labels: {
                 continue: 'Seguir leyendo',
                 completed: 'Completados',
@@ -280,6 +338,8 @@ describe('Widget: configurable labels', () => {
         const { container } = setupWidgetTest();
         window.CompletionistStorage = mockStorage();
         window.CompletionistConfig = {
+            viewedEnabled: true,
+            completedEnabled: true,
             labels: { loading: 'Cargando...' }
         };
 
@@ -292,6 +352,8 @@ describe('Widget: configurable labels', () => {
         const { container, xhrInstances } = setupWidgetTest();
         window.CompletionistStorage = mockStorage();
         window.CompletionistConfig = {
+            viewedEnabled: true,
+            completedEnabled: true,
             labels: { empty: 'Empieza a leer' }
         };
 

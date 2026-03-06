@@ -116,4 +116,33 @@ class SettingsTest extends TestCase {
         $this->assertEquals('Empty', $config['labels']['empty']);
         $this->assertEquals('Loading...', $config['labels']['loading']);
     }
+
+    public function testSectionsEnabledByDefault(): void {
+        $settings = new Settings();
+
+        $this->assertTrue($settings->viewedEnabled());
+        $this->assertTrue($settings->completedEnabled());
+    }
+
+    public function testSectionsCanBeDisabled(): void {
+        $settings = Settings::fromArray([
+            'viewed_enabled' => false,
+            'completed_enabled' => false,
+        ]);
+
+        $this->assertFalse($settings->viewedEnabled());
+        $this->assertFalse($settings->completedEnabled());
+    }
+
+    public function testToJsConfigIncludesSectionEnabled(): void {
+        $settings = Settings::fromArray([
+            'viewed_enabled' => false,
+            'completed_enabled' => true,
+        ]);
+
+        $config = $settings->toJsConfig();
+
+        $this->assertFalse($config['viewedEnabled']);
+        $this->assertTrue($config['completedEnabled']);
+    }
 }

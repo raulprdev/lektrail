@@ -103,13 +103,17 @@
 
     function renderWidget(container, viewedPosts, readPosts, suggestions) {
         var config = getConfig();
-        var viewedSlice = viewedPosts.slice(0, config.maxViewed);
-        var readSlice = readPosts.slice(0, config.maxRead);
+        var viewedSlice = config.viewedEnabled ? viewedPosts.slice(0, config.maxViewed) : [];
+        var readSlice = config.completedEnabled ? readPosts.slice(0, config.maxRead) : [];
         var suggestionsSlice = filterUntracked(suggestions).slice(0, config.maxSuggestions);
 
         var html = renderStats();
-        html += renderSection(config.labels.continue, viewedSlice, 'completionist-continue');
-        html += renderSection(config.labels.completed, readSlice, 'completionist-completed');
+        if (config.viewedEnabled) {
+            html += renderSection(config.labels.continue, viewedSlice, 'completionist-continue');
+        }
+        if (config.completedEnabled) {
+            html += renderSection(config.labels.completed, readSlice, 'completionist-completed');
+        }
         html += renderSection(config.labels.suggestions, suggestionsSlice, 'completionist-suggestions');
 
         var hasContent = viewedSlice.length || readSlice.length || suggestionsSlice.length;
