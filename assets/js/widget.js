@@ -2,11 +2,10 @@
     'use strict';
 
     function getConfig() {
-        return window.CompletionistConfig || {
-            maxViewed: 3,
-            maxRead: 5,
-            maxSuggestions: 5
-        };
+        if (!window.CompletionistConfig) {
+            throw new Error('CompletionistConfig not found');
+        }
+        return window.CompletionistConfig;
     }
 
     function fetchPostsByIds(endpoint, ids, callback) {
@@ -78,8 +77,9 @@
     }
 
     function renderLoading(container) {
+        var config = getConfig();
         container.innerHTML = renderStats() +
-            '<div class="completionist-loading">Loading suggestions...</div>';
+            '<div class="completionist-loading">' + config.labels.loading + '</div>';
     }
 
     function renderSection(title, posts, className) {
@@ -97,7 +97,8 @@
     }
 
     function renderEmptyState() {
-        return '<div class="completionist-empty">Start reading to track your progress!</div>';
+        var config = getConfig();
+        return '<div class="completionist-empty">' + config.labels.empty + '</div>';
     }
 
     function renderWidget(container, viewedPosts, readPosts, suggestions) {
@@ -107,9 +108,9 @@
         var suggestionsSlice = filterUntracked(suggestions).slice(0, config.maxSuggestions);
 
         var html = renderStats();
-        html += renderSection('Continue reading', viewedSlice, 'completionist-continue');
-        html += renderSection('Completed', readSlice, 'completionist-completed');
-        html += renderSection('Suggested reading', suggestionsSlice, 'completionist-suggestions');
+        html += renderSection(config.labels.continue, viewedSlice, 'completionist-continue');
+        html += renderSection(config.labels.completed, readSlice, 'completionist-completed');
+        html += renderSection(config.labels.suggestions, suggestionsSlice, 'completionist-suggestions');
 
         var hasContent = viewedSlice.length || readSlice.length || suggestionsSlice.length;
         if (!hasContent) {

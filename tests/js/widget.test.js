@@ -246,3 +246,58 @@ describe('Widget: all sections together', () => {
         expect(container.innerHTML).toContain('New Post');
     });
 });
+
+describe('Widget: configurable labels', () => {
+    test('uses custom labels from config', () => {
+        const { container, xhrInstances } = setupWidgetTest();
+        window.CompletionistStorage = mockStorage({ viewedIds: [1], readIds: [2] });
+        window.CompletionistConfig = {
+            maxViewed: 3,
+            maxRead: 5,
+            maxSuggestions: 5,
+            labels: {
+                continue: 'Seguir leyendo',
+                completed: 'Completados',
+                suggestions: 'Lecturas sugeridas',
+                empty: 'Empieza a leer',
+                loading: 'Cargando...'
+            }
+        };
+
+        eval(widgetCode);
+        triggerXhrResponses(xhrInstances, {
+            viewed: { ids: [1], posts: [wpPost(1, 'Post 1')] },
+            read: { ids: [2], posts: [wpPost(2, 'Post 2')] },
+            suggestions: [{ id: 3, title: 'Post 3' }]
+        });
+
+        expect(container.innerHTML).toContain('Seguir leyendo');
+        expect(container.innerHTML).toContain('Completados');
+        expect(container.innerHTML).toContain('Lecturas sugeridas');
+    });
+
+    test('uses custom loading label from config', () => {
+        const { container } = setupWidgetTest();
+        window.CompletionistStorage = mockStorage();
+        window.CompletionistConfig = {
+            labels: { loading: 'Cargando...' }
+        };
+
+        eval(widgetCode);
+
+        expect(container.innerHTML).toContain('Cargando...');
+    });
+
+    test('uses custom empty state label from config', () => {
+        const { container, xhrInstances } = setupWidgetTest();
+        window.CompletionistStorage = mockStorage();
+        window.CompletionistConfig = {
+            labels: { empty: 'Empieza a leer' }
+        };
+
+        eval(widgetCode);
+        triggerXhrResponses(xhrInstances, { suggestions: [] });
+
+        expect(container.innerHTML).toContain('Empieza a leer');
+    });
+});

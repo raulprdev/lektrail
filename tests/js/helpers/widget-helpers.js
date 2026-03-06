@@ -21,10 +21,18 @@ function createWidgetContainer(options = {}) {
 }
 
 function mockConfig(options = {}) {
+    const defaultLabels = {
+        continue: 'Continue reading',
+        completed: 'Completed',
+        suggestions: 'Suggested reading',
+        empty: 'Start reading to track your progress!',
+        loading: 'Loading suggestions...'
+    };
     return {
         maxViewed: options.maxViewed || 3,
         maxRead: options.maxRead || 5,
-        maxSuggestions: options.maxSuggestions || 5
+        maxSuggestions: options.maxSuggestions || 5,
+        labels: Object.assign({}, defaultLabels, options.labels || {})
     };
 }
 
