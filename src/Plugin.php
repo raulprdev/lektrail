@@ -34,14 +34,18 @@ class Plugin {
         $this->suggestions->register($this->hooks);
         $this->shortcode->register($this->hooks);
         $this->adminPage->register($this->hooks);
-        $this->hooks->addAction('wp_enqueue_scripts', [$this, 'maybeEnqueueDetector']);
+        $this->hooks->addAction('wp_enqueue_scripts', [$this, 'enqueueDetector']);
     }
 
-    public function maybeEnqueueDetector(): void {
-        $postTypes = $this->settings->load()->postTypes();
-        if (!$this->context->isSingular($postTypes)) {
+    public function enqueueDetector(): void {
+        if (!$this->shouldEnqueueDetector()) {
             return;
         }
         $this->assets->enqueueDetector($this->context->getPostId());
+    }
+
+    private function shouldEnqueueDetector(): bool {
+        $postTypes = $this->settings->load()->postTypes();
+        return $this->context->isSingular($postTypes);
     }
 }

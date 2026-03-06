@@ -58,7 +58,7 @@ class PluginTest extends TestCase {
         $this->context->postId = 123;
 
         $plugin = $this->createPlugin();
-        $plugin->maybeEnqueueDetector();
+        $plugin->enqueueDetector();
 
         $this->assertArrayHasKey(Assets::HANDLE_DETECTOR, $this->scripts->scripts);
     }
@@ -69,7 +69,7 @@ class PluginTest extends TestCase {
         $this->context->postId = 123;
 
         $plugin = $this->createPlugin();
-        $plugin->maybeEnqueueDetector();
+        $plugin->enqueueDetector();
 
         $this->assertArrayNotHasKey(Assets::HANDLE_DETECTOR, $this->scripts->scripts);
     }
@@ -80,7 +80,7 @@ class PluginTest extends TestCase {
         $this->context->postId = 0;
 
         $plugin = $this->createPlugin();
-        $plugin->maybeEnqueueDetector();
+        $plugin->enqueueDetector();
 
         $this->assertArrayNotHasKey(Assets::HANDLE_DETECTOR, $this->scripts->scripts);
     }
