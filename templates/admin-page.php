@@ -57,6 +57,55 @@
             </tr>
         </table>
 
+        <h2><?= esc_html__('Widget Labels', 'completionist') ?></h2>
+        <table class="form-table">
+            <tr>
+                <th scope="row"><?= esc_html__('Continue Reading Label', 'completionist') ?></th>
+                <td>
+                    <input type="text"
+                           name="<?= \Completionist\WordPressSettingsRepository::OPTION_KEY ?>[label_continue]"
+                           value="<?= esc_attr($settings->labelContinue()) ?>"
+                           class="regular-text">
+                </td>
+            </tr>
+            <tr>
+                <th scope="row"><?= esc_html__('Completed Label', 'completionist') ?></th>
+                <td>
+                    <input type="text"
+                           name="<?= \Completionist\WordPressSettingsRepository::OPTION_KEY ?>[label_completed]"
+                           value="<?= esc_attr($settings->labelCompleted()) ?>"
+                           class="regular-text">
+                </td>
+            </tr>
+            <tr>
+                <th scope="row"><?= esc_html__('Suggestions Label', 'completionist') ?></th>
+                <td>
+                    <input type="text"
+                           name="<?= \Completionist\WordPressSettingsRepository::OPTION_KEY ?>[label_suggestions]"
+                           value="<?= esc_attr($settings->labelSuggestions()) ?>"
+                           class="regular-text">
+                </td>
+            </tr>
+            <tr>
+                <th scope="row"><?= esc_html__('Empty State Label', 'completionist') ?></th>
+                <td>
+                    <input type="text"
+                           name="<?= \Completionist\WordPressSettingsRepository::OPTION_KEY ?>[label_empty]"
+                           value="<?= esc_attr($settings->labelEmpty()) ?>"
+                           class="regular-text">
+                </td>
+            </tr>
+            <tr>
+                <th scope="row"><?= esc_html__('Loading Label', 'completionist') ?></th>
+                <td>
+                    <input type="text"
+                           name="<?= \Completionist\WordPressSettingsRepository::OPTION_KEY ?>[label_loading]"
+                           value="<?= esc_attr($settings->labelLoading()) ?>"
+                           class="regular-text">
+                </td>
+            </tr>
+        </table>
+
         <?php submit_button(); ?>
     </form>
 </div>

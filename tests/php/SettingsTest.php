@@ -92,4 +92,28 @@ class SettingsTest extends TestCase {
         $this->assertEquals('Nothing here', $settings->labelEmpty());
         $this->assertEquals('Please wait...', $settings->labelLoading());
     }
+
+    public function testToJsConfigReturnsExpectedStructure(): void {
+        $settings = Settings::fromArray([
+            'max_viewed' => 4,
+            'max_read' => 6,
+            'max_suggestions' => 8,
+            'label_continue' => 'Continue',
+            'label_completed' => 'Done',
+            'label_suggestions' => 'Try these',
+            'label_empty' => 'Empty',
+            'label_loading' => 'Loading...',
+        ]);
+
+        $config = $settings->toJsConfig();
+
+        $this->assertEquals(4, $config['maxViewed']);
+        $this->assertEquals(6, $config['maxRead']);
+        $this->assertEquals(8, $config['maxSuggestions']);
+        $this->assertEquals('Continue', $config['labels']['continue']);
+        $this->assertEquals('Done', $config['labels']['completed']);
+        $this->assertEquals('Try these', $config['labels']['suggestions']);
+        $this->assertEquals('Empty', $config['labels']['empty']);
+        $this->assertEquals('Loading...', $config['labels']['loading']);
+    }
 }

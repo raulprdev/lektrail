@@ -119,4 +119,19 @@ class Settings {
     public function labelLoading(): string {
         return $this->labelLoading;
     }
+
+    public function toJsConfig(): array {
+        return [
+            'maxViewed' => $this->maxViewed,
+            'maxRead' => $this->maxRead,
+            'maxSuggestions' => $this->maxSuggestions,
+            'labels' => [
+                'continue' => $this->labelContinue,
+                'completed' => $this->labelCompleted,
+                'suggestions' => $this->labelSuggestions,
+                'empty' => $this->labelEmpty,
+                'loading' => $this->labelLoading,
+            ],
+        ];
+    }
 }

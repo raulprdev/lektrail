@@ -49,12 +49,7 @@ class Assets {
             true
         );
 
-        $config = sprintf(
-            'window.CompletionistConfig = {maxViewed: %d, maxRead: %d, maxSuggestions: %d};',
-            $settings->maxViewed(),
-            $settings->maxRead(),
-            $settings->maxSuggestions()
-        );
+        $config = 'window.CompletionistConfig = ' . json_encode($settings->toJsConfig()) . ';';
         $this->scripts->addInlineScript(self::HANDLE_WIDGET, $config, 'before');
 
         $this->scripts->enqueueStyle(

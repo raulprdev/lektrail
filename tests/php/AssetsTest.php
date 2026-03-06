@@ -66,8 +66,27 @@ class AssetsTest extends TestCase {
         $this->assets->enqueueWidget($settings);
 
         $inline = $this->loader->inlineScripts[Assets::HANDLE_WIDGET];
-        $this->assertStringContainsString('maxViewed: 7', $inline['code']);
-        $this->assertStringContainsString('maxRead: 12', $inline['code']);
-        $this->assertStringContainsString('maxSuggestions: 8', $inline['code']);
+        $this->assertStringContainsString('"maxViewed":7', $inline['code']);
+        $this->assertStringContainsString('"maxRead":12', $inline['code']);
+        $this->assertStringContainsString('"maxSuggestions":8', $inline['code']);
+    }
+
+    public function testEnqueueWidgetPassesLabelsToScript(): void {
+        $settings = Settings::fromArray([
+            'label_continue' => 'Keep reading',
+            'label_completed' => 'Done',
+            'label_suggestions' => 'Try these',
+            'label_empty' => 'Nothing yet',
+            'label_loading' => 'Wait...',
+        ]);
+
+        $this->assets->enqueueWidget($settings);
+
+        $inline = $this->loader->inlineScripts[Assets::HANDLE_WIDGET];
+        $this->assertStringContainsString('Keep reading', $inline['code']);
+        $this->assertStringContainsString('Done', $inline['code']);
+        $this->assertStringContainsString('Try these', $inline['code']);
+        $this->assertStringContainsString('Nothing yet', $inline['code']);
+        $this->assertStringContainsString('Wait...', $inline['code']);
     }
 }
