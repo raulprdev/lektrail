@@ -36,6 +36,16 @@ describe('Widget: stats display', () => {
 
         expect(container.innerHTML).toContain('Loading');
     });
+
+    test('shows empty state message when no posts to display', () => {
+        const { container, xhrInstances } = setupWidgetTest();
+        window.CompletionistStorage = mockStorage();
+
+        eval(widgetCode);
+        triggerXhrResponses(xhrInstances, { suggestions: [] });
+
+        expect(container.innerHTML).toContain('Start reading');
+    });
 });
 
 describe('Widget: continue reading section', () => {

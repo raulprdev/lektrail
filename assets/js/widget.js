@@ -92,11 +92,24 @@
         return html;
     }
 
+    function renderEmptyState() {
+        return '<div class="completionist-empty">Start reading to track your progress!</div>';
+    }
+
     function renderWidget(container, viewedPosts, readPosts, suggestions) {
+        var viewedSlice = viewedPosts.slice(0, MAX_CONTINUE_READING);
+        var readSlice = readPosts.slice(0, MAX_COMPLETED);
+        var suggestionsSlice = filterUntracked(suggestions).slice(0, MAX_SUGGESTIONS);
+
         var html = renderStats();
-        html += renderSection('Continue reading', viewedPosts.slice(0, MAX_CONTINUE_READING), 'completionist-continue');
-        html += renderSection('Completed', readPosts.slice(0, MAX_COMPLETED), 'completionist-completed');
-        html += renderSection('Suggested reading', filterUntracked(suggestions).slice(0, MAX_SUGGESTIONS), 'completionist-suggestions');
+        html += renderSection('Continue reading', viewedSlice, 'completionist-continue');
+        html += renderSection('Completed', readSlice, 'completionist-completed');
+        html += renderSection('Suggested reading', suggestionsSlice, 'completionist-suggestions');
+
+        var hasContent = viewedSlice.length || readSlice.length || suggestionsSlice.length;
+        if (!hasContent) {
+            html += renderEmptyState();
+        }
 
         container.innerHTML = html;
     }
