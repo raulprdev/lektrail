@@ -14,8 +14,23 @@
         if (alreadyTracked) return false;
         if (!postId) return false;
         if (!storage) return false;
+        if (storage.isTracked(postId)) return false;
+        return true;
+    }
+
+    function shouldMarkRead(postId, storage, alreadyMarkedRead) {
+        if (alreadyMarkedRead) return false;
+        if (!postId) return false;
+        if (!storage) return false;
         if (storage.hasRead(postId)) return false;
         return true;
+    }
+
+    function trackViewed(postId, storage, dispatch) {
+        storage.addViewed(postId);
+        if (dispatch) {
+            dispatch('completionist:viewed', { postId: postId });
+        }
     }
 
     function trackRead(postId, storage, dispatch) {
@@ -47,13 +62,13 @@
         };
         var Observer = deps.Observer || global.IntersectionObserver;
 
-        var tracked = false;
+        var markedRead = false;
 
         function handleIntersection() {
             var postId = getPostId(dom);
-            if (shouldTrack(postId, storage, tracked)) {
+            if (shouldMarkRead(postId, storage, markedRead)) {
                 trackRead(postId, storage, dispatch);
-                tracked = true;
+                markedRead = true;
                 return true;
             }
             return false;
@@ -65,6 +80,10 @@
 
             if (!article || !postId) {
                 return { success: false, reason: !article ? 'no-article' : 'no-postid' };
+            }
+
+            if (shouldTrack(postId, storage, false)) {
+                trackViewed(postId, storage, dispatch);
             }
 
             if (!Observer) {
@@ -90,7 +109,7 @@
         return {
             init: init,
             handleIntersection: handleIntersection,
-            isTracked: function() { return tracked; }
+            isTracked: function() { return markedRead; }
         };
     }
 

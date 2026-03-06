@@ -1,13 +1,14 @@
 (function() {
     'use strict';
 
-    const STORAGE_KEY = 'completionist';
+    var STORAGE_KEY = 'completionist';
 
     function getData() {
         try {
-            return JSON.parse(localStorage.getItem(STORAGE_KEY)) || { reads: [] };
+            var data = JSON.parse(localStorage.getItem(STORAGE_KEY));
+            return data || { viewed: [], read: [] };
         } catch (e) {
-            return { reads: [] };
+            return { viewed: [], read: [] };
         }
     }
 
@@ -19,30 +20,69 @@
         }
     }
 
+    function findIndexById(array, postId) {
+        for (var i = 0; i < array.length; i++) {
+            if (array[i].postId === postId) return i;
+        }
+        return -1;
+    }
+
     window.CompletionistStorage = {
+        getViewedIds: function() {
+            return getData().viewed.map(function(v) { return v.postId; });
+        },
+
         getReadIds: function() {
-            return getData().reads.map(function(r) { return r.postId; });
+            return getData().read.map(function(r) { return r.postId; });
+        },
+
+        addViewed: function(postId) {
+            var data = getData();
+
+            if (findIndexById(data.viewed, postId) !== -1) return;
+            if (findIndexById(data.read, postId) !== -1) return;
+
+            data.viewed.push({ postId: postId, viewedAt: new Date().toISOString() });
+            setData(data);
         },
 
         addRead: function(postId) {
             var data = getData();
-            var exists = data.reads.some(function(r) { return r.postId === postId; });
-            if (exists) return;
 
-            data.reads.push({ postId: postId, readAt: new Date().toISOString() });
+            if (findIndexById(data.read, postId) !== -1) return;
+
+            var viewedIndex = findIndexById(data.viewed, postId);
+            if (viewedIndex !== -1) {
+                data.viewed.splice(viewedIndex, 1);
+            }
+
+            data.read.push({ postId: postId, readAt: new Date().toISOString() });
             setData(data);
         },
 
+        hasViewed: function(postId) {
+            return findIndexById(getData().viewed, postId) !== -1;
+        },
+
         hasRead: function(postId) {
-            return getData().reads.some(function(r) { return r.postId === postId; });
+            return findIndexById(getData().read, postId) !== -1;
+        },
+
+        isTracked: function(postId) {
+            var data = getData();
+            return findIndexById(data.viewed, postId) !== -1 || findIndexById(data.read, postId) !== -1;
+        },
+
+        getViewedCount: function() {
+            return getData().viewed.length;
+        },
+
+        getReadCount: function() {
+            return getData().read.length;
         },
 
         clear: function() {
             localStorage.removeItem(STORAGE_KEY);
-        },
-
-        getReadCount: function() {
-            return getData().reads.length;
         }
     };
 })();
