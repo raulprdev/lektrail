@@ -6,25 +6,28 @@ class Plugin {
 
     private Hooks $hooks;
     private Assets $assets;
-    private PostQuery $posts;
-    private JsonResponse $response;
+    private SettingsRepository $settings;
+    private Context $context;
     private SuggestionsEndpoint $suggestions;
     private Shortcode $shortcode;
-    private SettingsRepository $settings;
     private AdminPage $adminPage;
 
-    public function __construct(string $pluginPath, string $pluginUrl, string $version) {
-        $this->hooks = new WordPressHooks();
-        $scripts = new WordPressScriptLoader();
-        $options = new WordPressOptions();
-
-        $this->assets = new Assets($scripts, $pluginPath, $pluginUrl, $version);
-        $this->posts = new WordPressPostQuery();
-        $this->response = new WordPressJsonResponse();
-        $this->settings = new WordPressSettingsRepository($options);
-        $this->suggestions = new SuggestionsEndpoint($this->posts, $this->response);
-        $this->shortcode = new Shortcode($this->assets, $this->settings);
-        $this->adminPage = new AdminPage($this->settings);
+    public function __construct(
+        Assets $assets,
+        SettingsRepository $settings,
+        Context $context,
+        SuggestionsEndpoint $suggestions,
+        Shortcode $shortcode,
+        AdminPage $adminPage,
+        Hooks $hooks
+    ) {
+        $this->assets = $assets;
+        $this->settings = $settings;
+        $this->context = $context;
+        $this->suggestions = $suggestions;
+        $this->shortcode = $shortcode;
+        $this->adminPage = $adminPage;
+        $this->hooks = $hooks;
     }
 
     public function run(): void {
@@ -36,9 +39,9 @@ class Plugin {
 
     public function maybeEnqueueDetector(): void {
         $postTypes = $this->settings->load()->postTypes();
-        if (!is_singular($postTypes)) {
+        if (!$this->context->isSingular($postTypes)) {
             return;
         }
-        $this->assets->enqueueDetector(get_the_ID());
+        $this->assets->enqueueDetector($this->context->getPostId());
     }
 }
