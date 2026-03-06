@@ -37,6 +37,9 @@
             <tr>
                 <th scope="row"><?= esc_html__('Enable', 'completionist') ?></th>
                 <td>
+                    <input type="hidden"
+                           name="<?= \Completionist\WordPressSettingsRepository::OPTION_KEY ?>[viewed_enabled]"
+                           value="0">
                     <label>
                         <input type="checkbox"
                                name="<?= \Completionist\WordPressSettingsRepository::OPTION_KEY ?>[viewed_enabled]"
@@ -72,6 +75,9 @@
             <tr>
                 <th scope="row"><?= esc_html__('Enable', 'completionist') ?></th>
                 <td>
+                    <input type="hidden"
+                           name="<?= \Completionist\WordPressSettingsRepository::OPTION_KEY ?>[completed_enabled]"
+                           value="0">
                     <label>
                         <input type="checkbox"
                                name="<?= \Completionist\WordPressSettingsRepository::OPTION_KEY ?>[completed_enabled]"

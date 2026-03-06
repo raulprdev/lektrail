@@ -134,6 +134,16 @@ class SettingsTest extends TestCase {
         $this->assertFalse($settings->completedEnabled());
     }
 
+    public function testSectionsFromFormStringValues(): void {
+        $settings = Settings::fromArray([
+            'viewed_enabled' => '0',
+            'completed_enabled' => '1',
+        ]);
+
+        $this->assertFalse($settings->viewedEnabled());
+        $this->assertTrue($settings->completedEnabled());
+    }
+
     public function testToJsConfigIncludesSectionEnabled(): void {
         $settings = Settings::fromArray([
             'viewed_enabled' => false,
