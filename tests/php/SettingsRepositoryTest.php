@@ -4,14 +4,22 @@ namespace Completionist\Tests;
 
 use Completionist\Settings;
 use Completionist\WordPressSettingsRepository;
+use Completionist\Tests\Mocks\MockLocale;
 use Completionist\Tests\Mocks\MockOptions;
 use PHPUnit\Framework\TestCase;
 
 class SettingsRepositoryTest extends TestCase {
 
+    private MockOptions $options;
+    private MockLocale $locale;
+
+    protected function setUp(): void {
+        $this->options = new MockOptions();
+        $this->locale = new MockLocale();
+    }
+
     public function testLoadReturnsDefaultsWhenNoSavedSettings(): void {
-        $options = new MockOptions();
-        $repository = new WordPressSettingsRepository($options);
+        $repository = new WordPressSettingsRepository($this->options, $this->locale);
 
         $settings = $repository->load();
 
@@ -19,12 +27,11 @@ class SettingsRepositoryTest extends TestCase {
     }
 
     public function testLoadReturnsSavedSettings(): void {
-        $options = new MockOptions();
-        $options->set(WordPressSettingsRepository::OPTION_KEY, [
+        $this->options->set(WordPressSettingsRepository::OPTION_KEY, [
             'post_types' => ['post', 'page'],
             'max_viewed' => 10,
         ]);
-        $repository = new WordPressSettingsRepository($options);
+        $repository = new WordPressSettingsRepository($this->options, $this->locale);
 
         $settings = $repository->load();
 
@@ -33,13 +40,55 @@ class SettingsRepositoryTest extends TestCase {
     }
 
     public function testSaveStoresSettings(): void {
-        $options = new MockOptions();
-        $repository = new WordPressSettingsRepository($options);
+        $repository = new WordPressSettingsRepository($this->options, $this->locale);
         $settings = Settings::fromArray(['max_viewed' => 7]);
 
         $repository->save($settings);
 
-        $saved = $options->get(WordPressSettingsRepository::OPTION_KEY);
+        $saved = $this->options->get(WordPressSettingsRepository::OPTION_KEY);
         $this->assertEquals(7, $saved['max_viewed']);
+    }
+
+    public function testLoadReturnsEnglishLabelsForEnglishLocale(): void {
+        $this->locale->code = 'en_US';
+        $repository = new WordPressSettingsRepository($this->options, $this->locale);
+
+        $settings = $repository->load();
+
+        $this->assertEquals('Continue reading', $settings->labelContinue());
+        $this->assertEquals('Completed', $settings->labelCompleted());
+        $this->assertEquals('Suggested reading', $settings->labelSuggestions());
+    }
+
+    public function testLoadReturnsSpanishLabelsForSpanishLocale(): void {
+        $this->locale->code = 'es_ES';
+        $repository = new WordPressSettingsRepository($this->options, $this->locale);
+
+        $settings = $repository->load();
+
+        $this->assertEquals('Seguir leyendo', $settings->labelContinue());
+        $this->assertEquals('Completados', $settings->labelCompleted());
+        $this->assertEquals('Lecturas sugeridas', $settings->labelSuggestions());
+    }
+
+    public function testLoadReturnsSpanishLabelsForArgentineLocale(): void {
+        $this->locale->code = 'es_AR';
+        $repository = new WordPressSettingsRepository($this->options, $this->locale);
+
+        $settings = $repository->load();
+
+        $this->assertEquals('Seguir leyendo', $settings->labelContinue());
+    }
+
+    public function testSavedLabelsOverrideLocaleDefaults(): void {
+        $this->locale->code = 'es_ES';
+        $this->options->set(WordPressSettingsRepository::OPTION_KEY, [
+            'label_continue' => 'Custom label',
+        ]);
+        $repository = new WordPressSettingsRepository($this->options, $this->locale);
+
+        $settings = $repository->load();
+
+        $this->assertEquals('Custom label', $settings->labelContinue());
     }
 }

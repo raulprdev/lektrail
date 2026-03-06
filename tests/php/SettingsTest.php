@@ -70,5 +70,26 @@ class SettingsTest extends TestCase {
         $this->assertArrayHasKey('max_read', $array);
         $this->assertArrayHasKey('max_suggestions', $array);
         $this->assertArrayHasKey('privacy_notice', $array);
+        $this->assertArrayHasKey('label_continue', $array);
+        $this->assertArrayHasKey('label_completed', $array);
+        $this->assertArrayHasKey('label_suggestions', $array);
+        $this->assertArrayHasKey('label_empty', $array);
+        $this->assertArrayHasKey('label_loading', $array);
+    }
+
+    public function testLabelsFromArray(): void {
+        $settings = Settings::fromArray([
+            'label_continue' => 'Keep reading',
+            'label_completed' => 'Already read',
+            'label_suggestions' => 'You might like',
+            'label_empty' => 'Nothing here',
+            'label_loading' => 'Please wait...',
+        ]);
+
+        $this->assertEquals('Keep reading', $settings->labelContinue());
+        $this->assertEquals('Already read', $settings->labelCompleted());
+        $this->assertEquals('You might like', $settings->labelSuggestions());
+        $this->assertEquals('Nothing here', $settings->labelEmpty());
+        $this->assertEquals('Please wait...', $settings->labelLoading());
     }
 }

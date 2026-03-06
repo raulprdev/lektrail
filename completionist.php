@@ -34,9 +34,10 @@ add_action('plugins_loaded', function () {
     $options = new Completionist\WordPressOptions();
     $hooks = new Completionist\WordPressHooks();
     $context = new Completionist\WordPressContext();
+    $locale = new Completionist\WordPressLocale();
 
     $assets = new Completionist\Assets($scripts, COMPLETIONIST_PLUGIN_PATH, COMPLETIONIST_PLUGIN_URL, COMPLETIONIST_VERSION);
-    $settings = new Completionist\WordPressSettingsRepository($options);
+    $settings = new Completionist\WordPressSettingsRepository($options, $locale);
     $posts = new Completionist\WordPressPostQuery();
     $response = new Completionist\WordPressJsonResponse();
 
