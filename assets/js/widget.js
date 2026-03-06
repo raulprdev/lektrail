@@ -65,28 +65,17 @@
         });
     }
 
-    function renderStats() {
-        var storage = getStorage();
-        var viewedCount = storage.getViewedCount();
-        var readCount = storage.getReadCount();
-
-        return '<div class="completionist-stats">' +
-            '<span class="completionist-count">' + viewedCount + '</span> viewed, ' +
-            '<span class="completionist-count">' + readCount + '</span> read' +
-            '</div>';
-    }
-
     function renderLoading(container) {
         var config = getConfig();
-        container.innerHTML = renderStats() +
-            '<div class="completionist-loading">' + config.labels.loading + '</div>';
+        container.innerHTML = '<div class="completionist-loading">' + config.labels.loading + '</div>';
     }
 
-    function renderSection(title, posts, className) {
+    function renderSection(title, posts, className, count) {
         if (posts.length === 0) return '';
 
+        var titleWithCount = count !== undefined ? title + ' (' + count + ')' : title;
         var html = '<div class="' + className + '">';
-        html += '<h3>' + title + '</h3>';
+        html += '<h3>' + titleWithCount + '</h3>';
         html += '<ul>';
         posts.forEach(function(post) {
             html += '<li><a href="' + post.url + '">' + post.title + '</a></li>';
@@ -103,16 +92,17 @@
 
     function renderWidget(container, viewedPosts, readPosts, suggestions) {
         var config = getConfig();
+        var storage = getStorage();
         var viewedSlice = config.viewedEnabled ? viewedPosts.slice(0, config.maxViewed) : [];
         var readSlice = config.completedEnabled ? readPosts.slice(0, config.maxRead) : [];
         var suggestionsSlice = filterUntracked(suggestions).slice(0, config.maxSuggestions);
 
-        var html = renderStats();
+        var html = '';
         if (config.viewedEnabled) {
-            html += renderSection(config.labels.continue, viewedSlice, 'completionist-continue');
+            html += renderSection(config.labels.continue, viewedSlice, 'completionist-continue', storage.getViewedCount());
         }
         if (config.completedEnabled) {
-            html += renderSection(config.labels.completed, readSlice, 'completionist-completed');
+            html += renderSection(config.labels.completed, readSlice, 'completionist-completed', storage.getReadCount());
         }
         html += renderSection(config.labels.suggestions, suggestionsSlice, 'completionist-suggestions');
 

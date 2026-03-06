@@ -17,19 +17,7 @@ afterEach(() => {
     delete window.CompletionistConfig;
 });
 
-describe('Widget: stats display', () => {
-    test('shows viewed and read counts immediately', () => {
-        const { container } = setupWidgetTest();
-        window.CompletionistStorage = mockStorage({ viewedIds: [1, 2], readIds: [3, 4, 5] });
-
-        eval(widgetCode);
-
-        expect(container.innerHTML).toContain('2');
-        expect(container.innerHTML).toContain('viewed');
-        expect(container.innerHTML).toContain('3');
-        expect(container.innerHTML).toContain('read');
-    });
-
+describe('Widget: loading and empty states', () => {
     test('shows loading state while fetching', () => {
         const { container } = setupWidgetTest();
         window.CompletionistStorage = mockStorage();
@@ -47,6 +35,57 @@ describe('Widget: stats display', () => {
         triggerXhrResponses(xhrInstances, { suggestions: [] });
 
         expect(container.innerHTML).toContain('Start reading');
+    });
+});
+
+describe('Widget: section counts in titles', () => {
+    test('shows viewed count in section title', () => {
+        const { container, xhrInstances } = setupWidgetTest();
+        window.CompletionistStorage = mockStorage({ viewedIds: [1, 2, 3] });
+
+        eval(widgetCode);
+        triggerXhrResponses(xhrInstances, {
+            viewed: { ids: [1, 2, 3], posts: [wpPost(1, 'Post 1'), wpPost(2, 'Post 2'), wpPost(3, 'Post 3')] }
+        });
+
+        expect(container.innerHTML).toContain('Continue reading (3)');
+    });
+
+    test('shows read count in section title', () => {
+        const { container, xhrInstances } = setupWidgetTest();
+        window.CompletionistStorage = mockStorage({ readIds: [1, 2, 3, 4, 5] });
+
+        eval(widgetCode);
+        triggerXhrResponses(xhrInstances, {
+            read: { ids: [1, 2, 3, 4, 5], posts: [1, 2, 3, 4, 5].map(i => wpPost(i, `Post ${i}`)) }
+        });
+
+        expect(container.innerHTML).toContain('Completed (5)');
+    });
+
+    test('shows total count even when display is limited', () => {
+        const { container, xhrInstances } = setupWidgetTest();
+        window.CompletionistStorage = mockStorage({ readIds: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] });
+
+        eval(widgetCode);
+        triggerXhrResponses(xhrInstances, {
+            read: { ids: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], posts: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(i => wpPost(i, `Post ${i}`)) }
+        });
+
+        expect(container.innerHTML).toContain('Completed (10)');
+    });
+
+    test('suggestions section does not show count', () => {
+        const { container, xhrInstances } = setupWidgetTest();
+        window.CompletionistStorage = mockStorage();
+
+        eval(widgetCode);
+        triggerXhrResponses(xhrInstances, {
+            suggestions: [{ id: 1, title: 'Post 1' }, { id: 2, title: 'Post 2' }]
+        });
+
+        expect(container.innerHTML).toContain('Suggested reading');
+        expect(container.innerHTML).not.toContain('Suggested reading (');
     });
 });
 
