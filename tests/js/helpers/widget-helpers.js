@@ -1,4 +1,15 @@
+const fs = require('fs');
+const path = require('path');
 const { mockStorage } = require('./test-helpers');
+
+const renderItemCode = fs.readFileSync(
+    path.join(__dirname, '../../../assets/js/render-item.js'),
+    'utf8'
+);
+
+function loadRenderItem() {
+    eval(renderItemCode);
+}
 
 function mockXhr() {
     return {
@@ -42,6 +53,7 @@ function setupWidgetTest(configOptions = {}) {
     const container = createWidgetContainer();
     const xhrInstances = [];
 
+    loadRenderItem();
     window.CompletionistConfig = mockConfig(configOptions);
 
     document.getElementById = jest.fn(id => {

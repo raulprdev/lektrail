@@ -65,6 +65,12 @@
         });
     }
 
+    function getRenderItem() {
+        return window.CompletionistRenderItem || function(post) {
+            return '<li><a href="' + post.url + '">' + post.title + '</a></li>';
+        };
+    }
+
     function renderLoading(container) {
         var config = getConfig();
         container.innerHTML = '<div class="completionist-loading">' + config.labels.loading + '</div>';
@@ -73,12 +79,13 @@
     function renderSection(title, posts, className, count) {
         if (posts.length === 0) return '';
 
+        var renderItem = getRenderItem();
         var titleWithCount = count !== undefined ? title + ' (' + count + ')' : title;
         var html = '<div class="' + className + '">';
         html += '<h3>' + titleWithCount + '</h3>';
-        html += '<ul>';
+        html += '<ul class="completionist-list">';
         posts.forEach(function(post) {
-            html += '<li><a href="' + post.url + '">' + post.title + '</a></li>';
+            html += renderItem(post);
         });
         html += '</ul>';
         html += '</div>';

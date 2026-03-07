@@ -6,6 +6,7 @@ class Assets {
 
     public const HANDLE_STORAGE = 'completionist-storage';
     public const HANDLE_DETECTOR = 'completionist-detector';
+    public const HANDLE_RENDER_ITEM = 'completionist-render-item';
     public const HANDLE_WIDGET = 'completionist-widget';
 
     private ScriptLoader $scripts;
@@ -40,11 +41,12 @@ class Assets {
 
     public function enqueueWidget(Settings $settings): void {
         $this->enqueueStorage();
+        $this->enqueueRenderItem();
 
         $this->scripts->enqueueScript(
             self::HANDLE_WIDGET,
             $this->pluginUrl . 'assets/js/widget.js',
-            [self::HANDLE_STORAGE],
+            [self::HANDLE_STORAGE, self::HANDLE_RENDER_ITEM],
             $this->fileVersion('assets/js/widget.js'),
             true
         );
@@ -66,6 +68,16 @@ class Assets {
             $this->pluginUrl . 'assets/js/storage.js',
             [],
             $this->fileVersion('assets/js/storage.js'),
+            true
+        );
+    }
+
+    private function enqueueRenderItem(): void {
+        $this->scripts->enqueueScript(
+            self::HANDLE_RENDER_ITEM,
+            $this->pluginUrl . 'assets/js/render-item.js',
+            [],
+            $this->fileVersion('assets/js/render-item.js'),
             true
         );
     }

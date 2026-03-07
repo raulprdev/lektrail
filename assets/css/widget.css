@@ -5,16 +5,6 @@
     background: #fafafa;
 }
 
-.completionist-stats {
-    margin-bottom: 1rem;
-    font-size: 1.1rem;
-}
-
-.completionist-count {
-    font-weight: bold;
-    color: #2271b1;
-}
-
 .completionist-continue,
 .completionist-completed,
 .completionist-suggestions {
@@ -34,17 +24,27 @@
     font-size: 1rem;
 }
 
-.completionist-continue ul,
-.completionist-completed ul,
-.completionist-suggestions ul {
+.completionist-list {
     margin: 0;
     padding-left: 1.2rem;
+    list-style: disc;
 }
 
-.completionist-continue li,
-.completionist-completed li,
-.completionist-suggestions li {
+.completionist-item {
     margin-bottom: 0.25rem;
+}
+
+.completionist-thumbnail,
+.completionist-excerpt {
+    display: none;
+}
+
+.completionist-title {
+    text-decoration: none;
+}
+
+.completionist-title:hover {
+    text-decoration: underline;
 }
 
 .completionist-continue h3 {
