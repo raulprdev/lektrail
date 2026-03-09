@@ -19,8 +19,7 @@ class Shortcode {
     }
 
     public function render(array $atts): string {
-        $settings = $this->settings->load();
-        $this->assets->enqueueWidget($settings);
+        $this->assets->enqueueWidget();
 
         return sprintf(
             '<div id="completionist-widget" data-endpoint="%s" data-posts-endpoint="%s"></div>',

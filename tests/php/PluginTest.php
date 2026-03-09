@@ -31,7 +31,8 @@ class PluginTest extends TestCase {
             $this->scripts,
             dirname(__DIR__, 2) . '/',
             'http://example.com/',
-            '1.0.0'
+            '1.0.0',
+            new Settings()
         );
     }
 

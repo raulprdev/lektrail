@@ -31,6 +31,44 @@
             </tr>
         </table>
 
+        <h2><?= esc_html__('Consent Settings', 'completionist') ?></h2>
+        <table class="form-table">
+            <tr>
+                <th scope="row"><?= esc_html__('Require Consent', 'completionist') ?></th>
+                <td>
+                    <input type="hidden"
+                           name="<?= \Completionist\WordPressSettingsRepository::OPTION_KEY ?>[require_consent]"
+                           value="0">
+                    <label>
+                        <input type="checkbox"
+                               name="<?= \Completionist\WordPressSettingsRepository::OPTION_KEY ?>[require_consent]"
+                               value="1"
+                               <?php checked($settings->requireConsent()); ?>>
+                        <?= esc_html__('Ask users for consent before tracking', 'completionist') ?>
+                    </label>
+                    <p class="description"><?= esc_html__('If enabled, users must opt-in before their reading progress is tracked.', 'completionist') ?></p>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row"><?= esc_html__('Consent Message', 'completionist') ?></th>
+                <td>
+                    <textarea name="<?= \Completionist\WordPressSettingsRepository::OPTION_KEY ?>[consent_message]"
+                              rows="2" class="large-text"><?= esc_textarea($settings->consentMessage()) ?></textarea>
+                    <p class="description"><?= esc_html__('Message shown to users when asking for consent.', 'completionist') ?></p>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row"><?= esc_html__('Checkbox Label', 'completionist') ?></th>
+                <td>
+                    <input type="text"
+                           name="<?= \Completionist\WordPressSettingsRepository::OPTION_KEY ?>[consent_checkbox_label]"
+                           value="<?= esc_attr($settings->consentCheckboxLabel()) ?>"
+                           class="regular-text">
+                    <p class="description"><?= esc_html__('Label for the consent checkbox.', 'completionist') ?></p>
+                </td>
+            </tr>
+        </table>
+
         <h2><?= esc_html__('Viewed Section', 'completionist') ?></h2>
         <p class="description"><?= esc_html__('Posts the visitor started but did not scroll to the end.', 'completionist') ?></p>
         <table class="form-table">

@@ -34,6 +34,10 @@
     margin-bottom: 0.25rem;
 }
 
+.completionist-content {
+    display: inline;
+}
+
 .completionist-thumbnail,
 .completionist-excerpt {
     display: none;
@@ -67,4 +71,17 @@
 .completionist-empty {
     color: #666;
     font-style: italic;
+}
+
+.completionist-consent {
+    padding: 1rem;
+    text-align: center;
+}
+
+.completionist-consent p {
+    margin: 0 0 0.75rem 0;
+}
+
+.completionist-consent label {
+    cursor: pointer;
 }

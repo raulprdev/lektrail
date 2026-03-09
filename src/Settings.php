@@ -16,6 +16,9 @@ class Settings {
     public const DEFAULT_LABEL_LOADING = 'Loading suggestions...';
     public const DEFAULT_VIEWED_ENABLED = true;
     public const DEFAULT_COMPLETED_ENABLED = true;
+    public const DEFAULT_REQUIRE_CONSENT = false;
+    public const DEFAULT_CONSENT_MESSAGE = 'Track your reading progress on this site?';
+    public const DEFAULT_CONSENT_CHECKBOX_LABEL = 'Yes, track my reading';
 
     private array $postTypes;
     private int $maxViewed;
@@ -29,6 +32,9 @@ class Settings {
     private string $labelLoading;
     private bool $viewedEnabled;
     private bool $completedEnabled;
+    private bool $requireConsent;
+    private string $consentMessage;
+    private string $consentCheckboxLabel;
 
     public function __construct(
         array $postTypes = self::DEFAULT_POST_TYPES,
@@ -42,7 +48,10 @@ class Settings {
         string $labelEmpty = self::DEFAULT_LABEL_EMPTY,
         string $labelLoading = self::DEFAULT_LABEL_LOADING,
         bool $viewedEnabled = self::DEFAULT_VIEWED_ENABLED,
-        bool $completedEnabled = self::DEFAULT_COMPLETED_ENABLED
+        bool $completedEnabled = self::DEFAULT_COMPLETED_ENABLED,
+        bool $requireConsent = self::DEFAULT_REQUIRE_CONSENT,
+        string $consentMessage = self::DEFAULT_CONSENT_MESSAGE,
+        string $consentCheckboxLabel = self::DEFAULT_CONSENT_CHECKBOX_LABEL
     ) {
         $this->postTypes = $postTypes;
         $this->maxViewed = $maxViewed;
@@ -56,6 +65,9 @@ class Settings {
         $this->labelLoading = $labelLoading;
         $this->viewedEnabled = $viewedEnabled;
         $this->completedEnabled = $completedEnabled;
+        $this->requireConsent = $requireConsent;
+        $this->consentMessage = $consentMessage;
+        $this->consentCheckboxLabel = $consentCheckboxLabel;
     }
 
     public static function fromArray(array $data, array $defaults = []): self {
@@ -71,7 +83,10 @@ class Settings {
             $data['label_empty'] ?? $defaults['label_empty'] ?? self::DEFAULT_LABEL_EMPTY,
             $data['label_loading'] ?? $defaults['label_loading'] ?? self::DEFAULT_LABEL_LOADING,
             $data['viewed_enabled'] ?? $defaults['viewed_enabled'] ?? self::DEFAULT_VIEWED_ENABLED,
-            $data['completed_enabled'] ?? $defaults['completed_enabled'] ?? self::DEFAULT_COMPLETED_ENABLED
+            $data['completed_enabled'] ?? $defaults['completed_enabled'] ?? self::DEFAULT_COMPLETED_ENABLED,
+            (bool) ($data['require_consent'] ?? $defaults['require_consent'] ?? self::DEFAULT_REQUIRE_CONSENT),
+            $data['consent_message'] ?? $defaults['consent_message'] ?? self::DEFAULT_CONSENT_MESSAGE,
+            $data['consent_checkbox_label'] ?? $defaults['consent_checkbox_label'] ?? self::DEFAULT_CONSENT_CHECKBOX_LABEL
         );
     }
 
@@ -89,6 +104,9 @@ class Settings {
             'label_loading' => $this->labelLoading,
             'viewed_enabled' => $this->viewedEnabled,
             'completed_enabled' => $this->completedEnabled,
+            'require_consent' => $this->requireConsent,
+            'consent_message' => $this->consentMessage,
+            'consent_checkbox_label' => $this->consentCheckboxLabel,
         ];
     }
 
@@ -140,6 +158,18 @@ class Settings {
         return $this->completedEnabled;
     }
 
+    public function requireConsent(): bool {
+        return $this->requireConsent;
+    }
+
+    public function consentMessage(): string {
+        return $this->consentMessage;
+    }
+
+    public function consentCheckboxLabel(): string {
+        return $this->consentCheckboxLabel;
+    }
+
     public function toJsConfig(): array {
         return [
             'maxViewed' => $this->maxViewed,
@@ -147,12 +177,15 @@ class Settings {
             'maxSuggestions' => $this->maxSuggestions,
             'viewedEnabled' => $this->viewedEnabled,
             'completedEnabled' => $this->completedEnabled,
+            'requireConsent' => $this->requireConsent,
             'labels' => [
                 'continue' => $this->labelContinue,
                 'completed' => $this->labelCompleted,
                 'suggestions' => $this->labelSuggestions,
                 'empty' => $this->labelEmpty,
                 'loading' => $this->labelLoading,
+                'consentMessage' => $this->consentMessage,
+                'consentCheckboxLabel' => $this->consentCheckboxLabel,
             ],
         ];
     }

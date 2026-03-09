@@ -91,4 +91,14 @@ class SettingsRepositoryTest extends TestCase {
 
         $this->assertEquals('Custom label', $settings->labelContinue());
     }
+
+    public function testLoadReturnsSpanishConsentLabelsForSpanishLocale(): void {
+        $this->locale->code = 'es_ES';
+        $repository = new WordPressSettingsRepository($this->options, $this->locale);
+
+        $settings = $repository->load();
+
+        $this->assertEquals('¿Seguir tu progreso de lectura en este sitio?', $settings->consentMessage());
+        $this->assertEquals('Sí, seguir mi lectura', $settings->consentCheckboxLabel());
+    }
 }

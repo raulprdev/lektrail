@@ -61,10 +61,17 @@
             dom.dispatchEvent(new CustomEvent(name, { detail: detail }));
         };
         var Observer = deps.Observer || global.IntersectionObserver;
+        var consentManager = deps.consentManager || null;
 
         var markedRead = false;
 
+        function hasConsent() {
+            if (!consentManager) return true;
+            return consentManager.hasConsent() === true;
+        }
+
         function handleIntersection() {
+            if (!hasConsent()) return false;
             var postId = getPostId(dom);
             if (shouldMarkRead(postId, storage, markedRead)) {
                 trackRead(postId, storage, dispatch);
@@ -82,7 +89,7 @@
                 return { success: false, reason: !article ? 'no-article' : 'no-postid' };
             }
 
-            if (shouldTrack(postId, storage, false)) {
+            if (hasConsent() && shouldTrack(postId, storage, false)) {
                 trackViewed(postId, storage, dispatch);
             }
 
@@ -123,7 +130,11 @@
     };
 
     if (typeof document !== 'undefined') {
-        var detector = createDetector();
+        var consentManager = null;
+        if (global.CompletionistConsentManager) {
+            consentManager = global.CompletionistConsentManager.create();
+        }
+        var detector = createDetector({ consentManager: consentManager });
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', function() { detector.init(); });
         } else {

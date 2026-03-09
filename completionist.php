@@ -36,15 +36,16 @@ add_action('plugins_loaded', function () {
     $context = new Completionist\WordPressContext();
     $locale = new Completionist\WordPressLocale();
 
-    $assets = new Completionist\Assets($scripts, COMPLETIONIST_PLUGIN_PATH, COMPLETIONIST_PLUGIN_URL, COMPLETIONIST_VERSION);
-    $settings = new Completionist\WordPressSettingsRepository($options, $locale);
+    $settingsRepo = new Completionist\WordPressSettingsRepository($options, $locale);
+    $settings = $settingsRepo->load();
+    $assets = new Completionist\Assets($scripts, COMPLETIONIST_PLUGIN_PATH, COMPLETIONIST_PLUGIN_URL, COMPLETIONIST_VERSION, $settings);
     $posts = new Completionist\WordPressPostQuery();
     $response = new Completionist\WordPressJsonResponse();
 
     $suggestions = new Completionist\SuggestionsEndpoint($posts, $response);
-    $shortcode = new Completionist\Shortcode($assets, $settings);
-    $adminPage = new Completionist\AdminPage($settings);
+    $shortcode = new Completionist\Shortcode($assets, $settingsRepo);
+    $adminPage = new Completionist\AdminPage($settingsRepo);
 
-    $plugin = new Completionist\Plugin($assets, $settings, $context, $suggestions, $shortcode, $adminPage, $hooks);
+    $plugin = new Completionist\Plugin($assets, $settingsRepo, $context, $suggestions, $shortcode, $adminPage, $hooks);
     $plugin->run();
 });

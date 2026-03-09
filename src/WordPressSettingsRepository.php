@@ -12,6 +12,8 @@ class WordPressSettingsRepository implements SettingsRepository {
         'label_suggestions' => 'Lecturas sugeridas',
         'label_empty' => '¡Empieza a leer para seguir tu progreso!',
         'label_loading' => 'Cargando sugerencias...',
+        'consent_message' => '¿Seguir tu progreso de lectura en este sitio?',
+        'consent_checkbox_label' => 'Sí, seguir mi lectura',
     ];
 
     private Options $options;

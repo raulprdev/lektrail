@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const {
     mockStorage,
+    mockConsentManager,
     setupWidgetTest,
     wpPost,
     triggerXhrResponses
@@ -400,5 +401,46 @@ describe('Widget: configurable labels', () => {
         triggerXhrResponses(xhrInstances, { suggestions: [] });
 
         expect(container.innerHTML).toContain('Empieza a leer');
+    });
+});
+
+describe('Widget: consent banner', () => {
+    test('shows consent banner when requireConsent is true and no consent', () => {
+        const { container } = setupWidgetTest({ requireConsent: true });
+        window.CompletionistStorage = mockStorage();
+        window.CompletionistConsentManager = {
+            create: function() {
+                return mockConsentManager({ consent: null, isBuiltIn: true });
+            }
+        };
+
+        eval(widgetCode);
+
+        expect(container.innerHTML).toContain('completionist-consent');
+    });
+
+    test('shows widget normally when requireConsent is true and consent granted', () => {
+        const { container, xhrInstances } = setupWidgetTest({ requireConsent: true });
+        window.CompletionistStorage = mockStorage();
+        window.CompletionistConsentManager = {
+            create: function() {
+                return mockConsentManager({ consent: true });
+            }
+        };
+
+        eval(widgetCode);
+        triggerXhrResponses(xhrInstances, { suggestions: [] });
+
+        expect(container.innerHTML).not.toContain('completionist-consent');
+    });
+
+    test('shows widget normally when requireConsent is false', () => {
+        const { container, xhrInstances } = setupWidgetTest({ requireConsent: false });
+        window.CompletionistStorage = mockStorage();
+
+        eval(widgetCode);
+        triggerXhrResponses(xhrInstances, { suggestions: [] });
+
+        expect(container.innerHTML).not.toContain('completionist-consent');
     });
 });

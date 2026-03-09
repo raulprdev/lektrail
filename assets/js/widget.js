@@ -97,6 +97,26 @@
         return '<div class="completionist-empty">' + config.labels.empty + '</div>';
     }
 
+    function renderConsentBanner(container, config, onConsent) {
+        var html = '<div class="completionist-consent">';
+        html += '<p>' + config.labels.consentMessage + '</p>';
+        html += '<label>';
+        html += '<input type="checkbox" id="completionist-consent-checkbox">';
+        html += ' ' + config.labels.consentCheckboxLabel;
+        html += '</label>';
+        html += '</div>';
+        container.innerHTML = html;
+
+        var checkbox = container.querySelector('#completionist-consent-checkbox');
+        if (checkbox) {
+            checkbox.addEventListener('change', function() {
+                if (this.checked && onConsent) {
+                    onConsent();
+                }
+            });
+        }
+    }
+
     function renderWidget(container, viewedPosts, readPosts, suggestions) {
         var config = getConfig();
         var storage = getStorage();
@@ -121,12 +141,37 @@
         container.innerHTML = html;
     }
 
+    function getConsentManager() {
+        if (window.CompletionistConsentManager) {
+            return window.CompletionistConsentManager.create();
+        }
+        return null;
+    }
+
     function init() {
         var container = document.getElementById('completionist-widget');
         if (!container) return;
 
-        var storage = getStorage();
         var config = getConfig();
+
+        if (config.requireConsent) {
+            var consentManager = getConsentManager();
+            if (consentManager && consentManager.hasConsent() !== true) {
+                if (consentManager.isBuiltInProvider()) {
+                    renderConsentBanner(container, config, function() {
+                        consentManager.grantConsent();
+                        initWidget(container, config);
+                    });
+                }
+                return;
+            }
+        }
+
+        initWidget(container, config);
+    }
+
+    function initWidget(container, config) {
+        var storage = getStorage();
         var suggestionsEndpoint = container.dataset.endpoint;
         var postsEndpoint = container.dataset.postsEndpoint || '/wp-json/wp/v2/posts';
 

@@ -167,6 +167,91 @@ describe('detector.init', () => {
     });
 });
 
+describe('Detector: consent', () => {
+    function mockConsentManager(options) {
+        options = options || {};
+        return {
+            hasConsent: jest.fn(function() { return options.consent; }),
+            onConsentChange: jest.fn(),
+            isBuiltInProvider: jest.fn(function() { return true; }),
+            grantConsent: jest.fn()
+        };
+    }
+
+    test('does not track when consent is false', () => {
+        const storage = mockStorage();
+        const consentManager = mockConsentManager({ consent: false });
+        const detector = D.createDetector({
+            dom: mockDom({ postId: 123, article: true }),
+            storage,
+            consentManager,
+            Observer: null
+        });
+
+        detector.init();
+
+        expect(storage.addViewed).not.toHaveBeenCalled();
+    });
+
+    test('does not track when consent is null (pending)', () => {
+        const storage = mockStorage();
+        const consentManager = mockConsentManager({ consent: null });
+        const detector = D.createDetector({
+            dom: mockDom({ postId: 123, article: true }),
+            storage,
+            consentManager,
+            Observer: null
+        });
+
+        detector.init();
+
+        expect(storage.addViewed).not.toHaveBeenCalled();
+    });
+
+    test('tracks when consent is true', () => {
+        const storage = mockStorage();
+        const consentManager = mockConsentManager({ consent: true });
+        const detector = D.createDetector({
+            dom: mockDom({ postId: 123, article: true }),
+            storage,
+            consentManager,
+            Observer: null
+        });
+
+        detector.init();
+
+        expect(storage.addViewed).toHaveBeenCalledWith(123);
+    });
+
+    test('tracks normally when no consent manager', () => {
+        const storage = mockStorage();
+        const detector = D.createDetector({
+            dom: mockDom({ postId: 123, article: true }),
+            storage,
+            Observer: null
+        });
+
+        detector.init();
+
+        expect(storage.addViewed).toHaveBeenCalledWith(123);
+    });
+
+    test('does not mark read when consent is false', () => {
+        const storage = mockStorage({ viewedIds: [42] });
+        const consentManager = mockConsentManager({ consent: false });
+        const detector = D.createDetector({
+            dom: mockDom({ postId: 42, article: true }),
+            storage,
+            consentManager,
+            Observer: null
+        });
+
+        detector.handleIntersection();
+
+        expect(storage.addRead).not.toHaveBeenCalled();
+    });
+});
+
 describe('auto-init', () => {
     test('creates sentinel when article and postId exist', () => {
         const mockArticle = {

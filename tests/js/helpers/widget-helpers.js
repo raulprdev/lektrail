@@ -22,13 +22,22 @@ function mockXhr() {
 }
 
 function createWidgetContainer(options = {}) {
-    return {
+    var container = {
         innerHTML: '',
         dataset: {
             endpoint: options.endpoint || '/api',
             postsEndpoint: options.postsEndpoint || '/wp-json/wp/v2/posts'
+        },
+        querySelector: function(selector) {
+            if (selector === '#completionist-consent-checkbox') {
+                return {
+                    addEventListener: jest.fn()
+                };
+            }
+            return null;
         }
     };
+    return container;
 }
 
 function mockConfig(options = {}) {
@@ -37,7 +46,9 @@ function mockConfig(options = {}) {
         completed: 'Completed',
         suggestions: 'Suggested reading',
         empty: 'Start reading to track your progress!',
-        loading: 'Loading suggestions...'
+        loading: 'Loading suggestions...',
+        consentMessage: 'Track your reading progress?',
+        consentCheckboxLabel: 'Yes, track my reading'
     };
     return {
         maxViewed: options.maxViewed || 3,
@@ -45,7 +56,17 @@ function mockConfig(options = {}) {
         maxSuggestions: options.maxSuggestions || 5,
         viewedEnabled: options.viewedEnabled !== false,
         completedEnabled: options.completedEnabled !== false,
+        requireConsent: options.requireConsent || false,
         labels: Object.assign({}, defaultLabels, options.labels || {})
+    };
+}
+
+function mockConsentManager(options = {}) {
+    return {
+        hasConsent: jest.fn(function() { return options.consent; }),
+        isBuiltInProvider: jest.fn(function() { return options.isBuiltIn !== false; }),
+        onConsentChange: jest.fn(),
+        grantConsent: jest.fn()
     };
 }
 
@@ -107,6 +128,7 @@ module.exports = {
     mockStorage,
     mockXhr,
     mockConfig,
+    mockConsentManager,
     createWidgetContainer,
     setupWidgetTest,
     wpPost,

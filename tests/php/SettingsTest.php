@@ -155,4 +155,73 @@ class SettingsTest extends TestCase {
         $this->assertFalse($config['viewedEnabled']);
         $this->assertTrue($config['completedEnabled']);
     }
+
+    public function testDefaultRequireConsentIsFalse(): void {
+        $settings = new Settings();
+
+        $this->assertFalse($settings->requireConsent());
+    }
+
+    public function testDefaultConsentMessage(): void {
+        $settings = new Settings();
+
+        $this->assertEquals(Settings::DEFAULT_CONSENT_MESSAGE, $settings->consentMessage());
+    }
+
+    public function testDefaultConsentCheckboxLabel(): void {
+        $settings = new Settings();
+
+        $this->assertEquals(Settings::DEFAULT_CONSENT_CHECKBOX_LABEL, $settings->consentCheckboxLabel());
+    }
+
+    public function testConsentSettingsFromArray(): void {
+        $settings = Settings::fromArray([
+            'require_consent' => true,
+            'consent_message' => 'Custom consent message',
+            'consent_checkbox_label' => 'I agree',
+        ]);
+
+        $this->assertTrue($settings->requireConsent());
+        $this->assertEquals('Custom consent message', $settings->consentMessage());
+        $this->assertEquals('I agree', $settings->consentCheckboxLabel());
+    }
+
+    public function testConsentSettingsInToArray(): void {
+        $settings = Settings::fromArray([
+            'require_consent' => true,
+            'consent_message' => 'Test message',
+            'consent_checkbox_label' => 'Test label',
+        ]);
+
+        $array = $settings->toArray();
+
+        $this->assertArrayHasKey('require_consent', $array);
+        $this->assertArrayHasKey('consent_message', $array);
+        $this->assertArrayHasKey('consent_checkbox_label', $array);
+        $this->assertTrue($array['require_consent']);
+        $this->assertEquals('Test message', $array['consent_message']);
+        $this->assertEquals('Test label', $array['consent_checkbox_label']);
+    }
+
+    public function testToJsConfigIncludesConsentSettings(): void {
+        $settings = Settings::fromArray([
+            'require_consent' => true,
+            'consent_message' => 'Track reading?',
+            'consent_checkbox_label' => 'Yes please',
+        ]);
+
+        $config = $settings->toJsConfig();
+
+        $this->assertTrue($config['requireConsent']);
+        $this->assertEquals('Track reading?', $config['labels']['consentMessage']);
+        $this->assertEquals('Yes please', $config['labels']['consentCheckboxLabel']);
+    }
+
+    public function testRequireConsentFromFormStringValue(): void {
+        $settings = Settings::fromArray([
+            'require_consent' => '1',
+        ]);
+
+        $this->assertTrue($settings->requireConsent());
+    }
 }

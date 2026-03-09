@@ -8,26 +8,36 @@ class Assets {
     public const HANDLE_DETECTOR = 'completionist-detector';
     public const HANDLE_RENDER_ITEM = 'completionist-render-item';
     public const HANDLE_WIDGET = 'completionist-widget';
+    public const HANDLE_CONSENT_BUILTIN = 'completionist-consent-builtin';
+    public const HANDLE_CONSENT_MANAGER = 'completionist-consent-manager';
 
     private ScriptLoader $scripts;
     private string $pluginPath;
     private string $pluginUrl;
     private string $version;
+    private Settings $settings;
 
-    public function __construct(ScriptLoader $scripts, string $pluginPath, string $pluginUrl, string $version) {
+    public function __construct(ScriptLoader $scripts, string $pluginPath, string $pluginUrl, string $version, Settings $settings) {
         $this->scripts = $scripts;
         $this->pluginPath = $pluginPath;
         $this->pluginUrl = $pluginUrl;
         $this->version = $version;
+        $this->settings = $settings;
     }
 
     public function enqueueDetector(int $postId): void {
         $this->enqueueStorage();
 
+        $deps = [self::HANDLE_STORAGE];
+        if ($this->settings->requireConsent()) {
+            $this->enqueueConsent();
+            $deps[] = self::HANDLE_CONSENT_MANAGER;
+        }
+
         $this->scripts->enqueueScript(
             self::HANDLE_DETECTOR,
             $this->pluginUrl . 'assets/js/detector.js',
-            [self::HANDLE_STORAGE],
+            $deps,
             $this->fileVersion('assets/js/detector.js'),
             true
         );
@@ -39,19 +49,25 @@ class Assets {
         );
     }
 
-    public function enqueueWidget(Settings $settings): void {
+    public function enqueueWidget(): void {
         $this->enqueueStorage();
         $this->enqueueRenderItem();
+
+        $deps = [self::HANDLE_STORAGE, self::HANDLE_RENDER_ITEM];
+        if ($this->settings->requireConsent()) {
+            $this->enqueueConsent();
+            $deps[] = self::HANDLE_CONSENT_MANAGER;
+        }
 
         $this->scripts->enqueueScript(
             self::HANDLE_WIDGET,
             $this->pluginUrl . 'assets/js/widget.js',
-            [self::HANDLE_STORAGE, self::HANDLE_RENDER_ITEM],
+            $deps,
             $this->fileVersion('assets/js/widget.js'),
             true
         );
 
-        $config = 'window.CompletionistConfig = ' . json_encode($settings->toJsConfig()) . ';';
+        $config = 'window.CompletionistConfig = ' . json_encode($this->settings->toJsConfig()) . ';';
         $this->scripts->addInlineScript(self::HANDLE_WIDGET, $config, 'before');
 
         $this->scripts->enqueueStyle(
@@ -88,5 +104,23 @@ class Assets {
             return (string) filemtime($file);
         }
         return $this->version;
+    }
+
+    private function enqueueConsent(): void {
+        $this->scripts->enqueueScript(
+            self::HANDLE_CONSENT_BUILTIN,
+            $this->pluginUrl . 'assets/js/consent/builtin-provider.js',
+            [],
+            $this->fileVersion('assets/js/consent/builtin-provider.js'),
+            true
+        );
+
+        $this->scripts->enqueueScript(
+            self::HANDLE_CONSENT_MANAGER,
+            $this->pluginUrl . 'assets/js/consent/consent-manager.js',
+            [self::HANDLE_CONSENT_BUILTIN],
+            $this->fileVersion('assets/js/consent/consent-manager.js'),
+            true
+        );
     }
 }
