@@ -8,11 +8,9 @@ class Shortcode {
     public const WIDGET_ID = 'completionist-widget';
 
     private Assets $assets;
-    private SettingsRepository $settings;
 
-    public function __construct(Assets $assets, SettingsRepository $settings) {
+    public function __construct(Assets $assets) {
         $this->assets = $assets;
-        $this->settings = $settings;
     }
 
     public function register(Hooks $hooks): void {

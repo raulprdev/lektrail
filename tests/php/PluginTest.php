@@ -39,7 +39,7 @@ class PluginTest extends TestCase {
     private function createPlugin(): Plugin {
         $hooks = new MockHooks();
         $suggestions = new SuggestionsEndpoint(new MockPostQuery(), new MockJsonResponse());
-        $shortcode = new Shortcode($this->assets, $this->settings);
+        $shortcode = new Shortcode($this->assets);
         $adminPage = new AdminPage($this->settings);
 
         return new Plugin(

@@ -43,7 +43,7 @@ add_action('plugins_loaded', function () {
     $response = new Completionist\WordPressJsonResponse();
 
     $suggestions = new Completionist\SuggestionsEndpoint($posts, $response);
-    $shortcode = new Completionist\Shortcode($assets, $settingsRepo);
+    $shortcode = new Completionist\Shortcode($assets);
     $adminPage = new Completionist\AdminPage($settingsRepo);
 
     $plugin = new Completionist\Plugin($assets, $settingsRepo, $context, $suggestions, $shortcode, $adminPage, $hooks);
