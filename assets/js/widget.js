@@ -1,6 +1,8 @@
 (function() {
     'use strict';
 
+    var CONSENT_CHECKBOX_ID = 'completionist-consent-checkbox';
+
     function getConfig() {
         if (!window.CompletionistConfig) {
             throw new Error('CompletionistConfig not found');
@@ -101,13 +103,13 @@
         var html = '<div class="completionist-consent">';
         html += '<p>' + config.labels.consentMessage + '</p>';
         html += '<label>';
-        html += '<input type="checkbox" id="completionist-consent-checkbox">';
+        html += '<input type="checkbox" id="' + CONSENT_CHECKBOX_ID + '">';
         html += ' ' + config.labels.consentCheckboxLabel;
         html += '</label>';
         html += '</div>';
         container.innerHTML = html;
 
-        var checkbox = container.querySelector('#completionist-consent-checkbox');
+        var checkbox = container.querySelector('#' + CONSENT_CHECKBOX_ID);
         if (checkbox) {
             checkbox.addEventListener('change', function() {
                 if (this.checked && onConsent) {
@@ -149,10 +151,9 @@
     }
 
     function init() {
-        var container = document.getElementById('completionist-widget');
-        if (!container) return;
-
         var config = getConfig();
+        var container = document.getElementById(config.widgetId);
+        if (!container) return;
 
         if (config.requireConsent) {
             var consentManager = getConsentManager();

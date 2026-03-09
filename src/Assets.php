@@ -67,8 +67,10 @@ class Assets {
             true
         );
 
-        $config = 'window.CompletionistConfig = ' . json_encode($this->settings->toJsConfig()) . ';';
-        $this->scripts->addInlineScript(self::HANDLE_WIDGET, $config, 'before');
+        $config = array_merge($this->settings->toJsConfig(), [
+            'widgetId' => Shortcode::WIDGET_ID,
+        ]);
+        $this->scripts->addInlineScript(self::HANDLE_WIDGET, 'window.CompletionistConfig = ' . json_encode($config) . ';', 'before');
 
         $this->scripts->enqueueStyle(
             self::HANDLE_WIDGET,

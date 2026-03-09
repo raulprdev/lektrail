@@ -348,6 +348,7 @@ describe('Widget: configurable labels', () => {
         const { container, xhrInstances } = setupWidgetTest();
         window.CompletionistStorage = mockStorage({ viewedIds: [1], readIds: [2] });
         window.CompletionistConfig = {
+            widgetId: 'completionist-widget',
             maxViewed: 3,
             maxRead: 5,
             maxSuggestions: 5,
@@ -378,6 +379,7 @@ describe('Widget: configurable labels', () => {
         const { container } = setupWidgetTest();
         window.CompletionistStorage = mockStorage();
         window.CompletionistConfig = {
+            widgetId: 'completionist-widget',
             viewedEnabled: true,
             completedEnabled: true,
             labels: { loading: 'Cargando...' }
@@ -392,6 +394,7 @@ describe('Widget: configurable labels', () => {
         const { container, xhrInstances } = setupWidgetTest();
         window.CompletionistStorage = mockStorage();
         window.CompletionistConfig = {
+            widgetId: 'completionist-widget',
             viewedEnabled: true,
             completedEnabled: true,
             labels: { empty: 'Empieza a leer' }

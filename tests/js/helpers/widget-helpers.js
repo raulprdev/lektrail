@@ -51,6 +51,7 @@ function mockConfig(options = {}) {
         consentCheckboxLabel: 'Yes, track my reading'
     };
     return {
+        widgetId: options.widgetId || 'completionist-widget',
         maxViewed: options.maxViewed || 3,
         maxRead: options.maxRead || 5,
         maxSuggestions: options.maxSuggestions || 5,
