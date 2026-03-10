@@ -194,6 +194,17 @@
                                    class="regular-text">
                         </td>
                     </tr>
+                    <tr>
+                        <th scope="row"><?= esc_html__('Cache Duration', 'completionist') ?></th>
+                        <td>
+                            <input type="number"
+                                   name="<?= \Completionist\WordPressSettingsRepository::OPTION_KEY ?>[suggestions_cache_hours]"
+                                   value="<?= esc_attr($settings->suggestionsCacheHours()) ?>"
+                                   min="1" max="168" class="small-text">
+                            <?= esc_html__('hours', 'completionist') ?>
+                            <p class="description"><?= esc_html__('How long to cache suggestions before refreshing. Also refreshes when you complete reading a post.', 'completionist') ?></p>
+                        </td>
+                    </tr>
                 </table>
             </div>
         </div>

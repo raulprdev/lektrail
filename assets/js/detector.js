@@ -26,8 +26,8 @@
         return true;
     }
 
-    function trackViewed(postId, storage, dispatch) {
-        storage.addViewed(postId);
+    function trackViewed(postId, storage, dispatch, postData) {
+        storage.addViewed(postId, postData);
         if (dispatch) {
             dispatch('completionist:viewed', { postId: postId });
         }
@@ -90,7 +90,11 @@
             }
 
             if (hasConsent() && shouldTrack(postId, storage, false)) {
-                trackViewed(postId, storage, dispatch);
+                var postData = {
+                    title: dom.title || '',
+                    url: global.location ? global.location.href : ''
+                };
+                trackViewed(postId, storage, dispatch, postData);
             }
 
             if (!Observer) {

@@ -447,3 +447,72 @@ describe('Widget: consent banner', () => {
         expect(container.innerHTML).not.toContain('completionist-consent');
     });
 });
+
+describe('Widget: caching', () => {
+    test('renders viewed posts from cache without API call', () => {
+        const { container, xhrInstances } = setupWidgetTest();
+        window.CompletionistStorage = {
+            ...mockStorage(),
+            getViewedPosts: () => [{ id: 1, title: 'Cached Post', url: '/cached' }],
+            getReadPosts: () => [],
+            getSuggestions: () => [],
+            isSuggestionsCacheValid: () => false
+        };
+
+        eval(widgetCode);
+        triggerXhrResponses(xhrInstances, { suggestions: [] });
+
+        expect(container.innerHTML).toContain('Cached Post');
+    });
+
+    test('renders read posts from cache without API call', () => {
+        const { container, xhrInstances } = setupWidgetTest();
+        window.CompletionistStorage = {
+            ...mockStorage(),
+            getViewedPosts: () => [],
+            getReadPosts: () => [{ id: 1, title: 'Read Post', url: '/read' }],
+            getSuggestions: () => [],
+            isSuggestionsCacheValid: () => false
+        };
+
+        eval(widgetCode);
+        triggerXhrResponses(xhrInstances, { suggestions: [] });
+
+        expect(container.innerHTML).toContain('Read Post');
+    });
+
+    test('uses cached suggestions when cache is valid', () => {
+        const { container, xhrInstances } = setupWidgetTest();
+        window.CompletionistStorage = {
+            ...mockStorage(),
+            getViewedPosts: () => [],
+            getReadPosts: () => [],
+            getSuggestions: () => [{ id: 1, title: 'Cached Suggestion', url: '/suggestion' }],
+            isSuggestionsCacheValid: () => true
+        };
+
+        eval(widgetCode);
+
+        expect(container.innerHTML).toContain('Cached Suggestion');
+        expect(xhrInstances.length).toBe(0);
+    });
+
+    test('fetches suggestions when cache is expired', () => {
+        const { container, xhrInstances } = setupWidgetTest();
+        const setSuggestions = jest.fn();
+        window.CompletionistStorage = {
+            ...mockStorage(),
+            getViewedPosts: () => [],
+            getReadPosts: () => [],
+            getSuggestions: () => [],
+            isSuggestionsCacheValid: () => false,
+            setSuggestions: setSuggestions
+        };
+
+        eval(widgetCode);
+        triggerXhrResponses(xhrInstances, { suggestions: [{ id: 1, title: 'New Suggestion' }] });
+
+        expect(container.innerHTML).toContain('New Suggestion');
+        expect(setSuggestions).toHaveBeenCalled();
+    });
+});

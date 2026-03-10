@@ -173,3 +173,127 @@ describe('Storage: migration from old format', () => {
         expect(CompletionistStorage.getViewedCount()).toBe(0);
     });
 });
+
+describe('Storage: post data caching', () => {
+    test('addViewed stores post data when provided', () => {
+        CompletionistStorage.addViewed(123, { title: 'Test Post', url: '/test-post' });
+
+        const posts = CompletionistStorage.getViewedPosts();
+        expect(posts).toHaveLength(1);
+        expect(posts[0].id).toBe(123);
+        expect(posts[0].title).toBe('Test Post');
+        expect(posts[0].url).toBe('/test-post');
+    });
+
+    test('addViewed works without post data (backwards compatible)', () => {
+        CompletionistStorage.addViewed(123);
+
+        expect(CompletionistStorage.getViewedCount()).toBe(1);
+        expect(CompletionistStorage.getViewedIds()).toContain(123);
+    });
+
+    test('getViewedPosts returns full post objects', () => {
+        CompletionistStorage.addViewed(1, { title: 'Post 1', url: '/post-1' });
+        CompletionistStorage.addViewed(2, { title: 'Post 2', url: '/post-2' });
+
+        const posts = CompletionistStorage.getViewedPosts();
+        expect(posts).toHaveLength(2);
+        expect(posts[0]).toMatchObject({ id: 1, title: 'Post 1', url: '/post-1' });
+        expect(posts[1]).toMatchObject({ id: 2, title: 'Post 2', url: '/post-2' });
+    });
+
+    test('getViewedPosts marks old-format entries as needsFetch', () => {
+        CompletionistStorage.addViewed(123);
+
+        const posts = CompletionistStorage.getViewedPosts();
+        expect(posts[0].id).toBe(123);
+        expect(posts[0].needsFetch).toBe(true);
+    });
+
+    test('addRead stores post data when provided', () => {
+        CompletionistStorage.addRead(123, { title: 'Test Post', url: '/test-post' });
+
+        const posts = CompletionistStorage.getReadPosts();
+        expect(posts).toHaveLength(1);
+        expect(posts[0].id).toBe(123);
+        expect(posts[0].title).toBe('Test Post');
+        expect(posts[0].url).toBe('/test-post');
+    });
+
+    test('addRead preserves post data from viewed entry', () => {
+        CompletionistStorage.addViewed(123, { title: 'Test Post', url: '/test-post' });
+        CompletionistStorage.addRead(123);
+
+        const posts = CompletionistStorage.getReadPosts();
+        expect(posts[0].title).toBe('Test Post');
+        expect(posts[0].url).toBe('/test-post');
+    });
+
+    test('getReadPosts returns full post objects', () => {
+        CompletionistStorage.addRead(1, { title: 'Post 1', url: '/post-1' });
+        CompletionistStorage.addRead(2, { title: 'Post 2', url: '/post-2' });
+
+        const posts = CompletionistStorage.getReadPosts();
+        expect(posts).toHaveLength(2);
+        expect(posts[0]).toMatchObject({ id: 1, title: 'Post 1', url: '/post-1' });
+    });
+
+    test('getReadPosts marks old-format entries as needsFetch', () => {
+        CompletionistStorage.addRead(123);
+
+        const posts = CompletionistStorage.getReadPosts();
+        expect(posts[0].needsFetch).toBe(true);
+    });
+});
+
+describe('Storage: suggestions cache', () => {
+    test('setSuggestions stores posts with timestamp', () => {
+        const suggestions = [
+            { id: 1, title: 'Suggested 1', url: '/suggested-1' },
+            { id: 2, title: 'Suggested 2', url: '/suggested-2' }
+        ];
+
+        CompletionistStorage.setSuggestions(suggestions);
+
+        const cached = CompletionistStorage.getSuggestions();
+        expect(cached).toHaveLength(2);
+        expect(cached[0]).toMatchObject({ id: 1, title: 'Suggested 1' });
+    });
+
+    test('getSuggestions returns empty array when no cache', () => {
+        expect(CompletionistStorage.getSuggestions()).toEqual([]);
+    });
+
+    test('isSuggestionsCacheValid returns false when empty', () => {
+        expect(CompletionistStorage.isSuggestionsCacheValid(24)).toBe(false);
+    });
+
+    test('isSuggestionsCacheValid returns false when expired', () => {
+        const oldDate = new Date(Date.now() - 25 * 60 * 60 * 1000).toISOString();
+        localStorage.setItem('completionist', JSON.stringify({
+            viewed: [],
+            read: [],
+            suggestions: [{ id: 1, title: 'Test', url: '/test' }],
+            suggestionsUpdatedAt: oldDate
+        }));
+
+        const script = new Function(storageCode);
+        script();
+
+        expect(CompletionistStorage.isSuggestionsCacheValid(24)).toBe(false);
+    });
+
+    test('isSuggestionsCacheValid returns true when fresh', () => {
+        CompletionistStorage.setSuggestions([{ id: 1, title: 'Test', url: '/test' }]);
+
+        expect(CompletionistStorage.isSuggestionsCacheValid(24)).toBe(true);
+    });
+
+    test('clearSuggestionsCache removes suggestions and timestamp', () => {
+        CompletionistStorage.setSuggestions([{ id: 1, title: 'Test', url: '/test' }]);
+        CompletionistStorage.clearSuggestionsCache();
+
+        expect(CompletionistStorage.getSuggestions()).toEqual([]);
+        expect(CompletionistStorage.isSuggestionsCacheValid(24)).toBe(false);
+    });
+});

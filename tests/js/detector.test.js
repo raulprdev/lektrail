@@ -53,7 +53,7 @@ describe('Detector: on page load', () => {
 
         detector.init();
 
-        expect(storage.addViewed).toHaveBeenCalledWith(123);
+        expect(storage.addViewed).toHaveBeenCalledWith(123, expect.objectContaining({ title: expect.any(String), url: expect.any(String) }));
         expect(storage.addRead).not.toHaveBeenCalled();
     });
 
@@ -220,7 +220,7 @@ describe('Detector: consent', () => {
 
         detector.init();
 
-        expect(storage.addViewed).toHaveBeenCalledWith(123);
+        expect(storage.addViewed).toHaveBeenCalledWith(123, expect.objectContaining({ title: expect.any(String), url: expect.any(String) }));
     });
 
     test('tracks normally when no consent manager', () => {
@@ -233,7 +233,7 @@ describe('Detector: consent', () => {
 
         detector.init();
 
-        expect(storage.addViewed).toHaveBeenCalledWith(123);
+        expect(storage.addViewed).toHaveBeenCalledWith(123, expect.objectContaining({ title: expect.any(String), url: expect.any(String) }));
     });
 
     test('does not mark read when consent is false', () => {

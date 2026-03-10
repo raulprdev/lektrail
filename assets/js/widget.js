@@ -20,18 +20,25 @@
         xhr.open('GET', endpoint + '?include=' + ids.join(','));
         xhr.onload = function() {
             if (xhr.status === 200) {
-                var posts = JSON.parse(xhr.responseText);
-                var normalized = posts.map(function(post) {
-                    return {
-                        id: post.id,
-                        title: post.title.rendered,
-                        url: post.link
-                    };
-                });
-                callback(normalized);
+                try {
+                    var posts = JSON.parse(xhr.responseText);
+                    var normalized = posts.map(function(post) {
+                        return {
+                            id: post.id,
+                            title: post.title.rendered,
+                            url: post.link
+                        };
+                    });
+                    callback(normalized);
+                } catch (e) {
+                    callback([]);
+                }
             } else {
                 callback([]);
             }
+        };
+        xhr.onerror = function() {
+            callback([]);
         };
         xhr.send();
     }
@@ -41,11 +48,18 @@
         xhr.open('GET', endpoint + '&count=' + count);
         xhr.onload = function() {
             if (xhr.status === 200) {
-                var response = JSON.parse(xhr.responseText);
-                callback(response.success ? response.data : []);
+                try {
+                    var response = JSON.parse(xhr.responseText);
+                    callback(response.success ? response.data : []);
+                } catch (e) {
+                    callback([]);
+                }
             } else {
                 callback([]);
             }
+        };
+        xhr.onerror = function() {
+            callback([]);
         };
         xhr.send();
     }
@@ -64,6 +78,12 @@
         var storage = getStorage();
         return posts.filter(function(post) {
             return !storage.isTracked(post.id);
+        });
+    }
+
+    function filterValid(posts) {
+        return posts.filter(function(post) {
+            return post.title && post.url;
         });
     }
 
@@ -122,8 +142,8 @@
     function renderWidget(container, viewedPosts, readPosts, suggestions) {
         var config = getConfig();
         var storage = getStorage();
-        var viewedSlice = config.viewedEnabled ? viewedPosts.slice(0, config.maxViewed) : [];
-        var readSlice = config.completedEnabled ? readPosts.slice(0, config.maxRead) : [];
+        var viewedSlice = config.viewedEnabled ? filterValid(viewedPosts).slice(0, config.maxViewed) : [];
+        var readSlice = config.completedEnabled ? filterValid(readPosts).slice(0, config.maxRead) : [];
         var suggestionsSlice = filterUntracked(suggestions).slice(0, config.maxSuggestions);
 
         var html = '';
@@ -175,16 +195,27 @@
         var storage = getStorage();
         var suggestionsEndpoint = container.dataset.endpoint;
         var postsEndpoint = container.dataset.postsEndpoint || '/wp-json/wp/v2/posts';
+        var cacheHours = config.suggestionsCacheHours || 24;
 
-        var viewedIds = storage.getViewedIds();
-        var readIds = storage.getReadIds();
+        var viewedPosts = storage.getViewedPosts ? storage.getViewedPosts() : [];
+        var readPosts = storage.getReadPosts ? storage.getReadPosts() : [];
+        var viewedToFetch = viewedPosts.filter(function(p) { return p.needsFetch; }).map(function(p) { return p.id; });
+        var readToFetch = readPosts.filter(function(p) { return p.needsFetch; }).map(function(p) { return p.id; });
+
+        var suggestionsValid = storage.isSuggestionsCacheValid && storage.isSuggestionsCacheValid(cacheHours);
+        var suggestions = suggestionsValid && storage.getSuggestions ? storage.getSuggestions() : [];
+
+        var pending = 0;
+        if (viewedToFetch.length > 0) pending++;
+        if (readToFetch.length > 0) pending++;
+        if (!suggestionsValid) pending++;
+
+        if (pending === 0) {
+            renderWidget(container, viewedPosts, readPosts, suggestions);
+            return;
+        }
 
         renderLoading(container);
-
-        var viewedPosts = [];
-        var readPosts = [];
-        var suggestions = [];
-        var pending = 3;
 
         function checkComplete() {
             pending--;
@@ -193,20 +224,35 @@
             }
         }
 
-        fetchPostsByIds(postsEndpoint, viewedIds, function(posts) {
-            viewedPosts = posts;
-            checkComplete();
-        });
+        function updatePostsWithFetched(posts, fetched) {
+            return posts.map(function(p) {
+                if (!p.needsFetch) return p;
+                var found = fetched.find(function(f) { return f.id === p.id; });
+                return found || p;
+            });
+        }
 
-        fetchPostsByIds(postsEndpoint, readIds, function(posts) {
-            readPosts = posts;
-            checkComplete();
-        });
+        if (viewedToFetch.length > 0) {
+            fetchPostsByIds(postsEndpoint, viewedToFetch, function(fetched) {
+                viewedPosts = updatePostsWithFetched(viewedPosts, fetched);
+                checkComplete();
+            });
+        }
 
-        fetchSuggestions(suggestionsEndpoint, config.maxSuggestions, function(posts) {
-            suggestions = posts;
-            checkComplete();
-        });
+        if (readToFetch.length > 0) {
+            fetchPostsByIds(postsEndpoint, readToFetch, function(fetched) {
+                readPosts = updatePostsWithFetched(readPosts, fetched);
+                checkComplete();
+            });
+        }
+
+        if (!suggestionsValid) {
+            fetchSuggestions(suggestionsEndpoint, config.maxSuggestions, function(fetched) {
+                suggestions = fetched;
+                if (storage.setSuggestions) storage.setSuggestions(fetched);
+                checkComplete();
+            });
+        }
     }
 
     if (document.readyState === 'loading') {

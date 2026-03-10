@@ -224,4 +224,39 @@ class SettingsTest extends TestCase {
 
         $this->assertTrue($settings->requireConsent());
     }
+
+    public function testDefaultSuggestionsCacheHours(): void {
+        $settings = new Settings();
+
+        $this->assertEquals(24, $settings->suggestionsCacheHours());
+    }
+
+    public function testSuggestionsCacheHoursFromArray(): void {
+        $settings = Settings::fromArray([
+            'suggestions_cache_hours' => 12,
+        ]);
+
+        $this->assertEquals(12, $settings->suggestionsCacheHours());
+    }
+
+    public function testSuggestionsCacheHoursInToArray(): void {
+        $settings = Settings::fromArray([
+            'suggestions_cache_hours' => 6,
+        ]);
+
+        $array = $settings->toArray();
+
+        $this->assertArrayHasKey('suggestions_cache_hours', $array);
+        $this->assertEquals(6, $array['suggestions_cache_hours']);
+    }
+
+    public function testToJsConfigIncludesSuggestionsCacheHours(): void {
+        $settings = Settings::fromArray([
+            'suggestions_cache_hours' => 48,
+        ]);
+
+        $config = $settings->toJsConfig();
+
+        $this->assertEquals(48, $config['suggestionsCacheHours']);
+    }
 }
