@@ -516,3 +516,31 @@ describe('Widget: caching', () => {
         expect(setSuggestions).toHaveBeenCalled();
     });
 });
+
+describe('Widget: display options', () => {
+    test('renders excerpt when showExcerpt is enabled and data has excerpt', () => {
+        const { container, xhrInstances } = setupWidgetTest({ showExcerpt: true });
+        window.CompletionistStorage = mockStorage();
+
+        eval(widgetCode);
+        triggerXhrResponses(xhrInstances, {
+            suggestions: [{ id: 1, title: 'Post Title', excerpt: 'This is the excerpt.' }]
+        });
+
+        expect(container.innerHTML).toContain('completionist-excerpt');
+        expect(container.innerHTML).toContain('This is the excerpt.');
+    });
+
+    test('extracts excerpt from WP REST API response', () => {
+        const { container, xhrInstances } = setupWidgetTest({ showExcerpt: true });
+        window.CompletionistStorage = mockStorage({ viewedIds: [1] });
+
+        eval(widgetCode);
+        triggerXhrResponses(xhrInstances, {
+            viewed: { ids: [1], posts: [wpPost(1, 'Post Title', { excerpt: 'API excerpt text.' })] }
+        });
+
+        expect(container.innerHTML).toContain('completionist-excerpt');
+        expect(container.innerHTML).toContain('API excerpt text.');
+    });
+});

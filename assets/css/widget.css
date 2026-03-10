@@ -8,39 +8,77 @@
 .completionist-continue,
 .completionist-completed,
 .completionist-suggestions {
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #e5e5e5;
 }
 
 .completionist-continue:last-child,
 .completionist-completed:last-child,
 .completionist-suggestions:last-child {
     margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
 }
 
 .completionist-continue h3,
 .completionist-completed h3,
 .completionist-suggestions h3 {
     margin: 0 0 0.5rem;
-    font-size: 1rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #555;
 }
 
-.completionist-list {
+#completionist-widget .completionist-list {
     margin: 0;
-    padding-left: 1.2rem;
-    list-style: disc;
+    padding: 0;
+    list-style: none;
+    list-style-type: none;
 }
 
-.completionist-item {
-    margin-bottom: 0.25rem;
+#completionist-widget .completionist-list .completionist-item {
+    margin-bottom: 0.75rem;
+    padding: 0;
+    list-style: none;
+    list-style-type: none;
+}
+
+#completionist-widget .completionist-list .completionist-item::before {
+    content: none;
+}
+
+#completionist-widget .completionist-list .completionist-item:last-child {
+    margin-bottom: 0;
 }
 
 .completionist-content {
-    display: inline;
+    display: block;
 }
 
 .completionist-thumbnail,
 .completionist-excerpt {
     display: none;
+}
+
+.completionist-show-excerpt .completionist-excerpt {
+    display: block;
+    margin: 0.25rem 0 0;
+    font-size: 0.9em;
+    color: #666;
+}
+
+.completionist-show-thumbnail .completionist-thumbnail {
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.completionist-show-thumbnail .completionist-thumbnail img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
 }
 
 .completionist-title {
@@ -51,17 +89,6 @@
     text-decoration: underline;
 }
 
-.completionist-continue h3 {
-    color: #996800;
-}
-
-.completionist-completed h3 {
-    color: #007017;
-}
-
-.completionist-suggestions h3 {
-    color: #2271b1;
-}
 
 .completionist-loading {
     color: #666;

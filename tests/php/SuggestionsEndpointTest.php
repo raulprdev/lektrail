@@ -48,4 +48,24 @@ class SuggestionsEndpointTest extends TestCase {
 
         $this->assertEquals(SuggestionsEndpoint::DEFAULT_COUNT, $count);
     }
+
+    public function testHandleReturnsPostsWithExcerptAndThumbnail(): void {
+        $this->posts->posts = [
+            [
+                'id' => 1,
+                'title' => 'Test Post',
+                'url' => '/test-post',
+                'excerpt' => 'This is a test excerpt.',
+                'thumbnail' => 'http://example.com/image.jpg',
+            ],
+        ];
+        $_GET['count'] = '5';
+
+        $this->endpoint->handle();
+
+        $data = $this->response->successData;
+        $this->assertCount(1, $data);
+        $this->assertEquals('This is a test excerpt.', $data[0]['excerpt']);
+        $this->assertEquals('http://example.com/image.jpg', $data[0]['thumbnail']);
+    }
 }

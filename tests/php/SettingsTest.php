@@ -259,4 +259,58 @@ class SettingsTest extends TestCase {
 
         $this->assertEquals(48, $config['suggestionsCacheHours']);
     }
+
+    public function testDefaultShowExcerptIsFalse(): void {
+        $settings = new Settings();
+
+        $this->assertFalse($settings->showExcerpt());
+    }
+
+    public function testDefaultShowThumbnailIsFalse(): void {
+        $settings = new Settings();
+
+        $this->assertFalse($settings->showThumbnail());
+    }
+
+    public function testShowExcerptFromArray(): void {
+        $settings = Settings::fromArray([
+            'show_excerpt' => true,
+        ]);
+
+        $this->assertTrue($settings->showExcerpt());
+    }
+
+    public function testShowThumbnailFromArray(): void {
+        $settings = Settings::fromArray([
+            'show_thumbnail' => true,
+        ]);
+
+        $this->assertTrue($settings->showThumbnail());
+    }
+
+    public function testDisplaySettingsInToArray(): void {
+        $settings = Settings::fromArray([
+            'show_excerpt' => true,
+            'show_thumbnail' => true,
+        ]);
+
+        $array = $settings->toArray();
+
+        $this->assertArrayHasKey('show_excerpt', $array);
+        $this->assertArrayHasKey('show_thumbnail', $array);
+        $this->assertTrue($array['show_excerpt']);
+        $this->assertTrue($array['show_thumbnail']);
+    }
+
+    public function testToJsConfigIncludesDisplaySettings(): void {
+        $settings = Settings::fromArray([
+            'show_excerpt' => true,
+            'show_thumbnail' => false,
+        ]);
+
+        $config = $settings->toJsConfig();
+
+        $this->assertTrue($config['showExcerpt']);
+        $this->assertFalse($config['showThumbnail']);
+    }
 }

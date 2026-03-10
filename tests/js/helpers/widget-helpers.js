@@ -92,14 +92,23 @@ function setupWidgetTest(configOptions = {}) {
     return { container, xhrInstances };
 }
 
-function wpPost(id, title) {
-    return { id, title: { rendered: title }, link: `/${id}` };
+function wpPost(id, title, options = {}) {
+    const post = { id, title: { rendered: title }, link: `/${id}` };
+    if (options.excerpt) {
+        post.excerpt = { rendered: `<p>${options.excerpt}</p>` };
+    }
+    return post;
 }
 
 function suggestionsResponse(posts) {
     return JSON.stringify({
         success: true,
-        data: posts.map(p => ({ id: p.id, title: p.title, url: p.url || `/${p.id}` }))
+        data: posts.map(p => {
+            const post = { id: p.id, title: p.title, url: p.url || `/${p.id}` };
+            if (p.excerpt) post.excerpt = p.excerpt;
+            if (p.thumbnail) post.thumbnail = p.thumbnail;
+            return post;
+        })
     });
 }
 

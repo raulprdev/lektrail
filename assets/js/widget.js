@@ -23,11 +23,15 @@
                 try {
                     var posts = JSON.parse(xhr.responseText);
                     var normalized = posts.map(function(post) {
-                        return {
+                        var item = {
                             id: post.id,
                             title: post.title.rendered,
                             url: post.link
                         };
+                        if (post.excerpt && post.excerpt.rendered) {
+                            item.excerpt = post.excerpt.rendered.replace(/<[^>]*>/g, '').trim();
+                        }
+                        return item;
                     });
                     callback(normalized);
                 } catch (e) {
@@ -145,6 +149,11 @@
         var viewedSlice = config.viewedEnabled ? filterValid(viewedPosts).slice(0, config.maxViewed) : [];
         var readSlice = config.completedEnabled ? filterValid(readPosts).slice(0, config.maxRead) : [];
         var suggestionsSlice = filterUntracked(suggestions).slice(0, config.maxSuggestions);
+
+        var classes = [];
+        if (config.showExcerpt) classes.push('completionist-show-excerpt');
+        if (config.showThumbnail) classes.push('completionist-show-thumbnail');
+        container.className = classes.join(' ');
 
         var html = '';
         if (config.viewedEnabled) {

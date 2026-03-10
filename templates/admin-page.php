@@ -46,6 +46,45 @@
         </div>
 
         <div class="postbox">
+            <h2 class="hndle"><?= esc_html__('Display', 'completionist') ?></h2>
+            <div class="inside">
+                <p class="description"><?= esc_html__('Control what information is shown for each post in the widget.', 'completionist') ?></p>
+                <table class="form-table">
+                    <tr>
+                        <th scope="row"><?= esc_html__('Show Excerpt', 'completionist') ?></th>
+                        <td>
+                            <input type="hidden"
+                                   name="<?= \Completionist\WordPressSettingsRepository::OPTION_KEY ?>[show_excerpt]"
+                                   value="0">
+                            <label>
+                                <input type="checkbox"
+                                       name="<?= \Completionist\WordPressSettingsRepository::OPTION_KEY ?>[show_excerpt]"
+                                       value="1"
+                                       <?php checked($settings->showExcerpt()); ?>>
+                                <?= esc_html__('Display post excerpt below the title', 'completionist') ?>
+                            </label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><?= esc_html__('Show Thumbnail', 'completionist') ?></th>
+                        <td>
+                            <input type="hidden"
+                                   name="<?= \Completionist\WordPressSettingsRepository::OPTION_KEY ?>[show_thumbnail]"
+                                   value="0">
+                            <label>
+                                <input type="checkbox"
+                                       name="<?= \Completionist\WordPressSettingsRepository::OPTION_KEY ?>[show_thumbnail]"
+                                       value="1"
+                                       <?php checked($settings->showThumbnail()); ?>>
+                                <?= esc_html__('Display post thumbnail image', 'completionist') ?>
+                            </label>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="postbox">
             <h2 class="hndle"><?= esc_html__('Consent Settings', 'completionist') ?></h2>
             <div class="inside">
                 <table class="form-table">

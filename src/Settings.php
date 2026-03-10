@@ -20,6 +20,8 @@ class Settings {
     public const DEFAULT_CONSENT_MESSAGE = 'Track your reading progress on this site?';
     public const DEFAULT_CONSENT_CHECKBOX_LABEL = 'Yes, track my reading';
     public const DEFAULT_SUGGESTIONS_CACHE_HOURS = 24;
+    public const DEFAULT_SHOW_EXCERPT = false;
+    public const DEFAULT_SHOW_THUMBNAIL = false;
 
     private array $postTypes;
     private int $maxViewed;
@@ -37,6 +39,8 @@ class Settings {
     private string $consentMessage;
     private string $consentCheckboxLabel;
     private int $suggestionsCacheHours;
+    private bool $showExcerpt;
+    private bool $showThumbnail;
 
     public function __construct(
         array $postTypes = self::DEFAULT_POST_TYPES,
@@ -54,7 +58,9 @@ class Settings {
         bool $requireConsent = self::DEFAULT_REQUIRE_CONSENT,
         string $consentMessage = self::DEFAULT_CONSENT_MESSAGE,
         string $consentCheckboxLabel = self::DEFAULT_CONSENT_CHECKBOX_LABEL,
-        int $suggestionsCacheHours = self::DEFAULT_SUGGESTIONS_CACHE_HOURS
+        int $suggestionsCacheHours = self::DEFAULT_SUGGESTIONS_CACHE_HOURS,
+        bool $showExcerpt = self::DEFAULT_SHOW_EXCERPT,
+        bool $showThumbnail = self::DEFAULT_SHOW_THUMBNAIL
     ) {
         $this->postTypes = $postTypes;
         $this->maxViewed = $maxViewed;
@@ -72,6 +78,8 @@ class Settings {
         $this->consentMessage = $consentMessage;
         $this->consentCheckboxLabel = $consentCheckboxLabel;
         $this->suggestionsCacheHours = $suggestionsCacheHours;
+        $this->showExcerpt = $showExcerpt;
+        $this->showThumbnail = $showThumbnail;
     }
 
     public static function fromArray(array $data, array $defaults = []): self {
@@ -91,7 +99,9 @@ class Settings {
             (bool) ($data['require_consent'] ?? $defaults['require_consent'] ?? self::DEFAULT_REQUIRE_CONSENT),
             $data['consent_message'] ?? $defaults['consent_message'] ?? self::DEFAULT_CONSENT_MESSAGE,
             $data['consent_checkbox_label'] ?? $defaults['consent_checkbox_label'] ?? self::DEFAULT_CONSENT_CHECKBOX_LABEL,
-            (int) ($data['suggestions_cache_hours'] ?? $defaults['suggestions_cache_hours'] ?? self::DEFAULT_SUGGESTIONS_CACHE_HOURS)
+            (int) ($data['suggestions_cache_hours'] ?? $defaults['suggestions_cache_hours'] ?? self::DEFAULT_SUGGESTIONS_CACHE_HOURS),
+            (bool) ($data['show_excerpt'] ?? $defaults['show_excerpt'] ?? self::DEFAULT_SHOW_EXCERPT),
+            (bool) ($data['show_thumbnail'] ?? $defaults['show_thumbnail'] ?? self::DEFAULT_SHOW_THUMBNAIL)
         );
     }
 
@@ -113,6 +123,8 @@ class Settings {
             'consent_message' => $this->consentMessage,
             'consent_checkbox_label' => $this->consentCheckboxLabel,
             'suggestions_cache_hours' => $this->suggestionsCacheHours,
+            'show_excerpt' => $this->showExcerpt,
+            'show_thumbnail' => $this->showThumbnail,
         ];
     }
 
@@ -180,6 +192,14 @@ class Settings {
         return $this->suggestionsCacheHours;
     }
 
+    public function showExcerpt(): bool {
+        return $this->showExcerpt;
+    }
+
+    public function showThumbnail(): bool {
+        return $this->showThumbnail;
+    }
+
     public function toJsConfig(): array {
         return [
             'maxViewed' => $this->maxViewed,
@@ -189,6 +209,8 @@ class Settings {
             'completedEnabled' => $this->completedEnabled,
             'requireConsent' => $this->requireConsent,
             'suggestionsCacheHours' => $this->suggestionsCacheHours,
+            'showExcerpt' => $this->showExcerpt,
+            'showThumbnail' => $this->showThumbnail,
             'labels' => [
                 'continue' => $this->labelContinue,
                 'completed' => $this->labelCompleted,

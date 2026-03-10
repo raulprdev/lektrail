@@ -198,8 +198,8 @@ describe('Storage: post data caching', () => {
 
         const posts = CompletionistStorage.getViewedPosts();
         expect(posts).toHaveLength(2);
-        expect(posts[0]).toMatchObject({ id: 1, title: 'Post 1', url: '/post-1' });
-        expect(posts[1]).toMatchObject({ id: 2, title: 'Post 2', url: '/post-2' });
+        expect(posts[0]).toMatchObject({ id: 2, title: 'Post 2', url: '/post-2' });
+        expect(posts[1]).toMatchObject({ id: 1, title: 'Post 1', url: '/post-1' });
     });
 
     test('getViewedPosts marks old-format entries as needsFetch', () => {
@@ -235,7 +235,7 @@ describe('Storage: post data caching', () => {
 
         const posts = CompletionistStorage.getReadPosts();
         expect(posts).toHaveLength(2);
-        expect(posts[0]).toMatchObject({ id: 1, title: 'Post 1', url: '/post-1' });
+        expect(posts[0]).toMatchObject({ id: 2, title: 'Post 2', url: '/post-2' });
     });
 
     test('getReadPosts marks old-format entries as needsFetch', () => {
@@ -243,6 +243,28 @@ describe('Storage: post data caching', () => {
 
         const posts = CompletionistStorage.getReadPosts();
         expect(posts[0].needsFetch).toBe(true);
+    });
+
+    test('getViewedPosts returns most recent first', () => {
+        CompletionistStorage.addViewed(1, { title: 'First', url: '/first' });
+        CompletionistStorage.addViewed(2, { title: 'Second', url: '/second' });
+        CompletionistStorage.addViewed(3, { title: 'Third', url: '/third' });
+
+        const posts = CompletionistStorage.getViewedPosts();
+        expect(posts[0].id).toBe(3);
+        expect(posts[1].id).toBe(2);
+        expect(posts[2].id).toBe(1);
+    });
+
+    test('getReadPosts returns most recent first', () => {
+        CompletionistStorage.addRead(1, { title: 'First', url: '/first' });
+        CompletionistStorage.addRead(2, { title: 'Second', url: '/second' });
+        CompletionistStorage.addRead(3, { title: 'Third', url: '/third' });
+
+        const posts = CompletionistStorage.getReadPosts();
+        expect(posts[0].id).toBe(3);
+        expect(posts[1].id).toBe(2);
+        expect(posts[2].id).toBe(1);
     });
 });
 

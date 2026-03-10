@@ -123,7 +123,7 @@
                     post.needsFetch = true;
                 }
                 return post;
-            });
+            }).reverse();
         },
 
         getReadPosts: function() {
@@ -136,7 +136,7 @@
                     post.needsFetch = true;
                 }
                 return post;
-            });
+            }).reverse();
         },
 
         setSuggestions: function(posts) {
