@@ -38,8 +38,8 @@ add_action('plugins_loaded', function () {
 
     $settingsRepo = new Completionist\WordPressSettingsRepository($options, $locale);
     $settings = $settingsRepo->load();
-    $assets = new Completionist\Assets($scripts, COMPLETIONIST_PLUGIN_PATH, COMPLETIONIST_PLUGIN_URL, COMPLETIONIST_VERSION, $settings);
     $posts = new Completionist\WordPressPostQuery();
+    $assets = new Completionist\Assets($scripts, COMPLETIONIST_PLUGIN_PATH, COMPLETIONIST_PLUGIN_URL, COMPLETIONIST_VERSION, $settings, $posts);
     $response = new Completionist\WordPressJsonResponse();
 
     $suggestions = new Completionist\SuggestionsEndpoint($posts, $response);

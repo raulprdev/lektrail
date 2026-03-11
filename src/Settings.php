@@ -22,6 +22,7 @@ class Settings {
     public const DEFAULT_SUGGESTIONS_CACHE_HOURS = 24;
     public const DEFAULT_SHOW_EXCERPT = false;
     public const DEFAULT_SHOW_THUMBNAIL = false;
+    public const DEFAULT_EXCERPT_LENGTH = 20;
 
     private array $postTypes;
     private int $maxViewed;
@@ -41,6 +42,7 @@ class Settings {
     private int $suggestionsCacheHours;
     private bool $showExcerpt;
     private bool $showThumbnail;
+    private int $excerptLength;
 
     public function __construct(
         array $postTypes = self::DEFAULT_POST_TYPES,
@@ -60,7 +62,8 @@ class Settings {
         string $consentCheckboxLabel = self::DEFAULT_CONSENT_CHECKBOX_LABEL,
         int $suggestionsCacheHours = self::DEFAULT_SUGGESTIONS_CACHE_HOURS,
         bool $showExcerpt = self::DEFAULT_SHOW_EXCERPT,
-        bool $showThumbnail = self::DEFAULT_SHOW_THUMBNAIL
+        bool $showThumbnail = self::DEFAULT_SHOW_THUMBNAIL,
+        int $excerptLength = self::DEFAULT_EXCERPT_LENGTH
     ) {
         $this->postTypes = $postTypes;
         $this->maxViewed = $maxViewed;
@@ -80,6 +83,7 @@ class Settings {
         $this->suggestionsCacheHours = $suggestionsCacheHours;
         $this->showExcerpt = $showExcerpt;
         $this->showThumbnail = $showThumbnail;
+        $this->excerptLength = $excerptLength;
     }
 
     public static function fromArray(array $data, array $defaults = []): self {
@@ -101,7 +105,8 @@ class Settings {
             $data['consent_checkbox_label'] ?? $defaults['consent_checkbox_label'] ?? self::DEFAULT_CONSENT_CHECKBOX_LABEL,
             (int) ($data['suggestions_cache_hours'] ?? $defaults['suggestions_cache_hours'] ?? self::DEFAULT_SUGGESTIONS_CACHE_HOURS),
             (bool) ($data['show_excerpt'] ?? $defaults['show_excerpt'] ?? self::DEFAULT_SHOW_EXCERPT),
-            (bool) ($data['show_thumbnail'] ?? $defaults['show_thumbnail'] ?? self::DEFAULT_SHOW_THUMBNAIL)
+            (bool) ($data['show_thumbnail'] ?? $defaults['show_thumbnail'] ?? self::DEFAULT_SHOW_THUMBNAIL),
+            (int) ($data['excerpt_length'] ?? $defaults['excerpt_length'] ?? self::DEFAULT_EXCERPT_LENGTH)
         );
     }
 
@@ -125,6 +130,7 @@ class Settings {
             'suggestions_cache_hours' => $this->suggestionsCacheHours,
             'show_excerpt' => $this->showExcerpt,
             'show_thumbnail' => $this->showThumbnail,
+            'excerpt_length' => $this->excerptLength,
         ];
     }
 
@@ -198,6 +204,10 @@ class Settings {
 
     public function showThumbnail(): bool {
         return $this->showThumbnail;
+    }
+
+    public function excerptLength(): int {
+        return $this->excerptLength;
     }
 
     public function toJsConfig(): array {

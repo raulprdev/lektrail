@@ -313,4 +313,29 @@ class SettingsTest extends TestCase {
         $this->assertTrue($config['showExcerpt']);
         $this->assertFalse($config['showThumbnail']);
     }
+
+    public function testDefaultExcerptLength(): void {
+        $settings = new Settings();
+
+        $this->assertEquals(20, $settings->excerptLength());
+    }
+
+    public function testExcerptLengthFromArray(): void {
+        $settings = Settings::fromArray([
+            'excerpt_length' => 30,
+        ]);
+
+        $this->assertEquals(30, $settings->excerptLength());
+    }
+
+    public function testExcerptLengthInToArray(): void {
+        $settings = Settings::fromArray([
+            'excerpt_length' => 15,
+        ]);
+
+        $array = $settings->toArray();
+
+        $this->assertArrayHasKey('excerpt_length', $array);
+        $this->assertEquals(15, $array['excerpt_length']);
+    }
 }

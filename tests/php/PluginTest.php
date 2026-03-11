@@ -32,7 +32,8 @@ class PluginTest extends TestCase {
             dirname(__DIR__, 2) . '/',
             'http://example.com/',
             '1.0.0',
-            new Settings()
+            new Settings(),
+            new MockPostQuery()
         );
     }
 

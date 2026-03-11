@@ -12,9 +12,24 @@ let D;
 
 beforeEach(() => {
     delete window.CompletionistDetector;
+    delete window.CompletionistPostData;
     eval(detectorCode);
     D = window.CompletionistDetector;
 });
+
+afterEach(() => {
+    delete window.CompletionistPostData;
+});
+
+function setPostData(postId) {
+    window.CompletionistPostData = {
+        id: postId,
+        title: 'Test Post',
+        url: '/test-post',
+        excerpt: 'Test excerpt',
+        thumbnail: 'http://example.com/image.jpg'
+    };
+}
 
 describe('shouldTrack', () => {
     test('true when post is untracked', () => {
@@ -22,11 +37,11 @@ describe('shouldTrack', () => {
     });
 
     test('false when post already viewed', () => {
-        expect(D.shouldTrack(123, mockStorage({ viewedIds: [123] }), false)).toBe(false);
+        expect(D.shouldTrack(123, mockStorage({ viewedPosts: [{ id: 123, title: 'Test', url: '/test' }] }), false)).toBe(false);
     });
 
     test('false when post already read', () => {
-        expect(D.shouldTrack(123, mockStorage({ readIds: [123] }), false)).toBe(false);
+        expect(D.shouldTrack(123, mockStorage({ readPosts: [{ id: 123, title: 'Test', url: '/test' }] }), false)).toBe(false);
     });
 
     test('false when already tracked this session', () => {
@@ -44,6 +59,7 @@ describe('shouldTrack', () => {
 
 describe('Detector: on page load', () => {
     test('marks post as viewed on init (not read)', () => {
+        setPostData(123);
         const storage = mockStorage();
         const detector = D.createDetector({
             dom: mockDom({ postId: 123, article: true }),
@@ -58,7 +74,8 @@ describe('Detector: on page load', () => {
     });
 
     test('does not mark as viewed if already viewed', () => {
-        const storage = mockStorage({ viewedIds: [123] });
+        setPostData(123);
+        const storage = mockStorage({ viewedPosts: [{ id: 123, title: 'Test', url: '/test' }] });
         const detector = D.createDetector({
             dom: mockDom({ postId: 123, article: true }),
             storage,
@@ -71,7 +88,8 @@ describe('Detector: on page load', () => {
     });
 
     test('does not mark as viewed if already read', () => {
-        const storage = mockStorage({ readIds: [123] });
+        setPostData(123);
+        const storage = mockStorage({ readPosts: [{ id: 123, title: 'Test', url: '/test' }] });
         const detector = D.createDetector({
             dom: mockDom({ postId: 123, article: true }),
             storage,
@@ -82,11 +100,26 @@ describe('Detector: on page load', () => {
 
         expect(storage.addViewed).not.toHaveBeenCalled();
     });
+
+    test('skips tracking when CompletionistPostData is missing', () => {
+        const storage = mockStorage();
+        const detector = D.createDetector({
+            dom: mockDom({ postId: 123, article: true }),
+            storage,
+            Observer: null
+        });
+
+        const result = detector.init();
+
+        expect(result.success).toBe(false);
+        expect(result.reason).toBe('no-postdata');
+        expect(storage.addViewed).not.toHaveBeenCalled();
+    });
 });
 
 describe('Detector: on scroll to 90%', () => {
     test('promotes viewed post to read when scrolling completes', () => {
-        const storage = mockStorage({ viewedIds: [42] });
+        const storage = mockStorage({ viewedPosts: [{ id: 42, title: 'Test', url: '/test' }] });
         const detector = D.createDetector({
             dom: mockDom({ postId: 42, article: true }),
             storage,
@@ -112,7 +145,7 @@ describe('Detector: on scroll to 90%', () => {
     });
 
     test('does not re-mark if already read', () => {
-        const storage = mockStorage({ readIds: [42] });
+        const storage = mockStorage({ readPosts: [{ id: 42, title: 'Test', url: '/test' }] });
         const detector = D.createDetector({
             dom: mockDom({ postId: 42, article: true }),
             storage,
@@ -141,6 +174,7 @@ describe('Detector: on scroll to 90%', () => {
 
 describe('detector.init', () => {
     test('fails without article element', () => {
+        setPostData(123);
         const detector = D.createDetector({
             dom: mockDom({ postId: 123 }),
             Observer: null
@@ -156,7 +190,8 @@ describe('detector.init', () => {
         expect(detector.init().success).toBe(false);
     });
 
-    test('succeeds with article and postId', () => {
+    test('succeeds with article, postId and CompletionistPostData', () => {
+        setPostData(123);
         const storage = mockStorage();
         const detector = D.createDetector({
             dom: mockDom({ postId: 123, article: true }),
@@ -179,6 +214,7 @@ describe('Detector: consent', () => {
     }
 
     test('does not track when consent is false', () => {
+        setPostData(123);
         const storage = mockStorage();
         const consentManager = mockConsentManager({ consent: false });
         const detector = D.createDetector({
@@ -194,6 +230,7 @@ describe('Detector: consent', () => {
     });
 
     test('does not track when consent is null (pending)', () => {
+        setPostData(123);
         const storage = mockStorage();
         const consentManager = mockConsentManager({ consent: null });
         const detector = D.createDetector({
@@ -209,6 +246,7 @@ describe('Detector: consent', () => {
     });
 
     test('tracks when consent is true', () => {
+        setPostData(123);
         const storage = mockStorage();
         const consentManager = mockConsentManager({ consent: true });
         const detector = D.createDetector({
@@ -224,6 +262,7 @@ describe('Detector: consent', () => {
     });
 
     test('tracks normally when no consent manager', () => {
+        setPostData(123);
         const storage = mockStorage();
         const detector = D.createDetector({
             dom: mockDom({ postId: 123, article: true }),
@@ -237,7 +276,7 @@ describe('Detector: consent', () => {
     });
 
     test('does not mark read when consent is false', () => {
-        const storage = mockStorage({ viewedIds: [42] });
+        const storage = mockStorage({ viewedPosts: [{ id: 42, title: 'Test', url: '/test' }] });
         const consentManager = mockConsentManager({ consent: false });
         const detector = D.createDetector({
             dom: mockDom({ postId: 42, article: true }),
@@ -253,7 +292,7 @@ describe('Detector: consent', () => {
 });
 
 describe('auto-init', () => {
-    test('creates sentinel when article and postId exist', () => {
+    test('creates sentinel when article, postId and CompletionistPostData exist', () => {
         const mockArticle = {
             style: {},
             appendChild: jest.fn(),
@@ -275,6 +314,11 @@ describe('auto-init', () => {
         document.createElement = jest.fn(() => ({ style: {} }));
         window.getComputedStyle = jest.fn(() => ({ position: 'static' }));
         window.CompletionistStorage = mockStorage();
+        window.CompletionistPostData = {
+            id: 123,
+            title: 'Test Post',
+            url: '/test-post'
+        };
         window.IntersectionObserver = jest.fn(() => ({
             observe: jest.fn(),
             disconnect: jest.fn()

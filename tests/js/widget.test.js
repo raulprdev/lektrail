@@ -4,9 +4,15 @@ const {
     mockStorage,
     mockConsentManager,
     setupWidgetTest,
-    wpPost,
     triggerXhrResponses
 } = require('./helpers/widget-helpers');
+
+function post(id, title, options = {}) {
+    const p = { id, title, url: `/${id}` };
+    if (options.excerpt) p.excerpt = options.excerpt;
+    if (options.thumbnail) p.thumbnail = options.thumbnail;
+    return p;
+}
 
 const widgetCode = fs.readFileSync(
     path.join(__dirname, '../../assets/js/widget.js'),
@@ -42,36 +48,36 @@ describe('Widget: loading and empty states', () => {
 describe('Widget: section counts in titles', () => {
     test('shows viewed count in section title', () => {
         const { container, xhrInstances } = setupWidgetTest();
-        window.CompletionistStorage = mockStorage({ viewedIds: [1, 2, 3] });
+        window.CompletionistStorage = mockStorage({
+            viewedPosts: [post(1, 'Post 1'), post(2, 'Post 2'), post(3, 'Post 3')]
+        });
 
         eval(widgetCode);
-        triggerXhrResponses(xhrInstances, {
-            viewed: { ids: [1, 2, 3], posts: [wpPost(1, 'Post 1'), wpPost(2, 'Post 2'), wpPost(3, 'Post 3')] }
-        });
+        triggerXhrResponses(xhrInstances, { suggestions: [] });
 
         expect(container.innerHTML).toContain('Continue reading (3)');
     });
 
     test('shows read count in section title', () => {
         const { container, xhrInstances } = setupWidgetTest();
-        window.CompletionistStorage = mockStorage({ readIds: [1, 2, 3, 4, 5] });
+        window.CompletionistStorage = mockStorage({
+            readPosts: [1, 2, 3, 4, 5].map(i => post(i, `Post ${i}`))
+        });
 
         eval(widgetCode);
-        triggerXhrResponses(xhrInstances, {
-            read: { ids: [1, 2, 3, 4, 5], posts: [1, 2, 3, 4, 5].map(i => wpPost(i, `Post ${i}`)) }
-        });
+        triggerXhrResponses(xhrInstances, { suggestions: [] });
 
         expect(container.innerHTML).toContain('Completed (5)');
     });
 
     test('shows total count even when display is limited', () => {
         const { container, xhrInstances } = setupWidgetTest();
-        window.CompletionistStorage = mockStorage({ readIds: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] });
+        window.CompletionistStorage = mockStorage({
+            readPosts: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(i => post(i, `Post ${i}`))
+        });
 
         eval(widgetCode);
-        triggerXhrResponses(xhrInstances, {
-            read: { ids: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], posts: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(i => wpPost(i, `Post ${i}`)) }
-        });
+        triggerXhrResponses(xhrInstances, { suggestions: [] });
 
         expect(container.innerHTML).toContain('Completed (10)');
     });
@@ -91,14 +97,14 @@ describe('Widget: section counts in titles', () => {
 });
 
 describe('Widget: continue reading section', () => {
-    test('displays viewed posts fetched by IDs', () => {
+    test('displays viewed posts from storage', () => {
         const { container, xhrInstances } = setupWidgetTest();
-        window.CompletionistStorage = mockStorage({ viewedIds: [1] });
+        window.CompletionistStorage = mockStorage({
+            viewedPosts: [post(1, 'Viewed Post')]
+        });
 
         eval(widgetCode);
-        triggerXhrResponses(xhrInstances, {
-            viewed: { ids: [1], posts: [wpPost(1, 'Viewed Post')] }
-        });
+        triggerXhrResponses(xhrInstances, { suggestions: [] });
 
         expect(container.innerHTML).toContain('Continue reading');
         expect(container.innerHTML).toContain('Viewed Post');
@@ -106,13 +112,13 @@ describe('Widget: continue reading section', () => {
 
     test('does not show read posts in this section', () => {
         const { container, xhrInstances } = setupWidgetTest();
-        window.CompletionistStorage = mockStorage({ viewedIds: [1], readIds: [2] });
+        window.CompletionistStorage = mockStorage({
+            viewedPosts: [post(1, 'Viewed Post')],
+            readPosts: [post(2, 'Read Post')]
+        });
 
         eval(widgetCode);
-        triggerXhrResponses(xhrInstances, {
-            viewed: { ids: [1], posts: [wpPost(1, 'Viewed Post')] },
-            read: { ids: [2], posts: [wpPost(2, 'Read Post')] }
-        });
+        triggerXhrResponses(xhrInstances, { suggestions: [] });
 
         const continueSection = container.innerHTML.split('Completed')[0];
         expect(continueSection).toContain('Viewed Post');
@@ -121,15 +127,12 @@ describe('Widget: continue reading section', () => {
 
     test('limits to 3 posts', () => {
         const { container, xhrInstances } = setupWidgetTest();
-        window.CompletionistStorage = mockStorage({ viewedIds: [1, 2, 3, 4, 5] });
+        window.CompletionistStorage = mockStorage({
+            viewedPosts: [1, 2, 3, 4, 5].map(i => post(i, `Post ${i}`))
+        });
 
         eval(widgetCode);
-        triggerXhrResponses(xhrInstances, {
-            viewed: {
-                ids: [1, 2, 3, 4, 5],
-                posts: [1, 2, 3, 4, 5].map(i => wpPost(i, `Post ${i}`))
-            }
-        });
+        triggerXhrResponses(xhrInstances, { suggestions: [] });
 
         const section = container.innerHTML.split('Completed')[0];
         expect(section).toContain('Post 1');
@@ -139,26 +142,26 @@ describe('Widget: continue reading section', () => {
 
     test('hides section when no viewed posts', () => {
         const { container, xhrInstances } = setupWidgetTest();
-        window.CompletionistStorage = mockStorage({ readIds: [1] });
+        window.CompletionistStorage = mockStorage({
+            readPosts: [post(1, 'Read Post')]
+        });
 
         eval(widgetCode);
-        triggerXhrResponses(xhrInstances, {
-            read: { ids: [1], posts: [wpPost(1, 'Read Post')] }
-        });
+        triggerXhrResponses(xhrInstances, { suggestions: [] });
 
         expect(container.innerHTML).not.toContain('Continue reading');
     });
 });
 
 describe('Widget: completed section', () => {
-    test('displays read posts fetched by IDs', () => {
+    test('displays read posts from storage', () => {
         const { container, xhrInstances } = setupWidgetTest();
-        window.CompletionistStorage = mockStorage({ readIds: [1] });
+        window.CompletionistStorage = mockStorage({
+            readPosts: [post(1, 'Read Post')]
+        });
 
         eval(widgetCode);
-        triggerXhrResponses(xhrInstances, {
-            read: { ids: [1], posts: [wpPost(1, 'Read Post')] }
-        });
+        triggerXhrResponses(xhrInstances, { suggestions: [] });
 
         expect(container.innerHTML).toContain('Completed');
         expect(container.innerHTML).toContain('Read Post');
@@ -166,15 +169,12 @@ describe('Widget: completed section', () => {
 
     test('limits to 5 posts', () => {
         const { container, xhrInstances } = setupWidgetTest();
-        window.CompletionistStorage = mockStorage({ readIds: [1, 2, 3, 4, 5, 6, 7] });
+        window.CompletionistStorage = mockStorage({
+            readPosts: [1, 2, 3, 4, 5, 6, 7].map(i => post(i, `Post ${i}`))
+        });
 
         eval(widgetCode);
-        triggerXhrResponses(xhrInstances, {
-            read: {
-                ids: [1, 2, 3, 4, 5, 6, 7],
-                posts: [1, 2, 3, 4, 5, 6, 7].map(i => wpPost(i, `Post ${i}`))
-            }
-        });
+        triggerXhrResponses(xhrInstances, { suggestions: [] });
 
         const section = container.innerHTML.split('Completed')[1] || '';
         expect(section).toContain('Post 5');
@@ -183,12 +183,12 @@ describe('Widget: completed section', () => {
 
     test('hides section when no read posts', () => {
         const { container, xhrInstances } = setupWidgetTest();
-        window.CompletionistStorage = mockStorage({ viewedIds: [1] });
+        window.CompletionistStorage = mockStorage({
+            viewedPosts: [post(1, 'Viewed Post')]
+        });
 
         eval(widgetCode);
-        triggerXhrResponses(xhrInstances, {
-            viewed: { ids: [1], posts: [wpPost(1, 'Viewed Post')] }
-        });
+        triggerXhrResponses(xhrInstances, { suggestions: [] });
 
         expect(container.innerHTML).not.toContain('Completed');
     });
@@ -210,11 +210,12 @@ describe('Widget: suggested reading section', () => {
 
     test('excludes viewed posts', () => {
         const { container, xhrInstances } = setupWidgetTest();
-        window.CompletionistStorage = mockStorage({ viewedIds: [1] });
+        window.CompletionistStorage = mockStorage({
+            viewedPosts: [post(1, 'Viewed')]
+        });
 
         eval(widgetCode);
         triggerXhrResponses(xhrInstances, {
-            viewed: { ids: [1], posts: [wpPost(1, 'Viewed')] },
             suggestions: [{ id: 1, title: 'Viewed' }, { id: 2, title: 'New' }]
         });
 
@@ -225,11 +226,12 @@ describe('Widget: suggested reading section', () => {
 
     test('excludes read posts', () => {
         const { container, xhrInstances } = setupWidgetTest();
-        window.CompletionistStorage = mockStorage({ readIds: [1] });
+        window.CompletionistStorage = mockStorage({
+            readPosts: [post(1, 'Read')]
+        });
 
         eval(widgetCode);
         triggerXhrResponses(xhrInstances, {
-            read: { ids: [1], posts: [wpPost(1, 'Read')] },
             suggestions: [{ id: 1, title: 'Read' }, { id: 2, title: 'New' }]
         });
 
@@ -253,12 +255,13 @@ describe('Widget: suggested reading section', () => {
 
     test('hides section when no suggestions', () => {
         const { container, xhrInstances } = setupWidgetTest();
-        window.CompletionistStorage = mockStorage({ viewedIds: [1], readIds: [2] });
+        window.CompletionistStorage = mockStorage({
+            viewedPosts: [post(1, 'Viewed')],
+            readPosts: [post(2, 'Read')]
+        });
 
         eval(widgetCode);
         triggerXhrResponses(xhrInstances, {
-            viewed: { ids: [1], posts: [wpPost(1, 'Viewed')] },
-            read: { ids: [2], posts: [wpPost(2, 'Read')] },
             suggestions: [{ id: 1, title: 'Viewed' }, { id: 2, title: 'Read' }]
         });
 
@@ -269,12 +272,13 @@ describe('Widget: suggested reading section', () => {
 describe('Widget: all sections together', () => {
     test('displays all three sections correctly', () => {
         const { container, xhrInstances } = setupWidgetTest();
-        window.CompletionistStorage = mockStorage({ viewedIds: [1], readIds: [2] });
+        window.CompletionistStorage = mockStorage({
+            viewedPosts: [post(1, 'Viewed Post')],
+            readPosts: [post(2, 'Read Post')]
+        });
 
         eval(widgetCode);
         triggerXhrResponses(xhrInstances, {
-            viewed: { ids: [1], posts: [wpPost(1, 'Viewed Post')] },
-            read: { ids: [2], posts: [wpPost(2, 'Read Post')] },
             suggestions: [{ id: 3, title: 'New Post' }]
         });
 
@@ -290,12 +294,13 @@ describe('Widget: all sections together', () => {
 describe('Widget: section enable/disable', () => {
     test('hides viewed section when disabled', () => {
         const { container, xhrInstances } = setupWidgetTest({ viewedEnabled: false });
-        window.CompletionistStorage = mockStorage({ viewedIds: [1], readIds: [2] });
+        window.CompletionistStorage = mockStorage({
+            viewedPosts: [post(1, 'Viewed Post')],
+            readPosts: [post(2, 'Read Post')]
+        });
 
         eval(widgetCode);
         triggerXhrResponses(xhrInstances, {
-            viewed: { ids: [1], posts: [wpPost(1, 'Viewed Post')] },
-            read: { ids: [2], posts: [wpPost(2, 'Read Post')] },
             suggestions: [{ id: 3, title: 'New Post' }]
         });
 
@@ -307,12 +312,13 @@ describe('Widget: section enable/disable', () => {
 
     test('hides completed section when disabled', () => {
         const { container, xhrInstances } = setupWidgetTest({ completedEnabled: false });
-        window.CompletionistStorage = mockStorage({ viewedIds: [1], readIds: [2] });
+        window.CompletionistStorage = mockStorage({
+            viewedPosts: [post(1, 'Viewed Post')],
+            readPosts: [post(2, 'Read Post')]
+        });
 
         eval(widgetCode);
         triggerXhrResponses(xhrInstances, {
-            viewed: { ids: [1], posts: [wpPost(1, 'Viewed Post')] },
-            read: { ids: [2], posts: [wpPost(2, 'Read Post')] },
             suggestions: [{ id: 3, title: 'New Post' }]
         });
 
@@ -327,12 +333,13 @@ describe('Widget: section enable/disable', () => {
             viewedEnabled: false,
             completedEnabled: false
         });
-        window.CompletionistStorage = mockStorage({ viewedIds: [1], readIds: [2] });
+        window.CompletionistStorage = mockStorage({
+            viewedPosts: [post(1, 'Viewed Post')],
+            readPosts: [post(2, 'Read Post')]
+        });
 
         eval(widgetCode);
         triggerXhrResponses(xhrInstances, {
-            viewed: { ids: [1], posts: [wpPost(1, 'Viewed Post')] },
-            read: { ids: [2], posts: [wpPost(2, 'Read Post')] },
             suggestions: [{ id: 3, title: 'New Post' }]
         });
 
@@ -346,7 +353,10 @@ describe('Widget: section enable/disable', () => {
 describe('Widget: configurable labels', () => {
     test('uses custom labels from config', () => {
         const { container, xhrInstances } = setupWidgetTest();
-        window.CompletionistStorage = mockStorage({ viewedIds: [1], readIds: [2] });
+        window.CompletionistStorage = mockStorage({
+            viewedPosts: [post(1, 'Post 1')],
+            readPosts: [post(2, 'Post 2')]
+        });
         window.CompletionistConfig = {
             widgetId: 'completionist-widget',
             maxViewed: 3,
@@ -365,8 +375,6 @@ describe('Widget: configurable labels', () => {
 
         eval(widgetCode);
         triggerXhrResponses(xhrInstances, {
-            viewed: { ids: [1], posts: [wpPost(1, 'Post 1')] },
-            read: { ids: [2], posts: [wpPost(2, 'Post 2')] },
             suggestions: [{ id: 3, title: 'Post 3' }]
         });
 
@@ -531,27 +539,27 @@ describe('Widget: display options', () => {
         expect(container.innerHTML).toContain('This is the excerpt.');
     });
 
-    test('extracts excerpt from WP REST API response', () => {
+    test('renders excerpt from storage for viewed posts', () => {
         const { container, xhrInstances } = setupWidgetTest({ showExcerpt: true });
-        window.CompletionistStorage = mockStorage({ viewedIds: [1] });
+        window.CompletionistStorage = mockStorage({
+            viewedPosts: [post(1, 'Post Title', { excerpt: 'Stored excerpt text.' })]
+        });
 
         eval(widgetCode);
-        triggerXhrResponses(xhrInstances, {
-            viewed: { ids: [1], posts: [wpPost(1, 'Post Title', { excerpt: 'API excerpt text.' })] }
-        });
+        triggerXhrResponses(xhrInstances, { suggestions: [] });
 
         expect(container.innerHTML).toContain('completionist-excerpt');
-        expect(container.innerHTML).toContain('API excerpt text.');
+        expect(container.innerHTML).toContain('Stored excerpt text.');
     });
 
-    test('extracts thumbnail from WP REST API response', () => {
+    test('renders thumbnail from storage for viewed posts', () => {
         const { container, xhrInstances } = setupWidgetTest({ showThumbnail: true });
-        window.CompletionistStorage = mockStorage({ viewedIds: [1] });
+        window.CompletionistStorage = mockStorage({
+            viewedPosts: [post(1, 'Post Title', { thumbnail: 'http://example.com/image.jpg' })]
+        });
 
         eval(widgetCode);
-        triggerXhrResponses(xhrInstances, {
-            viewed: { ids: [1], posts: [wpPost(1, 'Post Title', { thumbnail: 'http://example.com/image.jpg' })] }
-        });
+        triggerXhrResponses(xhrInstances, { suggestions: [] });
 
         expect(container.innerHTML).toContain('completionist-thumbnail');
         expect(container.innerHTML).toContain('http://example.com/image.jpg');

@@ -5,6 +5,7 @@ namespace Completionist\Tests;
 use Completionist\Assets;
 use Completionist\Settings;
 use Completionist\Tests\Mocks\MockScriptLoader;
+use Completionist\Tests\Mocks\MockPostQuery;
 use PHPUnit\Framework\TestCase;
 
 class AssetsTest extends TestCase {
@@ -12,16 +13,18 @@ class AssetsTest extends TestCase {
     private string $pluginPath;
     private string $pluginUrl;
     private MockScriptLoader $loader;
+    private MockPostQuery $postQuery;
 
     protected function setUp(): void {
         $this->pluginPath = dirname(__DIR__, 2) . '/';
         $this->pluginUrl = 'http://example.com/wp-content/plugins/completionist/';
         $this->loader = new MockScriptLoader();
+        $this->postQuery = new MockPostQuery();
     }
 
     private function createAssets(array $settingsData = []): Assets {
         $settings = Settings::fromArray($settingsData);
-        return new Assets($this->loader, $this->pluginPath, $this->pluginUrl, '1.0.0', $settings);
+        return new Assets($this->loader, $this->pluginPath, $this->pluginUrl, '1.0.0', $settings, $this->postQuery);
     }
 
     public function testFileVersionReturnsTimestampForExistingFile(): void {
@@ -131,5 +134,41 @@ class AssetsTest extends TestCase {
         $assets->enqueueDetector(123);
 
         $this->assertArrayNotHasKey(Assets::HANDLE_CONSENT_BUILTIN, $this->loader->scripts);
+    }
+
+    public function testEnqueueDetectorOutputsPostData(): void {
+        $this->postQuery->postData[123] = [
+            'id' => 123,
+            'title' => 'Test Post',
+            'url' => '/test-post',
+            'excerpt' => 'This is the excerpt.',
+            'thumbnail' => 'http://example.com/image.jpg',
+        ];
+        $assets = $this->createAssets();
+
+        $assets->enqueueDetector(123);
+
+        $inlineScripts = $this->loader->inlineScripts[Assets::HANDLE_DETECTOR];
+        $this->assertStringContainsString('CompletionistPostData', $inlineScripts['code']);
+        $this->assertStringContainsString('"title":"Test Post"', $inlineScripts['code']);
+        $this->assertStringContainsString('"excerpt":"This is the excerpt."', $inlineScripts['code']);
+        $this->assertStringContainsString('image.jpg', $inlineScripts['code']);
+    }
+
+    public function testEnqueueDetectorTrimsExcerptToConfiguredLength(): void {
+        $longExcerpt = 'one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen seventeen eighteen nineteen twenty twentyone twentytwo';
+        $this->postQuery->postData[123] = [
+            'id' => 123,
+            'title' => 'Test Post',
+            'url' => '/test-post',
+            'excerpt' => $longExcerpt,
+        ];
+        $assets = $this->createAssets(['excerpt_length' => 10]);
+
+        $assets->enqueueDetector(123);
+
+        $inlineScripts = $this->loader->inlineScripts[Assets::HANDLE_DETECTOR];
+        $this->assertStringContainsString('one two three four five six seven eight nine ten...', $inlineScripts['code']);
+        $this->assertStringNotContainsString('eleven', $inlineScripts['code']);
     }
 }

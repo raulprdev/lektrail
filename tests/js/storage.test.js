@@ -202,19 +202,17 @@ describe('Storage: post data caching', () => {
         expect(posts[1]).toMatchObject({ id: 1, title: 'Post 1', url: '/post-1' });
     });
 
-    test('getViewedPosts marks old-format entries as needsFetch', () => {
-        CompletionistStorage.addViewed(123);
+    test('addViewed stores excerpt and thumbnail', () => {
+        CompletionistStorage.addViewed(123, {
+            title: 'Test Post',
+            url: '/test-post',
+            excerpt: 'This is the excerpt.',
+            thumbnail: 'http://example.com/image.jpg'
+        });
 
         const posts = CompletionistStorage.getViewedPosts();
-        expect(posts[0].id).toBe(123);
-        expect(posts[0].needsFetch).toBe(true);
-    });
-
-    test('getViewedPosts marks entries as needsFetch to get excerpt and thumbnail', () => {
-        CompletionistStorage.addViewed(1, { title: 'Post 1', url: '/post-1' });
-
-        const posts = CompletionistStorage.getViewedPosts();
-        expect(posts[0].needsFetch).toBe(true);
+        expect(posts[0].excerpt).toBe('This is the excerpt.');
+        expect(posts[0].thumbnail).toBe('http://example.com/image.jpg');
     });
 
     test('addRead stores post data when provided', () => {
@@ -245,18 +243,31 @@ describe('Storage: post data caching', () => {
         expect(posts[0]).toMatchObject({ id: 2, title: 'Post 2', url: '/post-2' });
     });
 
-    test('getReadPosts marks old-format entries as needsFetch', () => {
+    test('addRead stores excerpt and thumbnail', () => {
+        CompletionistStorage.addRead(123, {
+            title: 'Test Post',
+            url: '/test-post',
+            excerpt: 'This is the excerpt.',
+            thumbnail: 'http://example.com/image.jpg'
+        });
+
+        const posts = CompletionistStorage.getReadPosts();
+        expect(posts[0].excerpt).toBe('This is the excerpt.');
+        expect(posts[0].thumbnail).toBe('http://example.com/image.jpg');
+    });
+
+    test('addRead preserves excerpt and thumbnail from viewed entry', () => {
+        CompletionistStorage.addViewed(123, {
+            title: 'Test Post',
+            url: '/test-post',
+            excerpt: 'Original excerpt.',
+            thumbnail: 'http://example.com/original.jpg'
+        });
         CompletionistStorage.addRead(123);
 
         const posts = CompletionistStorage.getReadPosts();
-        expect(posts[0].needsFetch).toBe(true);
-    });
-
-    test('getReadPosts marks entries as needsFetch to get excerpt and thumbnail', () => {
-        CompletionistStorage.addRead(1, { title: 'Post 1', url: '/post-1' });
-
-        const posts = CompletionistStorage.getReadPosts();
-        expect(posts[0].needsFetch).toBe(true);
+        expect(posts[0].excerpt).toBe('Original excerpt.');
+        expect(posts[0].thumbnail).toBe('http://example.com/original.jpg');
     });
 
     test('getViewedPosts returns most recent first', () => {

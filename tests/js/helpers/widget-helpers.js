@@ -130,18 +130,7 @@ function wpPostsResponse(posts) {
 
 function triggerXhrResponses(xhrInstances, config) {
     xhrInstances.forEach(xhr => {
-        const url = xhr.open.mock.calls[0]?.[1] || '';
-        let response = JSON.stringify([]);
-
-        if (config.viewed && url.includes(`include=${config.viewed.ids.join(',')}`)) {
-            response = wpPostsResponse(config.viewed.posts);
-        } else if (config.read && url.includes(`include=${config.read.ids.join(',')}`)) {
-            response = wpPostsResponse(config.read.posts);
-        } else if (url.includes('/api')) {
-            response = suggestionsResponse(config.suggestions || []);
-        }
-
-        xhr.responseText = response;
+        xhr.responseText = suggestionsResponse(config.suggestions || []);
         if (xhr.onload) xhr.onload();
     });
 }

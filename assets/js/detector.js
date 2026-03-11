@@ -90,11 +90,11 @@
             }
 
             if (hasConsent() && shouldTrack(postId, storage, false)) {
-                var postData = {
-                    title: dom.title || '',
-                    url: global.location ? global.location.href : ''
-                };
-                trackViewed(postId, storage, dispatch, postData);
+                if (!global.CompletionistPostData) {
+                    console.warn('Completionist: PostData not found, skipping tracking');
+                    return { success: false, reason: 'no-postdata' };
+                }
+                trackViewed(postId, storage, dispatch, global.CompletionistPostData);
             }
 
             if (!Observer) {

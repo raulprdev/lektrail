@@ -1,12 +1,14 @@
 function mockStorage(options = {}) {
-    const viewedIds = options.viewedIds ? [...options.viewedIds] : [];
-    const readIds = options.readIds ? [...options.readIds] : [];
+    const viewedPosts = options.viewedPosts || [];
+    const readPosts = options.readPosts || [];
+    const viewedIds = viewedPosts.map(p => p.id);
+    const readIds = readPosts.map(p => p.id);
     let suggestions = [];
     let suggestionsUpdatedAt = null;
 
     return {
-        getViewedCount: () => viewedIds.length,
-        getReadCount: () => readIds.length,
+        getViewedCount: () => viewedPosts.length,
+        getReadCount: () => readPosts.length,
         getViewedIds: () => viewedIds,
         getReadIds: () => readIds,
         hasViewed: id => viewedIds.includes(id),
@@ -20,8 +22,8 @@ function mockStorage(options = {}) {
             if (idx !== -1) viewedIds.splice(idx, 1);
             if (!readIds.includes(id)) readIds.push(id);
         }),
-        getViewedPosts: () => viewedIds.map(id => ({ id, needsFetch: true })),
-        getReadPosts: () => readIds.map(id => ({ id, needsFetch: true })),
+        getViewedPosts: () => viewedPosts,
+        getReadPosts: () => readPosts,
         getSuggestions: () => suggestions,
         setSuggestions: jest.fn(posts => {
             suggestions = posts;

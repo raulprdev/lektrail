@@ -16,13 +16,15 @@ class Assets {
     private string $pluginUrl;
     private string $version;
     private Settings $settings;
+    private PostQuery $postQuery;
 
-    public function __construct(ScriptLoader $scripts, string $pluginPath, string $pluginUrl, string $version, Settings $settings) {
+    public function __construct(ScriptLoader $scripts, string $pluginPath, string $pluginUrl, string $version, Settings $settings, PostQuery $postQuery) {
         $this->scripts = $scripts;
         $this->pluginPath = $pluginPath;
         $this->pluginUrl = $pluginUrl;
         $this->version = $version;
         $this->settings = $settings;
+        $this->postQuery = $postQuery;
     }
 
     public function enqueueDetector(int $postId): void {
@@ -47,6 +49,25 @@ class Assets {
             sprintf('document.body.dataset.completionistPost = %d;', $postId),
             'before'
         );
+
+        $postData = $this->postQuery->getPostData($postId);
+        if (isset($postData['excerpt'])) {
+            $postData['excerpt'] = $this->trimExcerpt($postData['excerpt']);
+        }
+        $this->scripts->addInlineScript(
+            self::HANDLE_DETECTOR,
+            sprintf('window.CompletionistPostData = %s;', json_encode($postData)),
+            'before'
+        );
+    }
+
+    private function trimExcerpt(string $excerpt): string {
+        $words = explode(' ', $excerpt);
+        $length = $this->settings->excerptLength();
+        if (count($words) <= $length) {
+            return $excerpt;
+        }
+        return implode(' ', array_slice($words, 0, $length)) . '...';
     }
 
     public function enqueueWidget(): void {

@@ -10,48 +10,6 @@
         return window.CompletionistConfig;
     }
 
-    function fetchPostsByIds(endpoint, ids, callback) {
-        if (!ids.length) {
-            callback([]);
-            return;
-        }
-
-        var xhr = new XMLHttpRequest();
-        xhr.open('GET', endpoint + '?include=' + ids.join(',') + '&_embed=wp:featuredmedia');
-        xhr.onload = function() {
-            if (xhr.status === 200) {
-                try {
-                    var posts = JSON.parse(xhr.responseText);
-                    var normalized = posts.map(function(post) {
-                        var item = {
-                            id: post.id,
-                            title: post.title.rendered,
-                            url: post.link
-                        };
-                        if (post.excerpt && post.excerpt.rendered) {
-                            item.excerpt = post.excerpt.rendered.replace(/<[^>]*>/g, '').trim();
-                        }
-                        if (post._embedded && post._embedded['wp:featuredmedia'] && post._embedded['wp:featuredmedia'][0]) {
-                            var media = post._embedded['wp:featuredmedia'][0];
-                            var sizes = media.media_details && media.media_details.sizes;
-                            item.thumbnail = (sizes && sizes.thumbnail) ? sizes.thumbnail.source_url : media.source_url;
-                        }
-                        return item;
-                    });
-                    callback(normalized);
-                } catch (e) {
-                    callback([]);
-                }
-            } else {
-                callback([]);
-            }
-        };
-        xhr.onerror = function() {
-            callback([]);
-        };
-        xhr.send();
-    }
-
     function fetchSuggestions(endpoint, count, callback) {
         var xhr = new XMLHttpRequest();
         xhr.open('GET', endpoint + '&count=' + count);
@@ -208,65 +166,26 @@
     function initWidget(container, config) {
         var storage = getStorage();
         var suggestionsEndpoint = container.dataset.endpoint;
-        var postsEndpoint = container.dataset.postsEndpoint || '/wp-json/wp/v2/posts';
         var cacheHours = config.suggestionsCacheHours || 24;
 
         var viewedPosts = storage.getViewedPosts ? storage.getViewedPosts() : [];
         var readPosts = storage.getReadPosts ? storage.getReadPosts() : [];
-        var viewedToFetch = viewedPosts.filter(function(p) { return p.needsFetch; }).map(function(p) { return p.id; });
-        var readToFetch = readPosts.filter(function(p) { return p.needsFetch; }).map(function(p) { return p.id; });
 
         var suggestionsValid = storage.isSuggestionsCacheValid && storage.isSuggestionsCacheValid(cacheHours);
         var suggestions = suggestionsValid && storage.getSuggestions ? storage.getSuggestions() : [];
 
-        var pending = 0;
-        if (viewedToFetch.length > 0) pending++;
-        if (readToFetch.length > 0) pending++;
-        if (!suggestionsValid) pending++;
-
-        if (pending === 0) {
+        if (suggestionsValid) {
             renderWidget(container, viewedPosts, readPosts, suggestions);
             return;
         }
 
         renderLoading(container);
 
-        function checkComplete() {
-            pending--;
-            if (pending === 0) {
-                renderWidget(container, viewedPosts, readPosts, suggestions);
-            }
-        }
-
-        function updatePostsWithFetched(posts, fetched) {
-            return posts.map(function(p) {
-                if (!p.needsFetch) return p;
-                var found = fetched.find(function(f) { return f.id === p.id; });
-                return found || p;
-            });
-        }
-
-        if (viewedToFetch.length > 0) {
-            fetchPostsByIds(postsEndpoint, viewedToFetch, function(fetched) {
-                viewedPosts = updatePostsWithFetched(viewedPosts, fetched);
-                checkComplete();
-            });
-        }
-
-        if (readToFetch.length > 0) {
-            fetchPostsByIds(postsEndpoint, readToFetch, function(fetched) {
-                readPosts = updatePostsWithFetched(readPosts, fetched);
-                checkComplete();
-            });
-        }
-
-        if (!suggestionsValid) {
-            fetchSuggestions(suggestionsEndpoint, config.maxSuggestions, function(fetched) {
-                suggestions = fetched;
-                if (storage.setSuggestions) storage.setSuggestions(fetched);
-                checkComplete();
-            });
-        }
+        fetchSuggestions(suggestionsEndpoint, config.maxSuggestions, function(fetched) {
+            suggestions = fetched;
+            if (storage.setSuggestions) storage.setSuggestions(fetched);
+            renderWidget(container, viewedPosts, readPosts, suggestions);
+        });
     }
 
     if (document.readyState === 'loading') {

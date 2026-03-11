@@ -56,6 +56,8 @@
             var entry = { postId: postId, viewedAt: new Date().toISOString() };
             if (postData && postData.title) entry.title = postData.title;
             if (postData && postData.url) entry.url = postData.url;
+            if (postData && postData.excerpt) entry.excerpt = postData.excerpt;
+            if (postData && postData.thumbnail) entry.thumbnail = postData.thumbnail;
 
             data.viewed.push(entry);
             setData(data);
@@ -82,6 +84,16 @@
                 entry.url = postData.url;
             } else if (viewedEntry && viewedEntry.url) {
                 entry.url = viewedEntry.url;
+            }
+            if (postData && postData.excerpt) {
+                entry.excerpt = postData.excerpt;
+            } else if (viewedEntry && viewedEntry.excerpt) {
+                entry.excerpt = viewedEntry.excerpt;
+            }
+            if (postData && postData.thumbnail) {
+                entry.thumbnail = postData.thumbnail;
+            } else if (viewedEntry && viewedEntry.thumbnail) {
+                entry.thumbnail = viewedEntry.thumbnail;
             }
 
             data.read.push(entry);
@@ -115,18 +127,22 @@
 
         getViewedPosts: function() {
             return getData().viewed.map(function(entry) {
-                var post = { id: entry.postId, needsFetch: true };
+                var post = { id: entry.postId };
                 if (entry.title) post.title = entry.title;
                 if (entry.url) post.url = entry.url;
+                if (entry.excerpt) post.excerpt = entry.excerpt;
+                if (entry.thumbnail) post.thumbnail = entry.thumbnail;
                 return post;
             }).reverse();
         },
 
         getReadPosts: function() {
             return getData().read.map(function(entry) {
-                var post = { id: entry.postId, needsFetch: true };
+                var post = { id: entry.postId };
                 if (entry.title) post.title = entry.title;
                 if (entry.url) post.url = entry.url;
+                if (entry.excerpt) post.excerpt = entry.excerpt;
+                if (entry.thumbnail) post.thumbnail = entry.thumbnail;
                 return post;
             }).reverse();
         },

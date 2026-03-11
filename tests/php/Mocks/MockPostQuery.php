@@ -7,6 +7,7 @@ use Completionist\PostQuery;
 class MockPostQuery implements PostQuery {
 
     public array $posts = [];
+    public array $postData = [];
 
     public function getRandom(int $count): array {
         return array_slice($this->posts, 0, $count);
@@ -14,5 +15,9 @@ class MockPostQuery implements PostQuery {
 
     public function getTotalCount(): int {
         return count($this->posts);
+    }
+
+    public function getPostData(int $postId): array {
+        return $this->postData[$postId] ?? ['id' => $postId];
     }
 }

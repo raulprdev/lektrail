@@ -80,6 +80,17 @@
                             </label>
                         </td>
                     </tr>
+                    <tr>
+                        <th scope="row"><?= esc_html__('Excerpt Length', 'completionist') ?></th>
+                        <td>
+                            <input type="number"
+                                   name="<?= \Completionist\WordPressSettingsRepository::OPTION_KEY ?>[excerpt_length]"
+                                   value="<?= esc_attr($settings->excerptLength()) ?>"
+                                   min="5" max="100" class="small-text">
+                            <?= esc_html__('words', 'completionist') ?>
+                            <p class="description"><?= esc_html__('Number of words to show in excerpt.', 'completionist') ?></p>
+                        </td>
+                    </tr>
                 </table>
             </div>
         </div>
