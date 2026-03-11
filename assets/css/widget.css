@@ -64,7 +64,10 @@
 }
 
 .completionist-show-excerpt .completionist-excerpt {
-    display: block;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
     margin: 0.25rem 0 0;
     font-size: 0.9em;
     color: #666;
