@@ -543,4 +543,17 @@ describe('Widget: display options', () => {
         expect(container.innerHTML).toContain('completionist-excerpt');
         expect(container.innerHTML).toContain('API excerpt text.');
     });
+
+    test('extracts thumbnail from WP REST API response', () => {
+        const { container, xhrInstances } = setupWidgetTest({ showThumbnail: true });
+        window.CompletionistStorage = mockStorage({ viewedIds: [1] });
+
+        eval(widgetCode);
+        triggerXhrResponses(xhrInstances, {
+            viewed: { ids: [1], posts: [wpPost(1, 'Post Title', { thumbnail: 'http://example.com/image.jpg' })] }
+        });
+
+        expect(container.innerHTML).toContain('completionist-thumbnail');
+        expect(container.innerHTML).toContain('http://example.com/image.jpg');
+    });
 });

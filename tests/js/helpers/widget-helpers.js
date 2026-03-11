@@ -97,6 +97,18 @@ function wpPost(id, title, options = {}) {
     if (options.excerpt) {
         post.excerpt = { rendered: `<p>${options.excerpt}</p>` };
     }
+    if (options.thumbnail) {
+        post._embedded = {
+            'wp:featuredmedia': [{
+                source_url: options.thumbnail,
+                media_details: {
+                    sizes: {
+                        thumbnail: { source_url: options.thumbnail }
+                    }
+                }
+            }]
+        };
+    }
     return post;
 }
 

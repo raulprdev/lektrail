@@ -210,6 +210,13 @@ describe('Storage: post data caching', () => {
         expect(posts[0].needsFetch).toBe(true);
     });
 
+    test('getViewedPosts marks entries as needsFetch to get excerpt and thumbnail', () => {
+        CompletionistStorage.addViewed(1, { title: 'Post 1', url: '/post-1' });
+
+        const posts = CompletionistStorage.getViewedPosts();
+        expect(posts[0].needsFetch).toBe(true);
+    });
+
     test('addRead stores post data when provided', () => {
         CompletionistStorage.addRead(123, { title: 'Test Post', url: '/test-post' });
 
@@ -240,6 +247,13 @@ describe('Storage: post data caching', () => {
 
     test('getReadPosts marks old-format entries as needsFetch', () => {
         CompletionistStorage.addRead(123);
+
+        const posts = CompletionistStorage.getReadPosts();
+        expect(posts[0].needsFetch).toBe(true);
+    });
+
+    test('getReadPosts marks entries as needsFetch to get excerpt and thumbnail', () => {
+        CompletionistStorage.addRead(1, { title: 'Post 1', url: '/post-1' });
 
         const posts = CompletionistStorage.getReadPosts();
         expect(posts[0].needsFetch).toBe(true);

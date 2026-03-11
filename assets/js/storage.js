@@ -115,26 +115,18 @@
 
         getViewedPosts: function() {
             return getData().viewed.map(function(entry) {
-                var post = { id: entry.postId };
-                if (entry.title && entry.url) {
-                    post.title = entry.title;
-                    post.url = entry.url;
-                } else {
-                    post.needsFetch = true;
-                }
+                var post = { id: entry.postId, needsFetch: true };
+                if (entry.title) post.title = entry.title;
+                if (entry.url) post.url = entry.url;
                 return post;
             }).reverse();
         },
 
         getReadPosts: function() {
             return getData().read.map(function(entry) {
-                var post = { id: entry.postId };
-                if (entry.title && entry.url) {
-                    post.title = entry.title;
-                    post.url = entry.url;
-                } else {
-                    post.needsFetch = true;
-                }
+                var post = { id: entry.postId, needsFetch: true };
+                if (entry.title) post.title = entry.title;
+                if (entry.url) post.url = entry.url;
                 return post;
             }).reverse();
         },

@@ -17,7 +17,7 @@
         }
 
         var xhr = new XMLHttpRequest();
-        xhr.open('GET', endpoint + '?include=' + ids.join(','));
+        xhr.open('GET', endpoint + '?include=' + ids.join(',') + '&_embed=wp:featuredmedia');
         xhr.onload = function() {
             if (xhr.status === 200) {
                 try {
@@ -30,6 +30,11 @@
                         };
                         if (post.excerpt && post.excerpt.rendered) {
                             item.excerpt = post.excerpt.rendered.replace(/<[^>]*>/g, '').trim();
+                        }
+                        if (post._embedded && post._embedded['wp:featuredmedia'] && post._embedded['wp:featuredmedia'][0]) {
+                            var media = post._embedded['wp:featuredmedia'][0];
+                            var sizes = media.media_details && media.media_details.sizes;
+                            item.thumbnail = (sizes && sizes.thumbnail) ? sizes.thumbnail.source_url : media.source_url;
                         }
                         return item;
                     });
