@@ -70,15 +70,28 @@
     color: #666;
 }
 
+.completionist-show-thumbnail .completionist-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+}
+
 .completionist-show-thumbnail .completionist-thumbnail {
     display: block;
-    margin-bottom: 0.5rem;
+    flex-shrink: 0;
+    width: 100px;
 }
 
 .completionist-show-thumbnail .completionist-thumbnail img {
-    max-width: 100%;
+    width: 100%;
     height: auto;
     border-radius: 4px;
+    margin: 0;
+}
+
+.completionist-show-thumbnail .completionist-content {
+    flex: 1;
+    min-width: 0;
 }
 
 .completionist-title {
