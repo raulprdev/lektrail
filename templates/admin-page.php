@@ -200,6 +200,17 @@
                         </td>
                     </tr>
                     <tr>
+                        <th scope="row"><?= esc_html__('Read Threshold', 'completionist') ?></th>
+                        <td>
+                            <input type="number"
+                                   name="<?= \Completionist\WordPressSettingsRepository::OPTION_KEY ?>[read_threshold]"
+                                   value="<?= esc_attr($settings->readThreshold()) ?>"
+                                   min="10" max="100" class="small-text">
+                            <?= esc_html__('%', 'completionist') ?>
+                            <p class="description"><?= esc_html__('How far the user must scroll to mark the post as completed. Use lower values (e.g., 10%) for product pages where viewing is enough.', 'completionist') ?></p>
+                        </td>
+                    </tr>
+                    <tr>
                         <th scope="row"><?= esc_html__('Max Posts', 'completionist') ?></th>
                         <td>
                             <input type="number"

@@ -334,3 +334,35 @@ describe('auto-init', () => {
         expect(mockArticle.appendChild).toHaveBeenCalled();
     });
 });
+
+describe('Detector: read threshold', () => {
+    test('uses default threshold of 90 when no config', () => {
+        delete window.CompletionistConfig;
+        expect(D.getReadThreshold()).toBe(90);
+    });
+
+    test('uses threshold from CompletionistConfig', () => {
+        window.CompletionistConfig = { readThreshold: 50 };
+        expect(D.getReadThreshold()).toBe(50);
+    });
+
+    test('uses default when config has no readThreshold', () => {
+        window.CompletionistConfig = { maxViewed: 5 };
+        expect(D.getReadThreshold()).toBe(90);
+    });
+
+    test('createSentinel positions at correct percentage', () => {
+        const mockDomObj = {
+            createElement: jest.fn(() => ({ style: {} }))
+        };
+        const mockArticle = {
+            style: {},
+            appendChild: jest.fn()
+        };
+        window.getComputedStyle = jest.fn(() => ({ position: 'relative' }));
+
+        const sentinel = D.createSentinel(mockDomObj, mockArticle, 70);
+
+        expect(sentinel.style.cssText).toContain('bottom:30%');
+    });
+});

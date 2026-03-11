@@ -23,6 +23,7 @@ class Settings {
     public const DEFAULT_SHOW_EXCERPT = false;
     public const DEFAULT_SHOW_THUMBNAIL = false;
     public const DEFAULT_EXCERPT_LENGTH = 20;
+    public const DEFAULT_READ_THRESHOLD = 90;
 
     private array $postTypes;
     private int $maxViewed;
@@ -43,6 +44,7 @@ class Settings {
     private bool $showExcerpt;
     private bool $showThumbnail;
     private int $excerptLength;
+    private int $readThreshold;
 
     public function __construct(
         array $postTypes = self::DEFAULT_POST_TYPES,
@@ -63,7 +65,8 @@ class Settings {
         int $suggestionsCacheHours = self::DEFAULT_SUGGESTIONS_CACHE_HOURS,
         bool $showExcerpt = self::DEFAULT_SHOW_EXCERPT,
         bool $showThumbnail = self::DEFAULT_SHOW_THUMBNAIL,
-        int $excerptLength = self::DEFAULT_EXCERPT_LENGTH
+        int $excerptLength = self::DEFAULT_EXCERPT_LENGTH,
+        int $readThreshold = self::DEFAULT_READ_THRESHOLD
     ) {
         $this->postTypes = $postTypes;
         $this->maxViewed = $maxViewed;
@@ -84,6 +87,7 @@ class Settings {
         $this->showExcerpt = $showExcerpt;
         $this->showThumbnail = $showThumbnail;
         $this->excerptLength = $excerptLength;
+        $this->readThreshold = $readThreshold;
     }
 
     public static function fromArray(array $data, array $defaults = []): self {
@@ -106,7 +110,8 @@ class Settings {
             (int) ($data['suggestions_cache_hours'] ?? $defaults['suggestions_cache_hours'] ?? self::DEFAULT_SUGGESTIONS_CACHE_HOURS),
             (bool) ($data['show_excerpt'] ?? $defaults['show_excerpt'] ?? self::DEFAULT_SHOW_EXCERPT),
             (bool) ($data['show_thumbnail'] ?? $defaults['show_thumbnail'] ?? self::DEFAULT_SHOW_THUMBNAIL),
-            (int) ($data['excerpt_length'] ?? $defaults['excerpt_length'] ?? self::DEFAULT_EXCERPT_LENGTH)
+            (int) ($data['excerpt_length'] ?? $defaults['excerpt_length'] ?? self::DEFAULT_EXCERPT_LENGTH),
+            (int) ($data['read_threshold'] ?? $defaults['read_threshold'] ?? self::DEFAULT_READ_THRESHOLD)
         );
     }
 
@@ -131,6 +136,7 @@ class Settings {
             'show_excerpt' => $this->showExcerpt,
             'show_thumbnail' => $this->showThumbnail,
             'excerpt_length' => $this->excerptLength,
+            'read_threshold' => $this->readThreshold,
         ];
     }
 
@@ -210,6 +216,10 @@ class Settings {
         return $this->excerptLength;
     }
 
+    public function readThreshold(): int {
+        return $this->readThreshold;
+    }
+
     public function toJsConfig(): array {
         return [
             'maxViewed' => $this->maxViewed,
@@ -221,6 +231,7 @@ class Settings {
             'suggestionsCacheHours' => $this->suggestionsCacheHours,
             'showExcerpt' => $this->showExcerpt,
             'showThumbnail' => $this->showThumbnail,
+            'readThreshold' => $this->readThreshold,
             'labels' => [
                 'continue' => $this->labelContinue,
                 'completed' => $this->labelCompleted,

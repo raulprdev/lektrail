@@ -59,6 +59,12 @@ class Assets {
             sprintf('window.CompletionistPostData = %s;', json_encode($postData)),
             'before'
         );
+
+        $this->scripts->addInlineScript(
+            self::HANDLE_DETECTOR,
+            sprintf('window.CompletionistConfig = %s;', json_encode($this->settings->toJsConfig())),
+            'before'
+        );
     }
 
     private function trimExcerpt(string $excerpt): string {

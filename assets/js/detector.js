@@ -56,10 +56,21 @@
 		}
 	}
 
-	function createSentinel(dom, article) {
+	function getReadThreshold() {
+		const config = global.CompletionistConfig;
+		if (config && typeof config.readThreshold === 'number') {
+			return config.readThreshold;
+		}
+		return 90;
+	}
+
+	function createSentinel(dom, article, threshold) {
 		const sentinel = dom.createElement('div');
+		const bottom = 100 - threshold;
 		sentinel.style.cssText =
-			'position:absolute;bottom:10%;width:1px;height:1px;opacity:0;pointer-events:none;';
+			'position:absolute;bottom:' +
+			bottom +
+			'%;width:1px;height:1px;opacity:0;pointer-events:none;';
 
 		const style = global.getComputedStyle
 			? global.getComputedStyle(article)
@@ -109,6 +120,7 @@
 		function init() {
 			const article = findArticle(dom);
 			const postId = getPostId(dom);
+			const threshold = getReadThreshold();
 
 			if (!article || !postId) {
 				return {
@@ -137,11 +149,9 @@
 				global.addEventListener(
 					'scroll',
 					function () {
-						const percent =
-							((global.scrollY + global.innerHeight) /
-								dom.body.scrollHeight) *
-							100;
-						if (percent >= 90) {
+						const totalHeight = global.scrollY + global.innerHeight;
+						const percent = (totalHeight / dom.body.scrollHeight) * 100;
+						if (percent >= threshold) {
 							handleIntersection();
 						}
 					},
@@ -150,7 +160,7 @@
 				return { success: true, method: 'scroll' };
 			}
 
-			const sentinel = createSentinel(dom, article);
+			const sentinel = createSentinel(dom, article, threshold);
 			const observer = new Observer(function (entries) {
 				if (entries[0].isIntersecting) {
 					handleIntersection();
@@ -178,6 +188,7 @@
 		trackRead,
 		createSentinel,
 		createDetector,
+		getReadThreshold,
 	};
 
 	if (typeof document !== 'undefined') {

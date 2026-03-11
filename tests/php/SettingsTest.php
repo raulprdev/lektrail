@@ -338,4 +338,39 @@ class SettingsTest extends TestCase {
         $this->assertArrayHasKey('excerpt_length', $array);
         $this->assertEquals(15, $array['excerpt_length']);
     }
+
+    public function testDefaultReadThreshold(): void {
+        $settings = new Settings();
+
+        $this->assertEquals(90, $settings->readThreshold());
+    }
+
+    public function testReadThresholdFromArray(): void {
+        $settings = Settings::fromArray([
+            'read_threshold' => 50,
+        ]);
+
+        $this->assertEquals(50, $settings->readThreshold());
+    }
+
+    public function testReadThresholdInToArray(): void {
+        $settings = Settings::fromArray([
+            'read_threshold' => 75,
+        ]);
+
+        $array = $settings->toArray();
+
+        $this->assertArrayHasKey('read_threshold', $array);
+        $this->assertEquals(75, $array['read_threshold']);
+    }
+
+    public function testToJsConfigIncludesReadThreshold(): void {
+        $settings = Settings::fromArray([
+            'read_threshold' => 80,
+        ]);
+
+        $config = $settings->toJsConfig();
+
+        $this->assertEquals(80, $config['readThreshold']);
+    }
 }

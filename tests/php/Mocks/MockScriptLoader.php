@@ -19,6 +19,10 @@ class MockScriptLoader implements ScriptLoader {
     }
 
     public function addInlineScript(string $handle, string $code, string $position): void {
-        $this->inlineScripts[$handle] = compact('code', 'position');
+        if (isset($this->inlineScripts[$handle])) {
+            $this->inlineScripts[$handle]['code'] .= "\n" . $code;
+        } else {
+            $this->inlineScripts[$handle] = compact('code', 'position');
+        }
     }
 }
