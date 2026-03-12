@@ -57,6 +57,25 @@
 		return -1;
 	}
 
+	function isInSuggestions(postId) {
+		var data = getData();
+		for (var i = 0; i < data.suggestions.length; i++) {
+			if (data.suggestions[i].id === postId) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	function clearSuggestionsIfNeeded(postId) {
+		if (isInSuggestions(postId)) {
+			var data = getData();
+			data.suggestions = [];
+			data.suggestionsUpdatedAt = null;
+			setData(data);
+		}
+	}
+
 	window.CompletionistStorage = {
 		getViewedIds() {
 			return getData().viewed.map(function (v) {
@@ -96,6 +115,7 @@
 
 			data.viewed.push(entry);
 			setData(data);
+			clearSuggestionsIfNeeded(postId);
 		},
 
 		addRead(postId, postData) {
@@ -136,6 +156,7 @@
 
 			data.read.push(entry);
 			setData(data);
+			clearSuggestionsIfNeeded(postId);
 		},
 
 		hasViewed(postId) {

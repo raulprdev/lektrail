@@ -344,3 +344,49 @@ describe('Storage: suggestions cache', () => {
         expect(CompletionistStorage.isSuggestionsCacheValid(24)).toBe(false);
     });
 });
+
+describe('Storage: cache invalidation on tracking', () => {
+    test('addViewed clears cache when post is in suggestions', () => {
+        CompletionistStorage.setSuggestions([
+            { id: 1, title: 'Suggestion 1', url: '/s1' },
+            { id: 2, title: 'Suggestion 2', url: '/s2' }
+        ]);
+
+        CompletionistStorage.addViewed(1, { title: 'Suggestion 1', url: '/s1' });
+
+        expect(CompletionistStorage.isSuggestionsCacheValid(24)).toBe(false);
+    });
+
+    test('addViewed keeps cache when post is not in suggestions', () => {
+        CompletionistStorage.setSuggestions([
+            { id: 1, title: 'Suggestion 1', url: '/s1' },
+            { id: 2, title: 'Suggestion 2', url: '/s2' }
+        ]);
+
+        CompletionistStorage.addViewed(99, { title: 'Other Post', url: '/other' });
+
+        expect(CompletionistStorage.isSuggestionsCacheValid(24)).toBe(true);
+    });
+
+    test('addRead clears cache when post is in suggestions', () => {
+        CompletionistStorage.setSuggestions([
+            { id: 1, title: 'Suggestion 1', url: '/s1' },
+            { id: 2, title: 'Suggestion 2', url: '/s2' }
+        ]);
+
+        CompletionistStorage.addRead(2, { title: 'Suggestion 2', url: '/s2' });
+
+        expect(CompletionistStorage.isSuggestionsCacheValid(24)).toBe(false);
+    });
+
+    test('addRead keeps cache when post is not in suggestions', () => {
+        CompletionistStorage.setSuggestions([
+            { id: 1, title: 'Suggestion 1', url: '/s1' },
+            { id: 2, title: 'Suggestion 2', url: '/s2' }
+        ]);
+
+        CompletionistStorage.addRead(99, { title: 'Other Post', url: '/other' });
+
+        expect(CompletionistStorage.isSuggestionsCacheValid(24)).toBe(true);
+    });
+});
