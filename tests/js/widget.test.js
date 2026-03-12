@@ -561,3 +561,69 @@ describe('Widget: display options', () => {
         expect(container.innerHTML).toContain('http://example.com/image.jpg');
     });
 });
+
+describe('Widget: clear data button', () => {
+    test('shows clear button when enabled', () => {
+        const { container, xhrInstances } = setupWidgetTest({ showClearButton: true });
+        window.CompletionistStorage = mockStorage({
+            viewedPosts: [post(1, 'Post 1')]
+        });
+
+        eval(widgetCode);
+        triggerXhrResponses(xhrInstances, { suggestions: [] });
+
+        expect(container.innerHTML).toContain('completionist-clear');
+    });
+
+    test('hides clear button when disabled', () => {
+        const { container, xhrInstances } = setupWidgetTest({ showClearButton: false });
+        window.CompletionistStorage = mockStorage({
+            viewedPosts: [post(1, 'Post 1')]
+        });
+
+        eval(widgetCode);
+        triggerXhrResponses(xhrInstances, { suggestions: [] });
+
+        expect(container.innerHTML).not.toContain('completionist-clear');
+    });
+
+    test('hides clear button when no data to clear', () => {
+        const { container, xhrInstances } = setupWidgetTest({ showClearButton: true });
+        window.CompletionistStorage = mockStorage();
+
+        eval(widgetCode);
+        triggerXhrResponses(xhrInstances, { suggestions: [] });
+
+        expect(container.innerHTML).not.toContain('completionist-clear');
+    });
+
+    test('clicking clear button calls storage.clearHistory()', () => {
+        const { container, xhrInstances } = setupWidgetTest({ showClearButton: true });
+        const clearHistoryFn = jest.fn();
+        window.CompletionistStorage = {
+            ...mockStorage({ viewedPosts: [post(1, 'Post 1')] }),
+            clearHistory: clearHistoryFn
+        };
+
+        eval(widgetCode);
+        triggerXhrResponses(xhrInstances, { suggestions: [] });
+
+        const button = container.querySelector('.completionist-clear-btn');
+        button.click();
+
+        expect(clearHistoryFn).toHaveBeenCalled();
+    });
+
+    test('uses custom clear label from config', () => {
+        const { container, xhrInstances } = setupWidgetTest({ showClearButton: true });
+        window.CompletionistStorage = mockStorage({
+            viewedPosts: [post(1, 'Post 1')]
+        });
+        window.CompletionistConfig.labels = { clear: 'Borrar datos' };
+
+        eval(widgetCode);
+        triggerXhrResponses(xhrInstances, { suggestions: [] });
+
+        expect(container.innerHTML).toContain('Borrar datos');
+    });
+});

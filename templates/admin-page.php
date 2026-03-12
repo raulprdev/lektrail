@@ -352,6 +352,39 @@
             </div>
         </div>
 
+        <div class="postbox">
+            <h2 class="hndle"><?= esc_html__('Clear Data', 'completionist') ?></h2>
+            <div class="inside">
+                <p class="description"><?= esc_html__('Allow users to clear their reading history.', 'completionist') ?></p>
+                <table class="form-table">
+                    <tr>
+                        <th scope="row"><?= esc_html__('Show Clear Button', 'completionist') ?></th>
+                        <td>
+                            <input type="hidden"
+                                   name="<?= \Completionist\WordPress\SettingsRepository::OPTION_KEY ?>[show_clear_button]"
+                                   value="0">
+                            <label>
+                                <input type="checkbox"
+                                       name="<?= \Completionist\WordPress\SettingsRepository::OPTION_KEY ?>[show_clear_button]"
+                                       value="1"
+                                       <?php checked($settings->showClearButton()); ?>>
+                                <?= esc_html__('Display a button to clear reading history', 'completionist') ?>
+                            </label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><?= esc_html__('Button Label', 'completionist') ?></th>
+                        <td>
+                            <input type="text"
+                                   name="<?= \Completionist\WordPress\SettingsRepository::OPTION_KEY ?>[label_clear]"
+                                   value="<?= esc_attr($settings->labelClear()) ?>"
+                                   class="regular-text">
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
         <?php submit_button(); ?>
     </form>
 </div>

@@ -187,6 +187,13 @@
 			localStorage.removeItem(STORAGE_KEY);
 		},
 
+		clearHistory() {
+			const data = getData();
+			data.viewed = [];
+			data.read = [];
+			setData(data);
+		},
+
 		getViewedPosts() {
 			return getData()
 				.viewed.map(function (entry) {

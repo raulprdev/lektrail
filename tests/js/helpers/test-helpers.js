@@ -30,7 +30,9 @@ function mockStorage(options = {}) {
             suggestionsUpdatedAt = new Date().toISOString();
         }),
         isSuggestionsCacheValid: () => false,
-        clearSuggestionsCache: jest.fn()
+        clearSuggestionsCache: jest.fn(),
+        clear: jest.fn(),
+        clearHistory: jest.fn()
     };
 }
 

@@ -27,6 +27,8 @@ class Settings {
     public const DEFAULT_SUGGESTION_ORDER = 'random';
     public const DEFAULT_INCLUDE_CATEGORIES = [];
     public const DEFAULT_EXCLUDE_CATEGORIES = [];
+    public const DEFAULT_SHOW_CLEAR_BUTTON = true;
+    public const DEFAULT_LABEL_CLEAR = 'Clear history';
 
     private array $postTypes;
     private int $maxViewed;
@@ -51,6 +53,8 @@ class Settings {
     private string $suggestionOrder;
     private array $includeCategories;
     private array $excludeCategories;
+    private bool $showClearButton;
+    private string $labelClear;
 
     public function __construct(
         array $postTypes = self::DEFAULT_POST_TYPES,
@@ -75,7 +79,9 @@ class Settings {
         int $readThreshold = self::DEFAULT_READ_THRESHOLD,
         string $suggestionOrder = self::DEFAULT_SUGGESTION_ORDER,
         array $includeCategories = self::DEFAULT_INCLUDE_CATEGORIES,
-        array $excludeCategories = self::DEFAULT_EXCLUDE_CATEGORIES
+        array $excludeCategories = self::DEFAULT_EXCLUDE_CATEGORIES,
+        bool $showClearButton = self::DEFAULT_SHOW_CLEAR_BUTTON,
+        string $labelClear = self::DEFAULT_LABEL_CLEAR
     ) {
         $this->postTypes = $postTypes;
         $this->maxViewed = $maxViewed;
@@ -100,6 +106,8 @@ class Settings {
         $this->suggestionOrder = $suggestionOrder;
         $this->includeCategories = $includeCategories;
         $this->excludeCategories = $excludeCategories;
+        $this->showClearButton = $showClearButton;
+        $this->labelClear = $labelClear;
     }
 
     public static function fromArray(array $data, array $defaults = []): self {
@@ -126,7 +134,9 @@ class Settings {
             (int) ($data['read_threshold'] ?? $defaults['read_threshold'] ?? self::DEFAULT_READ_THRESHOLD),
             $data['suggestion_order'] ?? $defaults['suggestion_order'] ?? self::DEFAULT_SUGGESTION_ORDER,
             $data['include_categories'] ?? $defaults['include_categories'] ?? self::DEFAULT_INCLUDE_CATEGORIES,
-            $data['exclude_categories'] ?? $defaults['exclude_categories'] ?? self::DEFAULT_EXCLUDE_CATEGORIES
+            $data['exclude_categories'] ?? $defaults['exclude_categories'] ?? self::DEFAULT_EXCLUDE_CATEGORIES,
+            (bool) ($data['show_clear_button'] ?? $defaults['show_clear_button'] ?? self::DEFAULT_SHOW_CLEAR_BUTTON),
+            $data['label_clear'] ?? $defaults['label_clear'] ?? self::DEFAULT_LABEL_CLEAR
         );
     }
 
@@ -155,6 +165,8 @@ class Settings {
             'suggestion_order' => $this->suggestionOrder,
             'include_categories' => $this->includeCategories,
             'exclude_categories' => $this->excludeCategories,
+            'show_clear_button' => $this->showClearButton,
+            'label_clear' => $this->labelClear,
         ];
     }
 
@@ -250,6 +262,14 @@ class Settings {
         return $this->excludeCategories;
     }
 
+    public function showClearButton(): bool {
+        return $this->showClearButton;
+    }
+
+    public function labelClear(): string {
+        return $this->labelClear;
+    }
+
     public function toJsConfig(): array {
         return [
             'maxViewed' => $this->maxViewed,
@@ -262,6 +282,7 @@ class Settings {
             'showExcerpt' => $this->showExcerpt,
             'showThumbnail' => $this->showThumbnail,
             'readThreshold' => $this->readThreshold,
+            'showClearButton' => $this->showClearButton,
             'labels' => [
                 'continue' => $this->labelContinue,
                 'completed' => $this->labelCompleted,
@@ -270,6 +291,7 @@ class Settings {
                 'loading' => $this->labelLoading,
                 'consentMessage' => $this->consentMessage,
                 'consentCheckboxLabel' => $this->consentCheckboxLabel,
+                'clear' => $this->labelClear,
             ],
         ];
     }

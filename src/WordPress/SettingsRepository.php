@@ -19,6 +19,7 @@ class SettingsRepository implements SettingsRepositoryInterface {
         'label_loading' => 'Cargando sugerencias...',
         'consent_message' => '¿Seguir tu progreso de lectura en este sitio?',
         'consent_checkbox_label' => 'Sí, seguir mi lectura',
+        'label_clear' => 'Borrar historial',
     ];
 
     private OptionsInterface $options;

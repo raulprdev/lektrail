@@ -31,8 +31,10 @@ function mockXhr() {
 }
 
 function createWidgetContainer(options = {}) {
+    var clickHandlers = {};
     var container = {
         innerHTML: '',
+        className: '',
         dataset: {
             endpoint: options.endpoint || '/api',
             postsEndpoint: options.postsEndpoint || '/wp-json/wp/v2/posts'
@@ -42,6 +44,20 @@ function createWidgetContainer(options = {}) {
                 return {
                     addEventListener: jest.fn()
                 };
+            }
+            if (selector === '.completionist-clear-btn') {
+                if (container.innerHTML.indexOf('completionist-clear-btn') !== -1) {
+                    return {
+                        addEventListener: function(event, handler) {
+                            clickHandlers[selector] = handler;
+                        },
+                        click: function() {
+                            if (clickHandlers[selector]) {
+                                clickHandlers[selector]();
+                            }
+                        }
+                    };
+                }
             }
             return null;
         }
@@ -57,7 +73,8 @@ function mockConfig(options = {}) {
         empty: 'Start reading to track your progress!',
         loading: 'Loading suggestions...',
         consentMessage: 'Track your reading progress?',
-        consentCheckboxLabel: 'Yes, track my reading'
+        consentCheckboxLabel: 'Yes, track my reading',
+        clear: 'Clear history'
     };
     return {
         widgetId: options.widgetId || 'completionist-widget',
@@ -66,6 +83,7 @@ function mockConfig(options = {}) {
         maxSuggestions: options.maxSuggestions || 5,
         viewedEnabled: options.viewedEnabled !== false,
         completedEnabled: options.completedEnabled !== false,
+        showClearButton: options.showClearButton !== false,
         requireConsent: options.requireConsent || false,
         labels: Object.assign({}, defaultLabels, options.labels || {})
     };

@@ -93,6 +93,18 @@
 		);
 	}
 
+	function renderClearButton() {
+		const config = getConfig();
+		const label = config.labels.clear || 'Clear my data';
+		return (
+			'<div class="completionist-clear">' +
+			'<button type="button" class="completionist-clear-btn">' +
+			label +
+			'</button>' +
+			'</div>'
+		);
+	}
+
 	function renderConsentBanner(container, config, onConsent) {
 		let html = '<div class="completionist-consent">';
 		html += '<p>' + config.labels.consentMessage + '</p>';
@@ -137,6 +149,12 @@
 		container.className = classes.join(' ');
 
 		let html = '';
+
+		const hasUserData = storage.getViewedCount() > 0 || storage.getReadCount() > 0;
+		if (config.showClearButton !== false && hasUserData) {
+			html += renderClearButton();
+		}
+
 		if (config.viewedEnabled) {
 			html += renderSection(
 				config.labels.continue,
@@ -166,6 +184,14 @@
 		}
 
 		container.innerHTML = html;
+
+		const clearBtn = container.querySelector('.completionist-clear-btn');
+		if (clearBtn) {
+			clearBtn.addEventListener('click', function () {
+				storage.clearHistory();
+				renderWidget(container, [], [], suggestions);
+			});
+		}
 	}
 
 	function getConsentManager() {

@@ -432,4 +432,40 @@ class SettingsTest extends TestCase {
         $this->assertEquals([1, 2], $array['include_categories']);
         $this->assertEquals([3, 4], $array['exclude_categories']);
     }
+
+    public function testDefaultShowClearButton(): void {
+        $settings = new Settings();
+
+        $this->assertTrue($settings->showClearButton());
+    }
+
+    public function testShowClearButtonFromArray(): void {
+        $settings = Settings::fromArray(['show_clear_button' => false]);
+
+        $this->assertFalse($settings->showClearButton());
+    }
+
+    public function testDefaultLabelClear(): void {
+        $settings = new Settings();
+
+        $this->assertEquals(Settings::DEFAULT_LABEL_CLEAR, $settings->labelClear());
+    }
+
+    public function testLabelClearFromArray(): void {
+        $settings = Settings::fromArray(['label_clear' => 'Borrar mis datos']);
+
+        $this->assertEquals('Borrar mis datos', $settings->labelClear());
+    }
+
+    public function testToJsConfigIncludesClearSettings(): void {
+        $settings = Settings::fromArray([
+            'show_clear_button' => true,
+            'label_clear' => 'Clear data',
+        ]);
+
+        $jsConfig = $settings->toJsConfig();
+
+        $this->assertTrue($jsConfig['showClearButton']);
+        $this->assertEquals('Clear data', $jsConfig['labels']['clear']);
+    }
 }

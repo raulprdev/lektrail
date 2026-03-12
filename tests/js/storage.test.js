@@ -345,6 +345,21 @@ describe('Storage: suggestions cache', () => {
     });
 });
 
+describe('Storage: clearHistory', () => {
+    test('clearHistory removes viewed and read but keeps suggestions', () => {
+        CompletionistStorage.addViewed(1, { title: 'Post 1', url: '/1' });
+        CompletionistStorage.addRead(2, { title: 'Post 2', url: '/2' });
+        CompletionistStorage.setSuggestions([{ id: 3, title: 'Suggestion', url: '/3' }]);
+
+        CompletionistStorage.clearHistory();
+
+        expect(CompletionistStorage.getViewedCount()).toBe(0);
+        expect(CompletionistStorage.getReadCount()).toBe(0);
+        expect(CompletionistStorage.getSuggestions()).toHaveLength(1);
+        expect(CompletionistStorage.isSuggestionsCacheValid(24)).toBe(true);
+    });
+});
+
 describe('Storage: cache invalidation on tracking', () => {
     test('addViewed clears cache when post is in suggestions', () => {
         CompletionistStorage.setSuggestions([
