@@ -33,14 +33,6 @@
                             <?php endforeach; ?>
                         </td>
                     </tr>
-                    <tr>
-                        <th scope="row"><?= esc_html__('Privacy Notice', 'completionist') ?></th>
-                        <td>
-                            <textarea name="<?= \Completionist\WordPress\SettingsRepository::OPTION_KEY ?>[privacy_notice]"
-                                      rows="3" class="large-text"><?= esc_textarea($settings->privacyNotice()) ?></textarea>
-                            <p class="description"><?= esc_html__('Displayed to users. Explains that reading progress is tracked in local storage.', 'completionist') ?></p>
-                        </td>
-                    </tr>
                 </table>
             </div>
         </div>

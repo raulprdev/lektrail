@@ -8,7 +8,6 @@ class Settings {
     public const DEFAULT_MAX_VIEWED = 3;
     public const DEFAULT_MAX_READ = 5;
     public const DEFAULT_MAX_SUGGESTIONS = 5;
-    public const DEFAULT_PRIVACY_NOTICE = 'This site tracks your reading progress using local storage.';
     public const DEFAULT_LABEL_CONTINUE = 'Continue reading';
     public const DEFAULT_LABEL_COMPLETED = 'Completed';
     public const DEFAULT_LABEL_SUGGESTIONS = 'Suggested reading';
@@ -34,7 +33,6 @@ class Settings {
     private int $maxViewed;
     private int $maxRead;
     private int $maxSuggestions;
-    private string $privacyNotice;
     private string $labelContinue;
     private string $labelCompleted;
     private string $labelSuggestions;
@@ -61,7 +59,6 @@ class Settings {
         int $maxViewed = self::DEFAULT_MAX_VIEWED,
         int $maxRead = self::DEFAULT_MAX_READ,
         int $maxSuggestions = self::DEFAULT_MAX_SUGGESTIONS,
-        string $privacyNotice = self::DEFAULT_PRIVACY_NOTICE,
         string $labelContinue = self::DEFAULT_LABEL_CONTINUE,
         string $labelCompleted = self::DEFAULT_LABEL_COMPLETED,
         string $labelSuggestions = self::DEFAULT_LABEL_SUGGESTIONS,
@@ -87,7 +84,6 @@ class Settings {
         $this->maxViewed = $maxViewed;
         $this->maxRead = $maxRead;
         $this->maxSuggestions = $maxSuggestions;
-        $this->privacyNotice = $privacyNotice;
         $this->labelContinue = $labelContinue;
         $this->labelCompleted = $labelCompleted;
         $this->labelSuggestions = $labelSuggestions;
@@ -116,7 +112,6 @@ class Settings {
             $data['max_viewed'] ?? $defaults['max_viewed'] ?? self::DEFAULT_MAX_VIEWED,
             $data['max_read'] ?? $defaults['max_read'] ?? self::DEFAULT_MAX_READ,
             $data['max_suggestions'] ?? $defaults['max_suggestions'] ?? self::DEFAULT_MAX_SUGGESTIONS,
-            $data['privacy_notice'] ?? $defaults['privacy_notice'] ?? self::DEFAULT_PRIVACY_NOTICE,
             $data['label_continue'] ?? $defaults['label_continue'] ?? self::DEFAULT_LABEL_CONTINUE,
             $data['label_completed'] ?? $defaults['label_completed'] ?? self::DEFAULT_LABEL_COMPLETED,
             $data['label_suggestions'] ?? $defaults['label_suggestions'] ?? self::DEFAULT_LABEL_SUGGESTIONS,
@@ -146,7 +141,6 @@ class Settings {
             'max_viewed' => $this->maxViewed,
             'max_read' => $this->maxRead,
             'max_suggestions' => $this->maxSuggestions,
-            'privacy_notice' => $this->privacyNotice,
             'label_continue' => $this->labelContinue,
             'label_completed' => $this->labelCompleted,
             'label_suggestions' => $this->labelSuggestions,
@@ -184,10 +178,6 @@ class Settings {
 
     public function maxSuggestions(): int {
         return $this->maxSuggestions;
-    }
-
-    public function privacyNotice(): string {
-        return $this->privacyNotice;
     }
 
     public function labelContinue(): string {

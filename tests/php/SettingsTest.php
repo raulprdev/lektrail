@@ -31,26 +31,18 @@ class SettingsTest extends TestCase {
         $this->assertEquals(Settings::DEFAULT_MAX_SUGGESTIONS, $settings->maxSuggestions());
     }
 
-    public function testDefaultPrivacyNotice(): void {
-        $settings = new Settings();
-
-        $this->assertEquals(Settings::DEFAULT_PRIVACY_NOTICE, $settings->privacyNotice());
-    }
-
     public function testFromArrayWithCustomValues(): void {
         $settings = Settings::fromArray([
             'post_types' => ['post', 'page', 'book'],
             'max_viewed' => 10,
             'max_read' => 15,
             'max_suggestions' => 8,
-            'privacy_notice' => 'Custom notice',
         ]);
 
         $this->assertEquals(['post', 'page', 'book'], $settings->postTypes());
         $this->assertEquals(10, $settings->maxViewed());
         $this->assertEquals(15, $settings->maxRead());
         $this->assertEquals(8, $settings->maxSuggestions());
-        $this->assertEquals('Custom notice', $settings->privacyNotice());
     }
 
     public function testFromArrayUsesDefaultsForMissingKeys(): void {
@@ -69,7 +61,6 @@ class SettingsTest extends TestCase {
         $this->assertArrayHasKey('max_viewed', $array);
         $this->assertArrayHasKey('max_read', $array);
         $this->assertArrayHasKey('max_suggestions', $array);
-        $this->assertArrayHasKey('privacy_notice', $array);
         $this->assertArrayHasKey('label_continue', $array);
         $this->assertArrayHasKey('label_completed', $array);
         $this->assertArrayHasKey('label_suggestions', $array);
