@@ -8,6 +8,21 @@ class MockPostQuery implements PostQuery {
 
     public array $posts = [];
     public array $postData = [];
+    public ?array $lastQueryArgs = null;
+
+    public function query(array $args): array {
+        $this->lastQueryArgs = $args;
+        $posts = $this->posts;
+
+        if (!empty($args['post__not_in'])) {
+            $posts = array_filter($posts, function ($post) use ($args) {
+                return !in_array($post['id'], $args['post__not_in']);
+            });
+        }
+
+        $limit = $args['posts_per_page'] ?? count($posts);
+        return array_slice(array_values($posts), 0, $limit);
+    }
 
     public function getRandom(int $count): array {
         return array_slice($this->posts, 0, $count);

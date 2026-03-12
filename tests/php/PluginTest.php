@@ -8,6 +8,7 @@ use Completionist\Plugin;
 use Completionist\Settings;
 use Completionist\Shortcode;
 use Completionist\SuggestionsEndpoint;
+use Completionist\SuggestionsQuery;
 use Completionist\Tests\Mocks\MockContext;
 use Completionist\Tests\Mocks\MockHooks;
 use Completionist\Tests\Mocks\MockJsonResponse;
@@ -39,7 +40,9 @@ class PluginTest extends TestCase {
 
     private function createPlugin(): Plugin {
         $hooks = new MockHooks();
-        $suggestions = new SuggestionsEndpoint(new MockPostQuery(), new MockJsonResponse());
+        $posts = new MockPostQuery();
+        $query = new SuggestionsQuery(new Settings(), $posts);
+        $suggestions = new SuggestionsEndpoint($query, new MockJsonResponse());
         $shortcode = new Shortcode($this->assets);
         $adminPage = new AdminPage($this->settings);
 

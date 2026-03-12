@@ -5,14 +5,12 @@ namespace Completionist;
 class SuggestionsEndpoint {
 
     public const ACTION = 'completionist_suggestions';
-    public const MAX_COUNT = 20;
-    public const DEFAULT_COUNT = 5;
 
-    private PostQuery $posts;
+    private SuggestionsQuery $query;
     private JsonResponse $response;
 
-    public function __construct(PostQuery $posts, JsonResponse $response) {
-        $this->posts = $posts;
+    public function __construct(SuggestionsQuery $query, JsonResponse $response) {
+        $this->query = $query;
         $this->response = $response;
     }
 
@@ -22,13 +20,18 @@ class SuggestionsEndpoint {
     }
 
     public function handle(): void {
-        $count = $this->parseCount($_GET['count'] ?? null);
-        $this->response->success($this->posts->getRandom($count));
+        $excludeIds = $this->parseExcludeIds($_GET['exclude'] ?? '');
+        $this->response->success($this->query->get($excludeIds));
     }
 
-    public function parseCount($input): int {
-        $count = is_numeric($input) ? (int) $input : self::DEFAULT_COUNT;
-        return max(1, min($count, self::MAX_COUNT));
+    public function parseExcludeIds(string $input): array {
+        if (empty($input)) {
+            return [];
+        }
+        return array_values(array_filter(
+            array_map('intval', explode(',', $input)),
+            fn($id) => $id > 0
+        ));
     }
 
     public static function url(): string {

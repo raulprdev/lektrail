@@ -42,7 +42,8 @@ add_action('plugins_loaded', function () {
     $assets = new Completionist\Assets($scripts, COMPLETIONIST_PLUGIN_PATH, COMPLETIONIST_PLUGIN_URL, COMPLETIONIST_VERSION, $settings, $posts);
     $response = new Completionist\WordPressJsonResponse();
 
-    $suggestions = new Completionist\SuggestionsEndpoint($posts, $response);
+    $suggestionsQuery = new Completionist\SuggestionsQuery($settings, $posts);
+    $suggestions = new Completionist\SuggestionsEndpoint($suggestionsQuery, $response);
     $shortcode = new Completionist\Shortcode($assets);
     $adminPage = new Completionist\AdminPage($settingsRepo);
 

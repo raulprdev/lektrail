@@ -373,4 +373,63 @@ class SettingsTest extends TestCase {
 
         $this->assertEquals(80, $config['readThreshold']);
     }
+
+    public function testDefaultSuggestionOrder(): void {
+        $settings = new Settings();
+
+        $this->assertEquals('random', $settings->suggestionOrder());
+    }
+
+    public function testSuggestionOrderFromArray(): void {
+        $settings = Settings::fromArray([
+            'suggestion_order' => 'recent',
+        ]);
+
+        $this->assertEquals('recent', $settings->suggestionOrder());
+    }
+
+    public function testDefaultIncludeCategories(): void {
+        $settings = new Settings();
+
+        $this->assertEquals([], $settings->includeCategories());
+    }
+
+    public function testIncludeCategoriesFromArray(): void {
+        $settings = Settings::fromArray([
+            'include_categories' => [1, 3, 5],
+        ]);
+
+        $this->assertEquals([1, 3, 5], $settings->includeCategories());
+    }
+
+    public function testDefaultExcludeCategories(): void {
+        $settings = new Settings();
+
+        $this->assertEquals([], $settings->excludeCategories());
+    }
+
+    public function testExcludeCategoriesFromArray(): void {
+        $settings = Settings::fromArray([
+            'exclude_categories' => [2, 4],
+        ]);
+
+        $this->assertEquals([2, 4], $settings->excludeCategories());
+    }
+
+    public function testSuggestionSettingsInToArray(): void {
+        $settings = Settings::fromArray([
+            'suggestion_order' => 'related',
+            'include_categories' => [1, 2],
+            'exclude_categories' => [3, 4],
+        ]);
+
+        $array = $settings->toArray();
+
+        $this->assertArrayHasKey('suggestion_order', $array);
+        $this->assertArrayHasKey('include_categories', $array);
+        $this->assertArrayHasKey('exclude_categories', $array);
+        $this->assertEquals('related', $array['suggestion_order']);
+        $this->assertEquals([1, 2], $array['include_categories']);
+        $this->assertEquals([3, 4], $array['exclude_categories']);
+    }
 }

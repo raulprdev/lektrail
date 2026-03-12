@@ -24,6 +24,9 @@ class Settings {
     public const DEFAULT_SHOW_THUMBNAIL = false;
     public const DEFAULT_EXCERPT_LENGTH = 20;
     public const DEFAULT_READ_THRESHOLD = 90;
+    public const DEFAULT_SUGGESTION_ORDER = 'random';
+    public const DEFAULT_INCLUDE_CATEGORIES = [];
+    public const DEFAULT_EXCLUDE_CATEGORIES = [];
 
     private array $postTypes;
     private int $maxViewed;
@@ -45,6 +48,9 @@ class Settings {
     private bool $showThumbnail;
     private int $excerptLength;
     private int $readThreshold;
+    private string $suggestionOrder;
+    private array $includeCategories;
+    private array $excludeCategories;
 
     public function __construct(
         array $postTypes = self::DEFAULT_POST_TYPES,
@@ -66,7 +72,10 @@ class Settings {
         bool $showExcerpt = self::DEFAULT_SHOW_EXCERPT,
         bool $showThumbnail = self::DEFAULT_SHOW_THUMBNAIL,
         int $excerptLength = self::DEFAULT_EXCERPT_LENGTH,
-        int $readThreshold = self::DEFAULT_READ_THRESHOLD
+        int $readThreshold = self::DEFAULT_READ_THRESHOLD,
+        string $suggestionOrder = self::DEFAULT_SUGGESTION_ORDER,
+        array $includeCategories = self::DEFAULT_INCLUDE_CATEGORIES,
+        array $excludeCategories = self::DEFAULT_EXCLUDE_CATEGORIES
     ) {
         $this->postTypes = $postTypes;
         $this->maxViewed = $maxViewed;
@@ -88,6 +97,9 @@ class Settings {
         $this->showThumbnail = $showThumbnail;
         $this->excerptLength = $excerptLength;
         $this->readThreshold = $readThreshold;
+        $this->suggestionOrder = $suggestionOrder;
+        $this->includeCategories = $includeCategories;
+        $this->excludeCategories = $excludeCategories;
     }
 
     public static function fromArray(array $data, array $defaults = []): self {
@@ -111,7 +123,10 @@ class Settings {
             (bool) ($data['show_excerpt'] ?? $defaults['show_excerpt'] ?? self::DEFAULT_SHOW_EXCERPT),
             (bool) ($data['show_thumbnail'] ?? $defaults['show_thumbnail'] ?? self::DEFAULT_SHOW_THUMBNAIL),
             (int) ($data['excerpt_length'] ?? $defaults['excerpt_length'] ?? self::DEFAULT_EXCERPT_LENGTH),
-            (int) ($data['read_threshold'] ?? $defaults['read_threshold'] ?? self::DEFAULT_READ_THRESHOLD)
+            (int) ($data['read_threshold'] ?? $defaults['read_threshold'] ?? self::DEFAULT_READ_THRESHOLD),
+            $data['suggestion_order'] ?? $defaults['suggestion_order'] ?? self::DEFAULT_SUGGESTION_ORDER,
+            $data['include_categories'] ?? $defaults['include_categories'] ?? self::DEFAULT_INCLUDE_CATEGORIES,
+            $data['exclude_categories'] ?? $defaults['exclude_categories'] ?? self::DEFAULT_EXCLUDE_CATEGORIES
         );
     }
 
@@ -137,6 +152,9 @@ class Settings {
             'show_thumbnail' => $this->showThumbnail,
             'excerpt_length' => $this->excerptLength,
             'read_threshold' => $this->readThreshold,
+            'suggestion_order' => $this->suggestionOrder,
+            'include_categories' => $this->includeCategories,
+            'exclude_categories' => $this->excludeCategories,
         ];
     }
 
@@ -218,6 +236,18 @@ class Settings {
 
     public function readThreshold(): int {
         return $this->readThreshold;
+    }
+
+    public function suggestionOrder(): string {
+        return $this->suggestionOrder;
+    }
+
+    public function includeCategories(): array {
+        return $this->includeCategories;
+    }
+
+    public function excludeCategories(): array {
+        return $this->excludeCategories;
     }
 
     public function toJsConfig(): array {

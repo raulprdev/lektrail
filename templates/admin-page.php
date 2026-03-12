@@ -266,6 +266,60 @@
                             <p class="description"><?= esc_html__('How long to cache suggestions before refreshing. Also refreshes when you complete reading a post.', 'completionist') ?></p>
                         </td>
                     </tr>
+                    <tr>
+                        <th scope="row"><?= esc_html__('Order', 'completionist') ?></th>
+                        <td>
+                            <select name="<?= \Completionist\WordPressSettingsRepository::OPTION_KEY ?>[suggestion_order]">
+                                <option value="random" <?php selected($settings->suggestionOrder(), 'random'); ?>>
+                                    <?= esc_html__('Random', 'completionist') ?>
+                                </option>
+                                <option value="recent" <?php selected($settings->suggestionOrder(), 'recent'); ?>>
+                                    <?= esc_html__('Recent (newest first)', 'completionist') ?>
+                                </option>
+                                <option value="related" <?php selected($settings->suggestionOrder(), 'related'); ?>>
+                                    <?= esc_html__('Related (same categories as read posts)', 'completionist') ?>
+                                </option>
+                            </select>
+                            <p class="description"><?= esc_html__('How to order suggested posts.', 'completionist') ?></p>
+                        </td>
+                    </tr>
+                    <?php $categories = get_categories(['hide_empty' => false]); ?>
+                    <?php if (!empty($categories)): ?>
+                    <tr>
+                        <th scope="row"><?= esc_html__('Include Categories', 'completionist') ?></th>
+                        <td>
+                            <fieldset>
+                                <?php foreach ($categories as $category): ?>
+                                    <label>
+                                        <input type="checkbox"
+                                               name="<?= \Completionist\WordPressSettingsRepository::OPTION_KEY ?>[include_categories][]"
+                                               value="<?= esc_attr($category->term_id) ?>"
+                                               <?php checked(in_array($category->term_id, $settings->includeCategories())); ?>>
+                                        <?= esc_html($category->name) ?>
+                                    </label><br>
+                                <?php endforeach; ?>
+                            </fieldset>
+                            <p class="description"><?= esc_html__('Only suggest posts from these categories. Leave empty to include all. Ignored when using "Related" order.', 'completionist') ?></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><?= esc_html__('Exclude Categories', 'completionist') ?></th>
+                        <td>
+                            <fieldset>
+                                <?php foreach ($categories as $category): ?>
+                                    <label>
+                                        <input type="checkbox"
+                                               name="<?= \Completionist\WordPressSettingsRepository::OPTION_KEY ?>[exclude_categories][]"
+                                               value="<?= esc_attr($category->term_id) ?>"
+                                               <?php checked(in_array($category->term_id, $settings->excludeCategories())); ?>>
+                                        <?= esc_html($category->name) ?>
+                                    </label><br>
+                                <?php endforeach; ?>
+                            </fieldset>
+                            <p class="description"><?= esc_html__('Never suggest posts from these categories. Ignored when using "Related" order.', 'completionist') ?></p>
+                        </td>
+                    </tr>
+                    <?php endif; ?>
                 </table>
             </div>
         </div>

@@ -2,7 +2,9 @@
 
 namespace Completionist\Tests;
 
+use Completionist\Settings;
 use Completionist\SuggestionsEndpoint;
+use Completionist\SuggestionsQuery;
 use Completionist\Tests\Mocks\MockPostQuery;
 use Completionist\Tests\Mocks\MockJsonResponse;
 use PHPUnit\Framework\TestCase;
@@ -11,42 +13,63 @@ class SuggestionsEndpointTest extends TestCase {
 
     private MockPostQuery $posts;
     private MockJsonResponse $response;
+    private SuggestionsQuery $query;
     private SuggestionsEndpoint $endpoint;
 
     protected function setUp(): void {
         $this->posts = new MockPostQuery();
+        $this->posts->posts = [
+            ['id' => 1, 'title' => 'Post 1', 'url' => '/post-1'],
+            ['id' => 2, 'title' => 'Post 2', 'url' => '/post-2'],
+            ['id' => 3, 'title' => 'Post 3', 'url' => '/post-3'],
+        ];
         $this->response = new MockJsonResponse();
-        $this->endpoint = new SuggestionsEndpoint($this->posts, $this->response);
+        $this->query = new SuggestionsQuery(new Settings(), $this->posts);
+        $this->endpoint = new SuggestionsEndpoint($this->query, $this->response);
+        $_GET = [];
     }
 
-    public function testParseCountReturnsDefaultWhenNull(): void {
-        $count = $this->endpoint->parseCount(null);
+    public function testParsesExcludeIds(): void {
+        $ids = $this->endpoint->parseExcludeIds('12,45,78');
 
-        $this->assertEquals(SuggestionsEndpoint::DEFAULT_COUNT, $count);
+        $this->assertEquals([12, 45, 78], $ids);
     }
 
-    public function testParseCountReturnsValueWhenValid(): void {
-        $count = $this->endpoint->parseCount('10');
+    public function testHandlesEmptyExclude(): void {
+        $ids = $this->endpoint->parseExcludeIds('');
 
-        $this->assertEquals(10, $count);
+        $this->assertEquals([], $ids);
     }
 
-    public function testParseCountCapsAtMaximum(): void {
-        $count = $this->endpoint->parseCount('100');
+    public function testHandlesInvalidExcludeValues(): void {
+        $ids = $this->endpoint->parseExcludeIds('12,abc,45,0,-5');
 
-        $this->assertEquals(SuggestionsEndpoint::MAX_COUNT, $count);
+        $this->assertEquals([12, 45], $ids);
     }
 
-    public function testParseCountReturnsMinimumOne(): void {
-        $count = $this->endpoint->parseCount('0');
+    public function testPassesExcludeIdsToQuery(): void {
+        $_GET['exclude'] = '1,2';
 
-        $this->assertEquals(1, $count);
+        $this->endpoint->handle();
+
+        $this->assertEquals([1, 2], $this->posts->lastQueryArgs['post__not_in']);
     }
 
-    public function testParseCountHandlesNonNumeric(): void {
-        $count = $this->endpoint->parseCount('abc');
+    public function testHandleReturnsFilteredPosts(): void {
+        $_GET['exclude'] = '1,2';
 
-        $this->assertEquals(SuggestionsEndpoint::DEFAULT_COUNT, $count);
+        $this->endpoint->handle();
+
+        $data = $this->response->successData;
+        $this->assertCount(1, $data);
+        $this->assertEquals('Post 3', $data[0]['title']);
+    }
+
+    public function testHandleReturnsAllPostsWhenNoExclude(): void {
+        $this->endpoint->handle();
+
+        $data = $this->response->successData;
+        $this->assertCount(3, $data);
     }
 
     public function testHandleReturnsPostsWithExcerptAndThumbnail(): void {
@@ -59,7 +82,6 @@ class SuggestionsEndpointTest extends TestCase {
                 'thumbnail' => 'http://example.com/image.jpg',
             ],
         ];
-        $_GET['count'] = '5';
 
         $this->endpoint->handle();
 
