@@ -7,6 +7,7 @@ class Assets {
     public const HANDLE_STORAGE = 'completionist-storage';
     public const HANDLE_DETECTOR = 'completionist-detector';
     public const HANDLE_RENDER_ITEM = 'completionist-render-item';
+    public const HANDLE_DATA_PROVIDER = 'completionist-data-provider';
     public const HANDLE_WIDGET = 'completionist-widget';
     public const HANDLE_CONSENT_BUILTIN = 'completionist-consent-builtin';
     public const HANDLE_CONSENT_MANAGER = 'completionist-consent-manager';
@@ -79,8 +80,9 @@ class Assets {
     public function enqueueWidget(): void {
         $this->enqueueStorage();
         $this->enqueueRenderItem();
+        $this->enqueueDataProvider();
 
-        $deps = [self::HANDLE_STORAGE, self::HANDLE_RENDER_ITEM];
+        $deps = [self::HANDLE_STORAGE, self::HANDLE_RENDER_ITEM, self::HANDLE_DATA_PROVIDER];
         if ($this->settings->requireConsent()) {
             $this->enqueueConsent();
             $deps[] = self::HANDLE_CONSENT_MANAGER;
@@ -123,6 +125,16 @@ class Assets {
             $this->pluginUrl . 'assets/js/render-item.js',
             [],
             $this->fileVersion('assets/js/render-item.js'),
+            true
+        );
+    }
+
+    private function enqueueDataProvider(): void {
+        $this->scripts->enqueueScript(
+            self::HANDLE_DATA_PROVIDER,
+            $this->pluginUrl . 'assets/js/data-provider.js',
+            [self::HANDLE_STORAGE],
+            $this->fileVersion('assets/js/data-provider.js'),
             true
         );
     }

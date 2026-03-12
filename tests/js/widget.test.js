@@ -208,36 +208,32 @@ describe('Widget: suggested reading section', () => {
         expect(container.innerHTML).toContain('New Post');
     });
 
-    test('excludes viewed posts', () => {
-        const { container, xhrInstances } = setupWidgetTest();
+    test('sends viewed post IDs in exclude param', () => {
+        const { xhrInstances } = setupWidgetTest();
         window.CompletionistStorage = mockStorage({
-            viewedPosts: [post(1, 'Viewed')]
+            viewedPosts: [post(1, 'Viewed'), post(2, 'Also Viewed')]
         });
 
         eval(widgetCode);
-        triggerXhrResponses(xhrInstances, {
-            suggestions: [{ id: 1, title: 'Viewed' }, { id: 2, title: 'New' }]
-        });
 
-        const section = container.innerHTML.split('Suggested reading')[1] || '';
-        expect(section).toContain('New');
-        expect(section).not.toContain('Viewed');
+        expect(xhrInstances[0].open).toHaveBeenCalledWith(
+            'GET',
+            expect.stringContaining('exclude=1,2')
+        );
     });
 
-    test('excludes read posts', () => {
-        const { container, xhrInstances } = setupWidgetTest();
+    test('sends read post IDs in exclude param', () => {
+        const { xhrInstances } = setupWidgetTest();
         window.CompletionistStorage = mockStorage({
-            readPosts: [post(1, 'Read')]
+            readPosts: [post(3, 'Read'), post(4, 'Also Read')]
         });
 
         eval(widgetCode);
-        triggerXhrResponses(xhrInstances, {
-            suggestions: [{ id: 1, title: 'Read' }, { id: 2, title: 'New' }]
-        });
 
-        const section = container.innerHTML.split('Suggested reading')[1] || '';
-        expect(section).toContain('New');
-        expect(section).not.toContain('Read');
+        expect(xhrInstances[0].open).toHaveBeenCalledWith(
+            'GET',
+            expect.stringContaining('exclude=3,4')
+        );
     });
 
     test('limits to 5 posts', () => {
@@ -253,7 +249,7 @@ describe('Widget: suggested reading section', () => {
         expect(container.innerHTML).not.toContain('Post 6');
     });
 
-    test('hides section when no suggestions', () => {
+    test('hides section when API returns empty suggestions', () => {
         const { container, xhrInstances } = setupWidgetTest();
         window.CompletionistStorage = mockStorage({
             viewedPosts: [post(1, 'Viewed')],
@@ -262,7 +258,7 @@ describe('Widget: suggested reading section', () => {
 
         eval(widgetCode);
         triggerXhrResponses(xhrInstances, {
-            suggestions: [{ id: 1, title: 'Viewed' }, { id: 2, title: 'Read' }]
+            suggestions: []
         });
 
         expect(container.innerHTML).not.toContain('Suggested reading');

@@ -7,8 +7,17 @@ const renderItemCode = fs.readFileSync(
     'utf8'
 );
 
+const dataProviderCode = fs.readFileSync(
+    path.join(__dirname, '../../../assets/js/data-provider.js'),
+    'utf8'
+);
+
 function loadRenderItem() {
     eval(renderItemCode);
+}
+
+function loadDataProvider() {
+    eval(dataProviderCode);
 }
 
 function mockXhr() {
@@ -76,6 +85,7 @@ function setupWidgetTest(configOptions = {}) {
     const xhrInstances = [];
 
     loadRenderItem();
+    loadDataProvider();
     window.CompletionistConfig = mockConfig(configOptions);
 
     document.getElementById = jest.fn(id => {

@@ -10,27 +10,6 @@
 		return window.CompletionistConfig;
 	}
 
-	function fetchSuggestions(endpoint, count, callback) {
-		const xhr = new XMLHttpRequest();
-		xhr.open('GET', endpoint + '&count=' + count);
-		xhr.onload = function () {
-			if (xhr.status === 200) {
-				try {
-					const response = JSON.parse(xhr.responseText);
-					callback(response.success ? response.data : []);
-				} catch (e) {
-					callback([]);
-				}
-			} else {
-				callback([]);
-			}
-		};
-		xhr.onerror = function () {
-			callback([]);
-		};
-		xhr.send();
-	}
-
 	function getStorage() {
 		return (
 			window.CompletionistStorage || {
@@ -53,11 +32,14 @@
 		);
 	}
 
-	function filterUntracked(posts) {
-		const storage = getStorage();
-		return posts.filter(function (post) {
-			return !storage.isTracked(post.id);
-		});
+	function getDataProvider(endpoint) {
+		if (window.CompletionistDataProvider) {
+			return window.CompletionistDataProvider.create({
+				dataMode: 'async',
+				endpoint: endpoint
+			});
+		}
+		return null;
 	}
 
 	function filterValid(posts) {
@@ -140,7 +122,7 @@
 		const readSlice = config.completedEnabled
 			? filterValid(readPosts).slice(0, config.maxRead)
 			: [];
-		const suggestionsSlice = filterUntracked(suggestions).slice(
+		const suggestionsSlice = filterValid(suggestions).slice(
 			0,
 			config.maxSuggestions
 		);
@@ -217,19 +199,18 @@
 	}
 
 	function initWidget(container, config) {
-		const storage = getStorage();
-		const suggestionsEndpoint = container.dataset.endpoint;
-		const cacheHours = config.suggestionsCacheHours || 24;
+		var storage = getStorage();
+		var suggestionsEndpoint = container.dataset.endpoint;
+		var cacheHours = config.suggestionsCacheHours || 24;
+		var provider = getDataProvider(suggestionsEndpoint);
 
-		const viewedPosts = storage.getViewedPosts
-			? storage.getViewedPosts()
-			: [];
-		const readPosts = storage.getReadPosts ? storage.getReadPosts() : [];
+		var viewedPosts = provider ? provider.getViewed() : [];
+		var readPosts = provider ? provider.getRead() : [];
 
-		const suggestionsValid =
+		var suggestionsValid =
 			storage.isSuggestionsCacheValid &&
 			storage.isSuggestionsCacheValid(cacheHours);
-		let suggestions =
+		var suggestions =
 			suggestionsValid && storage.getSuggestions
 				? storage.getSuggestions()
 				: [];
@@ -241,17 +222,17 @@
 
 		renderLoading(container);
 
-		fetchSuggestions(
-			suggestionsEndpoint,
-			config.maxSuggestions,
-			function (fetched) {
+		if (provider) {
+			provider.getSuggestions(function (fetched) {
 				suggestions = fetched;
 				if (storage.setSuggestions) {
 					storage.setSuggestions(fetched);
 				}
 				renderWidget(container, viewedPosts, readPosts, suggestions);
-			}
-		);
+			});
+		} else {
+			renderWidget(container, viewedPosts, readPosts, []);
+		}
 	}
 
 	if (document.readyState === 'loading') {
