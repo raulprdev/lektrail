@@ -2,7 +2,7 @@
 
 namespace Completionist\Tests\Mocks;
 
-use Completionist\JsonResponse;
+use Completionist\Contracts\JsonResponse;
 
 class MockJsonResponse implements JsonResponse {
 

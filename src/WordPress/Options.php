@@ -1,8 +1,10 @@
 <?php
 
-namespace Completionist;
+namespace Completionist\WordPress;
 
-class WordPressOptions implements Options {
+use Completionist\Contracts\Options as OptionsInterface;
+
+class Options implements OptionsInterface {
 
     public function get(string $key, $default = null) {
         return get_option($key, $default);

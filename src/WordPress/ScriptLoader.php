@@ -1,8 +1,10 @@
 <?php
 
-namespace Completionist;
+namespace Completionist\WordPress;
 
-class WordPressScriptLoader implements ScriptLoader {
+use Completionist\Contracts\ScriptLoader as ScriptLoaderInterface;
+
+class ScriptLoader implements ScriptLoaderInterface {
 
     public function enqueueScript(string $handle, string $url, array $deps, string $version, bool $inFooter): void {
         wp_enqueue_script($handle, $url, $deps, $version, $inFooter);

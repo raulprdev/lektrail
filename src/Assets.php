@@ -2,6 +2,9 @@
 
 namespace Completionist;
 
+use Completionist\Contracts\PostQuery;
+use Completionist\Contracts\ScriptLoader;
+
 class Assets {
 
     public const HANDLE_STORAGE = 'completionist-storage';

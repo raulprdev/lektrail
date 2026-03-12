@@ -2,7 +2,7 @@
 
 namespace Completionist\Tests\Mocks;
 
-use Completionist\Hooks;
+use Completionist\Contracts\Hooks;
 
 class MockHooks implements Hooks {
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Completionist;
+namespace Completionist\Contracts;
 
 interface Options {
     public function get(string $key, $default = null);

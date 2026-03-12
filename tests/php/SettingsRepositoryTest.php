@@ -3,7 +3,7 @@
 namespace Completionist\Tests;
 
 use Completionist\Settings;
-use Completionist\WordPressSettingsRepository;
+use Completionist\WordPress\SettingsRepository;
 use Completionist\Tests\Mocks\MockLocale;
 use Completionist\Tests\Mocks\MockOptions;
 use PHPUnit\Framework\TestCase;
@@ -19,7 +19,7 @@ class SettingsRepositoryTest extends TestCase {
     }
 
     public function testLoadReturnsDefaultsWhenNoSavedSettings(): void {
-        $repository = new WordPressSettingsRepository($this->options, $this->locale);
+        $repository = new SettingsRepository($this->options, $this->locale);
 
         $settings = $repository->load();
 
@@ -27,11 +27,11 @@ class SettingsRepositoryTest extends TestCase {
     }
 
     public function testLoadReturnsSavedSettings(): void {
-        $this->options->set(WordPressSettingsRepository::OPTION_KEY, [
+        $this->options->set(SettingsRepository::OPTION_KEY, [
             'post_types' => ['post', 'page'],
             'max_viewed' => 10,
         ]);
-        $repository = new WordPressSettingsRepository($this->options, $this->locale);
+        $repository = new SettingsRepository($this->options, $this->locale);
 
         $settings = $repository->load();
 
@@ -40,18 +40,18 @@ class SettingsRepositoryTest extends TestCase {
     }
 
     public function testSaveStoresSettings(): void {
-        $repository = new WordPressSettingsRepository($this->options, $this->locale);
+        $repository = new SettingsRepository($this->options, $this->locale);
         $settings = Settings::fromArray(['max_viewed' => 7]);
 
         $repository->save($settings);
 
-        $saved = $this->options->get(WordPressSettingsRepository::OPTION_KEY);
+        $saved = $this->options->get(SettingsRepository::OPTION_KEY);
         $this->assertEquals(7, $saved['max_viewed']);
     }
 
     public function testLoadReturnsEnglishLabelsForEnglishLocale(): void {
         $this->locale->code = 'en_US';
-        $repository = new WordPressSettingsRepository($this->options, $this->locale);
+        $repository = new SettingsRepository($this->options, $this->locale);
 
         $settings = $repository->load();
 
@@ -62,7 +62,7 @@ class SettingsRepositoryTest extends TestCase {
 
     public function testLoadReturnsSpanishLabelsForSpanishLocale(): void {
         $this->locale->code = 'es_ES';
-        $repository = new WordPressSettingsRepository($this->options, $this->locale);
+        $repository = new SettingsRepository($this->options, $this->locale);
 
         $settings = $repository->load();
 
@@ -73,7 +73,7 @@ class SettingsRepositoryTest extends TestCase {
 
     public function testLoadReturnsSpanishLabelsForArgentineLocale(): void {
         $this->locale->code = 'es_AR';
-        $repository = new WordPressSettingsRepository($this->options, $this->locale);
+        $repository = new SettingsRepository($this->options, $this->locale);
 
         $settings = $repository->load();
 
@@ -82,10 +82,10 @@ class SettingsRepositoryTest extends TestCase {
 
     public function testSavedLabelsOverrideLocaleDefaults(): void {
         $this->locale->code = 'es_ES';
-        $this->options->set(WordPressSettingsRepository::OPTION_KEY, [
+        $this->options->set(SettingsRepository::OPTION_KEY, [
             'label_continue' => 'Custom label',
         ]);
-        $repository = new WordPressSettingsRepository($this->options, $this->locale);
+        $repository = new SettingsRepository($this->options, $this->locale);
 
         $settings = $repository->load();
 
@@ -94,7 +94,7 @@ class SettingsRepositoryTest extends TestCase {
 
     public function testLoadReturnsSpanishConsentLabelsForSpanishLocale(): void {
         $this->locale->code = 'es_ES';
-        $repository = new WordPressSettingsRepository($this->options, $this->locale);
+        $repository = new SettingsRepository($this->options, $this->locale);
 
         $settings = $repository->load();
 

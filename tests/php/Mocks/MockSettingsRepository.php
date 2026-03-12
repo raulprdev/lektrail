@@ -2,8 +2,8 @@
 
 namespace Completionist\Tests\Mocks;
 
+use Completionist\Contracts\SettingsRepository;
 use Completionist\Settings;
-use Completionist\SettingsRepository;
 
 class MockSettingsRepository implements SettingsRepository {
 

@@ -2,6 +2,8 @@
 
 namespace Completionist;
 
+use Completionist\Contracts\PostQuery;
+
 class SuggestionsQuery {
 
     public const ORDER_RANDOM = 'random';

@@ -2,7 +2,7 @@
 
 namespace Completionist\Tests\Mocks;
 
-use Completionist\Options;
+use Completionist\Contracts\Options;
 
 class MockOptions implements Options {
 

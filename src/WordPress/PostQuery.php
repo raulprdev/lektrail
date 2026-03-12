@@ -1,8 +1,10 @@
 <?php
 
-namespace Completionist;
+namespace Completionist\WordPress;
 
-class WordPressPostQuery implements PostQuery {
+use Completionist\Contracts\PostQuery as PostQueryInterface;
+
+class PostQuery implements PostQueryInterface {
 
     public function query(array $args): array {
         $args['fields'] = 'ids';

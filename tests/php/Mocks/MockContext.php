@@ -2,7 +2,7 @@
 
 namespace Completionist\Tests\Mocks;
 
-use Completionist\Context;
+use Completionist\Contracts\Context;
 
 class MockContext implements Context {
 

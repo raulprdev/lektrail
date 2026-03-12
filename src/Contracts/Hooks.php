@@ -1,6 +1,6 @@
 <?php
 
-namespace Completionist;
+namespace Completionist\Contracts;
 
 interface Hooks {
     public function addAction(string $hook, callable $callback, int $priority = 10): void;

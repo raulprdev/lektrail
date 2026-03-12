@@ -1,6 +1,6 @@
 <?php
 
-namespace Completionist;
+namespace Completionist\Contracts;
 
 interface ScriptLoader {
     public function enqueueScript(string $handle, string $url, array $deps, string $version, bool $inFooter): void;

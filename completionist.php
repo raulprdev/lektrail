@@ -30,17 +30,17 @@ spl_autoload_register(function ($class) {
 define('COMPLETIONIST_PLUGIN_PATH', plugin_dir_path(__FILE__));
 
 add_action('plugins_loaded', function () {
-    $scripts = new Completionist\WordPressScriptLoader();
-    $options = new Completionist\WordPressOptions();
-    $hooks = new Completionist\WordPressHooks();
-    $context = new Completionist\WordPressContext();
-    $locale = new Completionist\WordPressLocale();
+    $scripts = new Completionist\WordPress\ScriptLoader();
+    $options = new Completionist\WordPress\Options();
+    $hooks = new Completionist\WordPress\Hooks();
+    $context = new Completionist\WordPress\Context();
+    $locale = new Completionist\WordPress\Locale();
 
-    $settingsRepo = new Completionist\WordPressSettingsRepository($options, $locale);
+    $settingsRepo = new Completionist\WordPress\SettingsRepository($options, $locale);
     $settings = $settingsRepo->load();
-    $posts = new Completionist\WordPressPostQuery();
+    $posts = new Completionist\WordPress\PostQuery();
     $assets = new Completionist\Assets($scripts, COMPLETIONIST_PLUGIN_PATH, COMPLETIONIST_PLUGIN_URL, COMPLETIONIST_VERSION, $settings, $posts);
-    $response = new Completionist\WordPressJsonResponse();
+    $response = new Completionist\WordPress\JsonResponse();
 
     $suggestionsQuery = new Completionist\SuggestionsQuery($settings, $posts);
     $suggestions = new Completionist\SuggestionsEndpoint($suggestionsQuery, $response);

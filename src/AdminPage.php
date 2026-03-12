@@ -2,6 +2,10 @@
 
 namespace Completionist;
 
+use Completionist\Contracts\Hooks;
+use Completionist\Contracts\SettingsRepository;
+use Completionist\WordPress\SettingsRepository as WordPressSettingsRepository;
+
 class AdminPage {
 
     public const MENU_SLUG = 'completionist';

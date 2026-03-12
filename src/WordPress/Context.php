@@ -1,8 +1,10 @@
 <?php
 
-namespace Completionist;
+namespace Completionist\WordPress;
 
-class WordPressContext implements Context {
+use Completionist\Contracts\Context as ContextInterface;
+
+class Context implements ContextInterface {
 
     public function isSingular(array $postTypes): bool {
         return is_singular($postTypes);

@@ -2,7 +2,7 @@
 
 namespace Completionist\Tests\Mocks;
 
-use Completionist\PostQuery;
+use Completionist\Contracts\PostQuery;
 
 class MockPostQuery implements PostQuery {
 

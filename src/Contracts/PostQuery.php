@@ -1,6 +1,6 @@
 <?php
 
-namespace Completionist;
+namespace Completionist\Contracts;
 
 interface PostQuery {
     public function query(array $args): array;

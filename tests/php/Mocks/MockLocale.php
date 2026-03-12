@@ -2,7 +2,7 @@
 
 namespace Completionist\Tests\Mocks;
 
-use Completionist\Locale;
+use Completionist\Contracts\Locale;
 
 class MockLocale implements Locale {
 

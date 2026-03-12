@@ -1,8 +1,13 @@
 <?php
 
-namespace Completionist;
+namespace Completionist\WordPress;
 
-class WordPressSettingsRepository implements SettingsRepository {
+use Completionist\Contracts\Locale as LocaleInterface;
+use Completionist\Contracts\Options as OptionsInterface;
+use Completionist\Contracts\SettingsRepository as SettingsRepositoryInterface;
+use Completionist\Settings;
+
+class SettingsRepository implements SettingsRepositoryInterface {
 
     public const OPTION_KEY = 'completionist_settings';
 
@@ -16,10 +21,10 @@ class WordPressSettingsRepository implements SettingsRepository {
         'consent_checkbox_label' => 'Sí, seguir mi lectura',
     ];
 
-    private Options $options;
-    private Locale $locale;
+    private OptionsInterface $options;
+    private LocaleInterface $locale;
 
-    public function __construct(Options $options, Locale $locale) {
+    public function __construct(OptionsInterface $options, LocaleInterface $locale) {
         $this->options = $options;
         $this->locale = $locale;
     }

@@ -2,6 +2,8 @@
 
 namespace Completionist;
 
+use Completionist\Contracts\Hooks;
+
 class Shortcode {
 
     public const TAG = 'completionist';

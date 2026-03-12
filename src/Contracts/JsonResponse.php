@@ -1,6 +1,6 @@
 <?php
 
-namespace Completionist;
+namespace Completionist\Contracts;
 
 interface JsonResponse {
     public function success(array $data): void;

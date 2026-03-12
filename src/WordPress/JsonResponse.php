@@ -1,8 +1,10 @@
 <?php
 
-namespace Completionist;
+namespace Completionist\WordPress;
 
-class WordPressJsonResponse implements JsonResponse {
+use Completionist\Contracts\JsonResponse as JsonResponseInterface;
+
+class JsonResponse implements JsonResponseInterface {
 
     public function success(array $data): void {
         wp_send_json_success($data);

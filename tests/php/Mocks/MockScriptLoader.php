@@ -2,7 +2,7 @@
 
 namespace Completionist\Tests\Mocks;
 
-use Completionist\ScriptLoader;
+use Completionist\Contracts\ScriptLoader;
 
 class MockScriptLoader implements ScriptLoader {
 

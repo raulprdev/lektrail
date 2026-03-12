@@ -2,6 +2,10 @@
 
 namespace Completionist;
 
+use Completionist\Contracts\Context;
+use Completionist\Contracts\Hooks;
+use Completionist\Contracts\SettingsRepository;
+
 class Plugin {
 
     private Hooks $hooks;

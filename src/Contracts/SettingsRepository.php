@@ -1,6 +1,8 @@
 <?php
 
-namespace Completionist;
+namespace Completionist\Contracts;
+
+use Completionist\Settings;
 
 interface SettingsRepository {
     public function load(): Settings;
