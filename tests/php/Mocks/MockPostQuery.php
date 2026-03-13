@@ -4,13 +4,14 @@ namespace Completionist\Tests\Mocks;
 
 use Completionist\Contracts\PostQuery;
 
-class MockPostQuery implements PostQuery {
-
+class MockPostQuery implements PostQuery
+{
     public array $posts = [];
     public array $postData = [];
     public ?array $lastQueryArgs = null;
 
-    public function query(array $args): array {
+    public function query(array $args): array
+    {
         $this->lastQueryArgs = $args;
         $posts = $this->posts;
 
@@ -24,19 +25,23 @@ class MockPostQuery implements PostQuery {
         return array_slice(array_values($posts), 0, $limit);
     }
 
-    public function getRandom(int $count): array {
+    public function getRandom(int $count): array
+    {
         return array_slice($this->posts, 0, $count);
     }
 
-    public function getTotalCount(): int {
+    public function getTotalCount(): int
+    {
         return count($this->posts);
     }
 
-    public function getPostData(int $postId): array {
+    public function getPostData(int $postId): array
+    {
         return $this->postData[$postId] ?? ['id' => $postId];
     }
 
-    public function getPostsDataByIds(array $ids): array {
-        return array_map(fn($id) => $this->getPostData($id), $ids);
+    public function getPostsDataByIds(array $ids): array
+    {
+        return array_map(fn ($id) => $this->getPostData($id), $ids);
     }
 }

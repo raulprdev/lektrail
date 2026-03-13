@@ -5,28 +5,30 @@ namespace Completionist;
 use Completionist\Contracts\PostQuery;
 use Completionist\Contracts\SettingsRepository;
 
-class SuggestionsQuery {
-
+class SuggestionsQuery
+{
     public const ORDER_RANDOM = 'random';
     public const ORDER_RECENT = 'recent';
     public const ORDER_RELATED = 'related';
 
     private SettingsRepository $settings;
-    private PostQuery $posts;
+    private PostQuery $postQuery;
 
-    public function __construct(SettingsRepository $settings, PostQuery $posts) {
-        $this->settings = $settings;
-        $this->posts = $posts;
+    public function __construct(SettingsRepository $settings, PostQuery $postQuery)
+    {
+        $this->settings  = $settings;
+        $this->postQuery = $postQuery;
     }
 
     private const SHUFFLE_MULTIPLIER = 3;
 
-    public function get(array $excludeIds, array $relatedCategories = []): array {
+    public function get(array $excludeIds, array $relatedCategories = []): array
+    {
         $settings = $this->settings->load();
         $limit = $settings->maxSuggestions();
         $order = $settings->suggestionOrder();
         $args = $this->buildQueryArgs($excludeIds, $relatedCategories, $limit);
-        $posts = $this->posts->query($args);
+        $posts = $this->postQuery->query($args);
 
         if ($order === self::ORDER_RANDOM || $order === self::ORDER_RELATED) {
             shuffle($posts);
@@ -35,7 +37,8 @@ class SuggestionsQuery {
         return array_slice($posts, 0, $limit);
     }
 
-    private function buildQueryArgs(array $excludeIds, array $relatedCategories, int $limit): array {
+    private function buildQueryArgs(array $excludeIds, array $relatedCategories, int $limit): array
+    {
         $settings = $this->settings->load();
         $order = $settings->suggestionOrder();
         $fetchLimit = $order === self::ORDER_RANDOM || $order === self::ORDER_RELATED
@@ -59,7 +62,8 @@ class SuggestionsQuery {
         return $args;
     }
 
-    private function applyCategoryFilters(array &$args, array $relatedCategories, Settings $settings): void {
+    private function applyCategoryFilters(array &$args, array $relatedCategories, Settings $settings): void
+    {
         $order = $settings->suggestionOrder();
 
         if ($order === self::ORDER_RELATED) {

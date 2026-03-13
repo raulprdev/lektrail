@@ -5,32 +5,35 @@ namespace Completionist;
 use Completionist\Contracts\Hooks;
 use Completionist\Contracts\PostQuery;
 
-class Shortcode {
-
+class Shortcode
+{
     public const TAG = 'completionist';
     public const WIDGET_ID = 'completionist-widget';
 
     private Assets $assets;
-    private TrackingService $tracking;
-    private SuggestionsQuery $suggestions;
-    private PostQuery $posts;
+    private TrackingService $trackingService;
+    private SuggestionsQuery $suggestionsQuery;
+    private PostQuery $postQuery;
 
-    public function __construct(Assets $assets, TrackingService $tracking, SuggestionsQuery $suggestions, PostQuery $posts) {
+    public function __construct(Assets $assets, TrackingService $trackingService, SuggestionsQuery $suggestionsQuery, PostQuery $postQuery)
+    {
         $this->assets = $assets;
-        $this->tracking = $tracking;
-        $this->suggestions = $suggestions;
-        $this->posts = $posts;
+        $this->trackingService = $trackingService;
+        $this->suggestionsQuery = $suggestionsQuery;
+        $this->postQuery = $postQuery;
     }
 
-    public function register(Hooks $hooks): void {
+    public function register(Hooks $hooks): void
+    {
         $hooks->addShortcode(self::TAG, [$this, 'render']);
     }
 
-    public function render(array $atts): string {
+    public function render(array $atts): string
+    {
         $inlineData = null;
 
-        if ($this->tracking->shouldTrackServerSide()) {
-            $history = $this->tracking->getHistory();
+        if ($this->trackingService->shouldTrackServerSide()) {
+            $history = $this->trackingService->getHistory();
             $excludeIds = array_merge(
                 array_column($history['viewed'], 'id'),
                 array_column($history['read'], 'id')
@@ -38,7 +41,7 @@ class Shortcode {
             $inlineData = [
                 'viewed' => $this->enrichPosts($history['viewed']),
                 'read' => $this->enrichPosts($history['read']),
-                'suggestions' => $this->suggestions->get($excludeIds),
+                'suggestions' => $this->suggestionsQuery->get($excludeIds),
             ];
         }
 
@@ -52,8 +55,9 @@ class Shortcode {
         );
     }
 
-    private function enrichPosts(array $posts): array {
+    private function enrichPosts(array $posts): array
+    {
         $ids = array_column($posts, 'id');
-        return $this->posts->getPostsDataByIds($ids);
+        return $this->postQuery->getPostsDataByIds($ids);
     }
 }

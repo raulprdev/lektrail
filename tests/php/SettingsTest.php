@@ -5,33 +5,38 @@ namespace Completionist\Tests;
 use Completionist\Settings;
 use PHPUnit\Framework\TestCase;
 
-class SettingsTest extends TestCase {
-
-    public function testDefaultPostTypes(): void {
+class SettingsTest extends TestCase
+{
+    public function testDefaultPostTypes(): void
+    {
         $settings = new Settings();
 
         $this->assertEquals(Settings::DEFAULT_POST_TYPES, $settings->postTypes());
     }
 
-    public function testDefaultMaxViewed(): void {
+    public function testDefaultMaxViewed(): void
+    {
         $settings = new Settings();
 
         $this->assertEquals(Settings::DEFAULT_MAX_VIEWED, $settings->maxViewed());
     }
 
-    public function testDefaultMaxRead(): void {
+    public function testDefaultMaxRead(): void
+    {
         $settings = new Settings();
 
         $this->assertEquals(Settings::DEFAULT_MAX_READ, $settings->maxRead());
     }
 
-    public function testDefaultMaxSuggestions(): void {
+    public function testDefaultMaxSuggestions(): void
+    {
         $settings = new Settings();
 
         $this->assertEquals(Settings::DEFAULT_MAX_SUGGESTIONS, $settings->maxSuggestions());
     }
 
-    public function testFromArrayWithCustomValues(): void {
+    public function testFromArrayWithCustomValues(): void
+    {
         $settings = Settings::fromArray([
             'post_types' => ['post', 'page', 'book'],
             'max_viewed' => 10,
@@ -45,7 +50,8 @@ class SettingsTest extends TestCase {
         $this->assertEquals(8, $settings->maxSuggestions());
     }
 
-    public function testFromArrayUsesDefaultsForMissingKeys(): void {
+    public function testFromArrayUsesDefaultsForMissingKeys(): void
+    {
         $settings = Settings::fromArray(['max_viewed' => 7]);
 
         $this->assertEquals(Settings::DEFAULT_POST_TYPES, $settings->postTypes());
@@ -53,7 +59,8 @@ class SettingsTest extends TestCase {
         $this->assertEquals(Settings::DEFAULT_MAX_READ, $settings->maxRead());
     }
 
-    public function testToArrayReturnsAllValues(): void {
+    public function testToArrayReturnsAllValues(): void
+    {
         $settings = new Settings();
         $array = $settings->toArray();
 
@@ -68,7 +75,8 @@ class SettingsTest extends TestCase {
         $this->assertArrayHasKey('label_loading', $array);
     }
 
-    public function testLabelsFromArray(): void {
+    public function testLabelsFromArray(): void
+    {
         $settings = Settings::fromArray([
             'label_continue' => 'Keep reading',
             'label_completed' => 'Already read',
@@ -84,7 +92,8 @@ class SettingsTest extends TestCase {
         $this->assertEquals('Please wait...', $settings->labelLoading());
     }
 
-    public function testToJsConfigReturnsExpectedStructure(): void {
+    public function testToJsConfigReturnsExpectedStructure(): void
+    {
         $settings = Settings::fromArray([
             'max_viewed' => 4,
             'max_read' => 6,
@@ -108,14 +117,16 @@ class SettingsTest extends TestCase {
         $this->assertEquals('Loading...', $config['labels']['loading']);
     }
 
-    public function testSectionsEnabledByDefault(): void {
+    public function testSectionsEnabledByDefault(): void
+    {
         $settings = new Settings();
 
         $this->assertTrue($settings->viewedEnabled());
         $this->assertTrue($settings->completedEnabled());
     }
 
-    public function testSectionsCanBeDisabled(): void {
+    public function testSectionsCanBeDisabled(): void
+    {
         $settings = Settings::fromArray([
             'viewed_enabled' => false,
             'completed_enabled' => false,
@@ -125,7 +136,8 @@ class SettingsTest extends TestCase {
         $this->assertFalse($settings->completedEnabled());
     }
 
-    public function testSectionsFromFormStringValues(): void {
+    public function testSectionsFromFormStringValues(): void
+    {
         $settings = Settings::fromArray([
             'viewed_enabled' => '0',
             'completed_enabled' => '1',
@@ -135,7 +147,8 @@ class SettingsTest extends TestCase {
         $this->assertTrue($settings->completedEnabled());
     }
 
-    public function testToJsConfigIncludesSectionEnabled(): void {
+    public function testToJsConfigIncludesSectionEnabled(): void
+    {
         $settings = Settings::fromArray([
             'viewed_enabled' => false,
             'completed_enabled' => true,
@@ -147,25 +160,29 @@ class SettingsTest extends TestCase {
         $this->assertTrue($config['completedEnabled']);
     }
 
-    public function testDefaultRequireConsentIsFalse(): void {
+    public function testDefaultRequireConsentIsFalse(): void
+    {
         $settings = new Settings();
 
         $this->assertFalse($settings->requireConsent());
     }
 
-    public function testDefaultConsentMessage(): void {
+    public function testDefaultConsentMessage(): void
+    {
         $settings = new Settings();
 
         $this->assertEquals(Settings::DEFAULT_CONSENT_MESSAGE, $settings->consentMessage());
     }
 
-    public function testDefaultConsentCheckboxLabel(): void {
+    public function testDefaultConsentCheckboxLabel(): void
+    {
         $settings = new Settings();
 
         $this->assertEquals(Settings::DEFAULT_CONSENT_CHECKBOX_LABEL, $settings->consentCheckboxLabel());
     }
 
-    public function testConsentSettingsFromArray(): void {
+    public function testConsentSettingsFromArray(): void
+    {
         $settings = Settings::fromArray([
             'require_consent' => true,
             'consent_message' => 'Custom consent message',
@@ -177,7 +194,8 @@ class SettingsTest extends TestCase {
         $this->assertEquals('I agree', $settings->consentCheckboxLabel());
     }
 
-    public function testConsentSettingsInToArray(): void {
+    public function testConsentSettingsInToArray(): void
+    {
         $settings = Settings::fromArray([
             'require_consent' => true,
             'consent_message' => 'Test message',
@@ -194,7 +212,8 @@ class SettingsTest extends TestCase {
         $this->assertEquals('Test label', $array['consent_checkbox_label']);
     }
 
-    public function testToJsConfigIncludesConsentSettings(): void {
+    public function testToJsConfigIncludesConsentSettings(): void
+    {
         $settings = Settings::fromArray([
             'require_consent' => true,
             'consent_message' => 'Track reading?',
@@ -208,7 +227,8 @@ class SettingsTest extends TestCase {
         $this->assertEquals('Yes please', $config['labels']['consentCheckboxLabel']);
     }
 
-    public function testRequireConsentFromFormStringValue(): void {
+    public function testRequireConsentFromFormStringValue(): void
+    {
         $settings = Settings::fromArray([
             'require_consent' => '1',
         ]);
@@ -216,13 +236,15 @@ class SettingsTest extends TestCase {
         $this->assertTrue($settings->requireConsent());
     }
 
-    public function testDefaultSuggestionsCacheHours(): void {
+    public function testDefaultSuggestionsCacheHours(): void
+    {
         $settings = new Settings();
 
         $this->assertEquals(24, $settings->suggestionsCacheHours());
     }
 
-    public function testSuggestionsCacheHoursFromArray(): void {
+    public function testSuggestionsCacheHoursFromArray(): void
+    {
         $settings = Settings::fromArray([
             'suggestions_cache_hours' => 12,
         ]);
@@ -230,7 +252,8 @@ class SettingsTest extends TestCase {
         $this->assertEquals(12, $settings->suggestionsCacheHours());
     }
 
-    public function testSuggestionsCacheHoursInToArray(): void {
+    public function testSuggestionsCacheHoursInToArray(): void
+    {
         $settings = Settings::fromArray([
             'suggestions_cache_hours' => 6,
         ]);
@@ -241,7 +264,8 @@ class SettingsTest extends TestCase {
         $this->assertEquals(6, $array['suggestions_cache_hours']);
     }
 
-    public function testToJsConfigIncludesSuggestionsCacheHours(): void {
+    public function testToJsConfigIncludesSuggestionsCacheHours(): void
+    {
         $settings = Settings::fromArray([
             'suggestions_cache_hours' => 48,
         ]);
@@ -251,19 +275,22 @@ class SettingsTest extends TestCase {
         $this->assertEquals(48, $config['suggestionsCacheHours']);
     }
 
-    public function testDefaultShowExcerptIsFalse(): void {
+    public function testDefaultShowExcerptIsFalse(): void
+    {
         $settings = new Settings();
 
         $this->assertFalse($settings->showExcerpt());
     }
 
-    public function testDefaultShowThumbnailIsFalse(): void {
+    public function testDefaultShowThumbnailIsFalse(): void
+    {
         $settings = new Settings();
 
         $this->assertFalse($settings->showThumbnail());
     }
 
-    public function testShowExcerptFromArray(): void {
+    public function testShowExcerptFromArray(): void
+    {
         $settings = Settings::fromArray([
             'show_excerpt' => true,
         ]);
@@ -271,7 +298,8 @@ class SettingsTest extends TestCase {
         $this->assertTrue($settings->showExcerpt());
     }
 
-    public function testShowThumbnailFromArray(): void {
+    public function testShowThumbnailFromArray(): void
+    {
         $settings = Settings::fromArray([
             'show_thumbnail' => true,
         ]);
@@ -279,7 +307,8 @@ class SettingsTest extends TestCase {
         $this->assertTrue($settings->showThumbnail());
     }
 
-    public function testDisplaySettingsInToArray(): void {
+    public function testDisplaySettingsInToArray(): void
+    {
         $settings = Settings::fromArray([
             'show_excerpt' => true,
             'show_thumbnail' => true,
@@ -293,7 +322,8 @@ class SettingsTest extends TestCase {
         $this->assertTrue($array['show_thumbnail']);
     }
 
-    public function testToJsConfigIncludesDisplaySettings(): void {
+    public function testToJsConfigIncludesDisplaySettings(): void
+    {
         $settings = Settings::fromArray([
             'show_excerpt' => true,
             'show_thumbnail' => false,
@@ -305,13 +335,15 @@ class SettingsTest extends TestCase {
         $this->assertFalse($config['showThumbnail']);
     }
 
-    public function testDefaultExcerptLength(): void {
+    public function testDefaultExcerptLength(): void
+    {
         $settings = new Settings();
 
         $this->assertEquals(20, $settings->excerptLength());
     }
 
-    public function testExcerptLengthFromArray(): void {
+    public function testExcerptLengthFromArray(): void
+    {
         $settings = Settings::fromArray([
             'excerpt_length' => 30,
         ]);
@@ -319,7 +351,8 @@ class SettingsTest extends TestCase {
         $this->assertEquals(30, $settings->excerptLength());
     }
 
-    public function testExcerptLengthInToArray(): void {
+    public function testExcerptLengthInToArray(): void
+    {
         $settings = Settings::fromArray([
             'excerpt_length' => 15,
         ]);
@@ -330,13 +363,15 @@ class SettingsTest extends TestCase {
         $this->assertEquals(15, $array['excerpt_length']);
     }
 
-    public function testDefaultReadThreshold(): void {
+    public function testDefaultReadThreshold(): void
+    {
         $settings = new Settings();
 
         $this->assertEquals(90, $settings->readThreshold());
     }
 
-    public function testReadThresholdFromArray(): void {
+    public function testReadThresholdFromArray(): void
+    {
         $settings = Settings::fromArray([
             'read_threshold' => 50,
         ]);
@@ -344,7 +379,8 @@ class SettingsTest extends TestCase {
         $this->assertEquals(50, $settings->readThreshold());
     }
 
-    public function testReadThresholdInToArray(): void {
+    public function testReadThresholdInToArray(): void
+    {
         $settings = Settings::fromArray([
             'read_threshold' => 75,
         ]);
@@ -355,7 +391,8 @@ class SettingsTest extends TestCase {
         $this->assertEquals(75, $array['read_threshold']);
     }
 
-    public function testToJsConfigIncludesReadThreshold(): void {
+    public function testToJsConfigIncludesReadThreshold(): void
+    {
         $settings = Settings::fromArray([
             'read_threshold' => 80,
         ]);
@@ -365,13 +402,15 @@ class SettingsTest extends TestCase {
         $this->assertEquals(80, $config['readThreshold']);
     }
 
-    public function testDefaultSuggestionOrder(): void {
+    public function testDefaultSuggestionOrder(): void
+    {
         $settings = new Settings();
 
         $this->assertEquals('random', $settings->suggestionOrder());
     }
 
-    public function testSuggestionOrderFromArray(): void {
+    public function testSuggestionOrderFromArray(): void
+    {
         $settings = Settings::fromArray([
             'suggestion_order' => 'recent',
         ]);
@@ -379,13 +418,15 @@ class SettingsTest extends TestCase {
         $this->assertEquals('recent', $settings->suggestionOrder());
     }
 
-    public function testDefaultIncludeCategories(): void {
+    public function testDefaultIncludeCategories(): void
+    {
         $settings = new Settings();
 
         $this->assertEquals([], $settings->includeCategories());
     }
 
-    public function testIncludeCategoriesFromArray(): void {
+    public function testIncludeCategoriesFromArray(): void
+    {
         $settings = Settings::fromArray([
             'include_categories' => [1, 3, 5],
         ]);
@@ -393,13 +434,15 @@ class SettingsTest extends TestCase {
         $this->assertEquals([1, 3, 5], $settings->includeCategories());
     }
 
-    public function testDefaultExcludeCategories(): void {
+    public function testDefaultExcludeCategories(): void
+    {
         $settings = new Settings();
 
         $this->assertEquals([], $settings->excludeCategories());
     }
 
-    public function testExcludeCategoriesFromArray(): void {
+    public function testExcludeCategoriesFromArray(): void
+    {
         $settings = Settings::fromArray([
             'exclude_categories' => [2, 4],
         ]);
@@ -407,7 +450,8 @@ class SettingsTest extends TestCase {
         $this->assertEquals([2, 4], $settings->excludeCategories());
     }
 
-    public function testSuggestionSettingsInToArray(): void {
+    public function testSuggestionSettingsInToArray(): void
+    {
         $settings = Settings::fromArray([
             'suggestion_order' => 'related',
             'include_categories' => [1, 2],
@@ -424,31 +468,36 @@ class SettingsTest extends TestCase {
         $this->assertEquals([3, 4], $array['exclude_categories']);
     }
 
-    public function testDefaultShowClearButton(): void {
+    public function testDefaultShowClearButton(): void
+    {
         $settings = new Settings();
 
         $this->assertTrue($settings->showClearButton());
     }
 
-    public function testShowClearButtonFromArray(): void {
+    public function testShowClearButtonFromArray(): void
+    {
         $settings = Settings::fromArray(['show_clear_button' => false]);
 
         $this->assertFalse($settings->showClearButton());
     }
 
-    public function testDefaultLabelClear(): void {
+    public function testDefaultLabelClear(): void
+    {
         $settings = new Settings();
 
         $this->assertEquals(Settings::DEFAULT_LABEL_CLEAR, $settings->labelClear());
     }
 
-    public function testLabelClearFromArray(): void {
+    public function testLabelClearFromArray(): void
+    {
         $settings = Settings::fromArray(['label_clear' => 'Borrar mis datos']);
 
         $this->assertEquals('Borrar mis datos', $settings->labelClear());
     }
 
-    public function testToJsConfigIncludesClearSettings(): void {
+    public function testToJsConfigIncludesClearSettings(): void
+    {
         $settings = Settings::fromArray([
             'show_clear_button' => true,
             'label_clear' => 'Clear data',
@@ -460,19 +509,22 @@ class SettingsTest extends TestCase {
         $this->assertEquals('Clear data', $jsConfig['labels']['clear']);
     }
 
-    public function testDefaultTrackLoggedInUsersIsFalse(): void {
+    public function testDefaultTrackLoggedInUsersIsFalse(): void
+    {
         $settings = new Settings();
 
         $this->assertFalse($settings->trackLoggedInUsers());
     }
 
-    public function testTrackLoggedInUsersFromArray(): void {
+    public function testTrackLoggedInUsersFromArray(): void
+    {
         $settings = Settings::fromArray(['track_logged_in_users' => true]);
 
         $this->assertTrue($settings->trackLoggedInUsers());
     }
 
-    public function testTrackLoggedInUsersInToArray(): void {
+    public function testTrackLoggedInUsersInToArray(): void
+    {
         $settings = Settings::fromArray(['track_logged_in_users' => true]);
 
         $array = $settings->toArray();

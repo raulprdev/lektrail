@@ -3,31 +3,34 @@
 namespace Completionist\Tests;
 
 use Completionist\Assets;
-use Completionist\Tests\Mocks\MockScriptLoader;
 use Completionist\Tests\Mocks\MockPostQuery;
+use Completionist\Tests\Mocks\MockScriptLoader;
 use Completionist\Tests\Mocks\MockSettingsRepository;
 use PHPUnit\Framework\TestCase;
 
-class AssetsTest extends TestCase {
-
+class AssetsTest extends TestCase
+{
     private string $pluginPath;
     private string $pluginUrl;
     private MockScriptLoader $loader;
     private MockPostQuery $postQuery;
 
-    protected function setUp(): void {
+    protected function setUp(): void
+    {
         $this->pluginPath = dirname(__DIR__, 2) . '/';
         $this->pluginUrl = 'http://example.com/wp-content/plugins/completionist/';
         $this->loader = new MockScriptLoader();
         $this->postQuery = new MockPostQuery();
     }
 
-    private function createAssets(array $settingsData = []): Assets {
+    private function createAssets(array $settingsData = []): Assets
+    {
         $settings = new MockSettingsRepository($settingsData);
         return new Assets($this->loader, $this->pluginPath, $this->pluginUrl, '1.0.0', $settings, $this->postQuery);
     }
 
-    public function testFileVersionReturnsTimestampForExistingFile(): void {
+    public function testFileVersionReturnsTimestampForExistingFile(): void
+    {
         $assets = $this->createAssets();
         $version = $assets->fileVersion('assets/js/detector.js');
 
@@ -35,14 +38,16 @@ class AssetsTest extends TestCase {
         $this->assertNotEquals('1.0.0', $version);
     }
 
-    public function testFileVersionReturnsFallbackForMissingFile(): void {
+    public function testFileVersionReturnsFallbackForMissingFile(): void
+    {
         $assets = $this->createAssets();
         $version = $assets->fileVersion('nonexistent/file.js');
 
         $this->assertEquals('1.0.0', $version);
     }
 
-    public function testEnqueueDetectorLoadsStorageFirst(): void {
+    public function testEnqueueDetectorLoadsStorageFirst(): void
+    {
         $assets = $this->createAssets();
         $assets->enqueueDetector(123);
 
@@ -50,7 +55,8 @@ class AssetsTest extends TestCase {
         $this->assertArrayHasKey(Assets::HANDLE_DETECTOR, $this->loader->scripts);
     }
 
-    public function testEnqueueDetectorAddsPostIdInlineScript(): void {
+    public function testEnqueueDetectorAddsPostIdInlineScript(): void
+    {
         $assets = $this->createAssets();
         $assets->enqueueDetector(456);
 
@@ -59,7 +65,8 @@ class AssetsTest extends TestCase {
         $this->assertEquals('before', $inline['position']);
     }
 
-    public function testEnqueueWidgetLoadsStyleAndScript(): void {
+    public function testEnqueueWidgetLoadsStyleAndScript(): void
+    {
         $assets = $this->createAssets();
         $assets->enqueueWidget();
 
@@ -67,7 +74,8 @@ class AssetsTest extends TestCase {
         $this->assertArrayHasKey(Assets::HANDLE_WIDGET, $this->loader->styles);
     }
 
-    public function testEnqueueWidgetPassesSettingsToScript(): void {
+    public function testEnqueueWidgetPassesSettingsToScript(): void
+    {
         $assets = $this->createAssets([
             'max_viewed' => 7,
             'max_read' => 12,
@@ -82,7 +90,8 @@ class AssetsTest extends TestCase {
         $this->assertStringContainsString('"maxSuggestions":8', $inline['code']);
     }
 
-    public function testEnqueueWidgetPassesLabelsToScript(): void {
+    public function testEnqueueWidgetPassesLabelsToScript(): void
+    {
         $assets = $this->createAssets([
             'label_continue' => 'Keep reading',
             'label_completed' => 'Done',
@@ -101,7 +110,8 @@ class AssetsTest extends TestCase {
         $this->assertStringContainsString('Wait...', $inline['code']);
     }
 
-    public function testEnqueueWidgetLoadsConsentScriptsWhenRequired(): void {
+    public function testEnqueueWidgetLoadsConsentScriptsWhenRequired(): void
+    {
         $assets = $this->createAssets(['require_consent' => true]);
 
         $assets->enqueueWidget();
@@ -110,7 +120,8 @@ class AssetsTest extends TestCase {
         $this->assertArrayHasKey(Assets::HANDLE_CONSENT_MANAGER, $this->loader->scripts);
     }
 
-    public function testEnqueueWidgetSkipsConsentScriptsWhenNotRequired(): void {
+    public function testEnqueueWidgetSkipsConsentScriptsWhenNotRequired(): void
+    {
         $assets = $this->createAssets(['require_consent' => false]);
 
         $assets->enqueueWidget();
@@ -119,7 +130,8 @@ class AssetsTest extends TestCase {
         $this->assertArrayNotHasKey(Assets::HANDLE_CONSENT_MANAGER, $this->loader->scripts);
     }
 
-    public function testEnqueueDetectorLoadsConsentScriptsWhenRequired(): void {
+    public function testEnqueueDetectorLoadsConsentScriptsWhenRequired(): void
+    {
         $assets = $this->createAssets(['require_consent' => true]);
 
         $assets->enqueueDetector(123);
@@ -128,7 +140,8 @@ class AssetsTest extends TestCase {
         $this->assertArrayHasKey(Assets::HANDLE_CONSENT_MANAGER, $this->loader->scripts);
     }
 
-    public function testEnqueueDetectorSkipsConsentScriptsWhenNotRequired(): void {
+    public function testEnqueueDetectorSkipsConsentScriptsWhenNotRequired(): void
+    {
         $assets = $this->createAssets(['require_consent' => false]);
 
         $assets->enqueueDetector(123);
@@ -136,7 +149,8 @@ class AssetsTest extends TestCase {
         $this->assertArrayNotHasKey(Assets::HANDLE_CONSENT_BUILTIN, $this->loader->scripts);
     }
 
-    public function testEnqueueDetectorSkipsConsentScriptsWhenServerSideTracking(): void {
+    public function testEnqueueDetectorSkipsConsentScriptsWhenServerSideTracking(): void
+    {
         $assets = $this->createAssets(['require_consent' => true]);
 
         $assets->enqueueDetector(123, true);
@@ -145,7 +159,8 @@ class AssetsTest extends TestCase {
         $this->assertArrayNotHasKey(Assets::HANDLE_CONSENT_MANAGER, $this->loader->scripts);
     }
 
-    public function testEnqueueDetectorOutputsPostData(): void {
+    public function testEnqueueDetectorOutputsPostData(): void
+    {
         $this->postQuery->postData[123] = [
             'id' => 123,
             'title' => 'Test Post',
@@ -164,7 +179,8 @@ class AssetsTest extends TestCase {
         $this->assertStringContainsString('image.jpg', $inlineScripts['code']);
     }
 
-    public function testEnqueueDetectorTrimsExcerptToConfiguredLength(): void {
+    public function testEnqueueDetectorTrimsExcerptToConfiguredLength(): void
+    {
         $longExcerpt = 'one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen seventeen eighteen nineteen twenty twentyone twentytwo';
         $this->postQuery->postData[123] = [
             'id' => 123,
@@ -181,7 +197,8 @@ class AssetsTest extends TestCase {
         $this->assertStringNotContainsString('eleven', $inlineScripts['code']);
     }
 
-    public function testEnqueueWidgetDisablesConsentWhenInlineDataProvided(): void {
+    public function testEnqueueWidgetDisablesConsentWhenInlineDataProvided(): void
+    {
         $assets = $this->createAssets(['require_consent' => true]);
         $inlineData = ['viewed' => [], 'read' => [], 'suggestions' => []];
 

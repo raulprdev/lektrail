@@ -4,9 +4,10 @@ namespace Completionist\WordPress;
 
 use Completionist\Contracts\PostQuery as PostQueryInterface;
 
-class PostQuery implements PostQueryInterface {
-
-    public function query(array $args): array {
+class PostQuery implements PostQueryInterface
+{
+    public function query(array $args): array
+    {
         $args['fields'] = 'ids';
         $query = new \WP_Query($args);
 
@@ -18,7 +19,8 @@ class PostQuery implements PostQueryInterface {
         return $posts;
     }
 
-    public function getRandom(int $count): array {
+    public function getRandom(int $count): array
+    {
         return $this->query([
             'post_type' => 'post',
             'post_status' => 'publish',
@@ -27,7 +29,8 @@ class PostQuery implements PostQueryInterface {
         ]);
     }
 
-    private function formatPost(int $postId): array {
+    private function formatPost(int $postId): array
+    {
         $post = [
             'id' => $postId,
             'title' => get_the_title($postId),
@@ -50,15 +53,18 @@ class PostQuery implements PostQueryInterface {
         return $post;
     }
 
-    public function getTotalCount(): int {
+    public function getTotalCount(): int
+    {
         return (int) wp_count_posts('post')->publish;
     }
 
-    public function getPostData(int $postId): array {
+    public function getPostData(int $postId): array
+    {
         return $this->formatPost($postId);
     }
 
-    public function getPostsDataByIds(array $ids): array {
+    public function getPostsDataByIds(array $ids): array
+    {
         if (empty($ids)) {
             return [];
         }

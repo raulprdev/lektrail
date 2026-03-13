@@ -8,8 +8,6 @@ use Completionist\Plugin;
 use Completionist\Shortcode;
 use Completionist\SuggestionsEndpoint;
 use Completionist\SuggestionsQuery;
-use Completionist\TrackingEndpoint;
-use Completionist\TrackingService;
 use Completionist\Tests\Mocks\MockContext;
 use Completionist\Tests\Mocks\MockHooks;
 use Completionist\Tests\Mocks\MockJsonResponse;
@@ -18,25 +16,29 @@ use Completionist\Tests\Mocks\MockScriptLoader;
 use Completionist\Tests\Mocks\MockSettingsRepository;
 use Completionist\Tests\Mocks\MockTrackingRepository;
 use Completionist\Tests\Mocks\MockUserProvider;
+use Completionist\TrackingEndpoint;
+use Completionist\TrackingService;
 use PHPUnit\Framework\TestCase;
 
-class PluginTest extends TestCase {
-
+class PluginTest extends TestCase
+{
     private MockScriptLoader $scripts;
     private MockSettingsRepository $settings;
     private MockContext $context;
     private MockUserProvider $users;
-    private MockTrackingRepository $tracking;
+    private MockTrackingRepository $trackings;
 
-    protected function setUp(): void {
+    protected function setUp(): void
+    {
         $this->scripts = new MockScriptLoader();
         $this->settings = new MockSettingsRepository();
         $this->context = new MockContext();
         $this->users = new MockUserProvider();
-        $this->tracking = new MockTrackingRepository();
+        $this->trackings = new MockTrackingRepository();
     }
 
-    private function createPlugin(): Plugin {
+    private function createPlugin(): Plugin
+    {
         $hooks = new MockHooks();
         $posts = new MockPostQuery();
         $assets = new Assets(
@@ -47,7 +49,7 @@ class PluginTest extends TestCase {
             $this->settings,
             $posts
         );
-        $trackingService = new TrackingService($this->users, $this->tracking, $this->settings);
+        $trackingService = new TrackingService($this->users, $this->trackings, $this->settings);
         $query = new SuggestionsQuery($this->settings, $posts);
         $suggestions = new SuggestionsEndpoint($query, new MockJsonResponse());
         $shortcode = new Shortcode($assets, $trackingService, $query, $posts);
@@ -67,7 +69,8 @@ class PluginTest extends TestCase {
         );
     }
 
-    public function testEnqueuesDetectorForConfiguredPostType(): void {
+    public function testEnqueuesDetectorForConfiguredPostType(): void
+    {
         $this->settings = new MockSettingsRepository(['post_types' => ['post', 'page']]);
         $this->context->singularPostType = 'post';
         $this->context->postId = 123;
@@ -78,7 +81,8 @@ class PluginTest extends TestCase {
         $this->assertArrayHasKey(Assets::HANDLE_DETECTOR, $this->scripts->scripts);
     }
 
-    public function testDoesNotEnqueueDetectorForNonConfiguredPostType(): void {
+    public function testDoesNotEnqueueDetectorForNonConfiguredPostType(): void
+    {
         $this->settings = new MockSettingsRepository(['post_types' => ['post']]);
         $this->context->singularPostType = 'page';
         $this->context->postId = 123;
@@ -89,7 +93,8 @@ class PluginTest extends TestCase {
         $this->assertArrayNotHasKey(Assets::HANDLE_DETECTOR, $this->scripts->scripts);
     }
 
-    public function testDoesNotEnqueueDetectorOnNonSingularPage(): void {
+    public function testDoesNotEnqueueDetectorOnNonSingularPage(): void
+    {
         $this->settings = new MockSettingsRepository(['post_types' => ['post']]);
         $this->context->singularPostType = null;
         $this->context->postId = 0;
@@ -100,7 +105,8 @@ class PluginTest extends TestCase {
         $this->assertArrayNotHasKey(Assets::HANDLE_DETECTOR, $this->scripts->scripts);
     }
 
-    public function testTracksViewedWhenServerSideEnabled(): void {
+    public function testTracksViewedWhenServerSideEnabled(): void
+    {
         $this->settings = new MockSettingsRepository([
             'post_types' => ['post'],
             'track_logged_in_users' => true,
@@ -112,10 +118,11 @@ class PluginTest extends TestCase {
         $plugin = $this->createPlugin();
         $plugin->enqueueDetector();
 
-        $this->assertEquals('viewed', $this->tracking->history[42][123]);
+        $this->assertEquals('viewed', $this->trackings->history[42][123]);
     }
 
-    public function testDoesNotTrackViewedWhenServerSideDisabled(): void {
+    public function testDoesNotTrackViewedWhenServerSideDisabled(): void
+    {
         $this->settings = new MockSettingsRepository([
             'post_types' => ['post'],
             'track_logged_in_users' => false,
@@ -127,10 +134,11 @@ class PluginTest extends TestCase {
         $plugin = $this->createPlugin();
         $plugin->enqueueDetector();
 
-        $this->assertEmpty($this->tracking->history);
+        $this->assertEmpty($this->trackings->history);
     }
 
-    public function testDoesNotTrackViewedForAnonymousUser(): void {
+    public function testDoesNotTrackViewedForAnonymousUser(): void
+    {
         $this->settings = new MockSettingsRepository([
             'post_types' => ['post'],
             'track_logged_in_users' => true,
@@ -142,6 +150,6 @@ class PluginTest extends TestCase {
         $plugin = $this->createPlugin();
         $plugin->enqueueDetector();
 
-        $this->assertEmpty($this->tracking->history);
+        $this->assertEmpty($this->trackings->history);
     }
 }

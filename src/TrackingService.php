@@ -3,48 +3,53 @@
 namespace Completionist;
 
 use Completionist\Contracts\SettingsRepository;
-use Completionist\Contracts\UserProvider;
 use Completionist\Contracts\TrackingRepository;
+use Completionist\Contracts\UserProvider;
 
-class TrackingService {
-
-    private UserProvider $users;
-    private TrackingRepository $tracking;
+class TrackingService
+{
+    private UserProvider $userProvider;
+    private TrackingRepository $trackings;
     private SettingsRepository $settings;
 
-    public function __construct(UserProvider $users, TrackingRepository $tracking, SettingsRepository $settings) {
-        $this->users = $users;
-        $this->tracking = $tracking;
+    public function __construct(UserProvider $userProvider, TrackingRepository $trackings, SettingsRepository $settings)
+    {
+        $this->userProvider = $userProvider;
+        $this->trackings    = $trackings;
         $this->settings = $settings;
     }
 
-    public function trackViewed(int $postId): void {
+    public function trackViewed(int $postId): void
+    {
         if (!$this->shouldTrackServerSide()) {
             return;
         }
-        $this->tracking->track($this->users->getCurrentUserId(), $postId, 'viewed');
+        $this->trackings->track($this->userProvider->getCurrentUserId(), $postId, 'viewed');
     }
 
-    public function trackRead(int $postId): void {
+    public function trackRead(int $postId): void
+    {
         if (!$this->shouldTrackServerSide()) {
             return;
         }
-        $this->tracking->track($this->users->getCurrentUserId(), $postId, 'read');
+        $this->trackings->track($this->userProvider->getCurrentUserId(), $postId, 'read');
     }
 
-    public function shouldTrackServerSide(): bool {
-        return $this->settings->load()->trackLoggedInUsers() && $this->users->isLoggedIn();
+    public function shouldTrackServerSide(): bool
+    {
+        return $this->settings->load()->trackLoggedInUsers() && $this->userProvider->isLoggedIn();
     }
 
-    public function getHistory(): array {
+    public function getHistory(): array
+    {
         if (!$this->shouldTrackServerSide()) {
             return ['viewed' => [], 'read' => []];
         }
-        $userId = $this->users->getCurrentUserId();
+        $userId = $this->userProvider->getCurrentUserId();
         $settings = $this->settings->load();
         return [
-            'viewed' => $this->tracking->getViewedPosts($userId, $settings->maxViewed()),
-            'read' => $this->tracking->getReadPosts($userId, $settings->maxRead()),
+            'viewed' => $this->trackings->getViewedPosts($userId, $settings->maxViewed()),
+            'read' => $this->trackings->getReadPosts($userId, $settings->maxRead()),
         ];
     }
 }

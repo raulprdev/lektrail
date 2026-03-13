@@ -2,7 +2,8 @@
 
 namespace Completionist\Contracts;
 
-interface Context {
+interface Context
+{
     public function isSingular(array $postTypes): bool;
     public function getPostId(): int;
 }

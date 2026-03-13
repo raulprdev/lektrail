@@ -2,6 +2,7 @@
 
 namespace Completionist\Contracts;
 
-interface Locale {
+interface Locale
+{
     public function getCode(): string;
 }

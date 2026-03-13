@@ -5,48 +5,51 @@ namespace Completionist\Tests;
 use Completionist\Assets;
 use Completionist\Shortcode;
 use Completionist\SuggestionsQuery;
-use Completionist\TrackingService;
 use Completionist\Tests\Mocks\MockPostQuery;
 use Completionist\Tests\Mocks\MockScriptLoader;
 use Completionist\Tests\Mocks\MockSettingsRepository;
 use Completionist\Tests\Mocks\MockTrackingRepository;
 use Completionist\Tests\Mocks\MockUserProvider;
+use Completionist\TrackingService;
 use PHPUnit\Framework\TestCase;
 
-class ShortcodeTest extends TestCase {
-
+class ShortcodeTest extends TestCase
+{
     private MockScriptLoader $scripts;
     private MockSettingsRepository $settings;
-    private MockUserProvider $users;
-    private MockTrackingRepository $tracking;
-    private MockPostQuery $posts;
+    private MockUserProvider $userProvider;
+    private MockTrackingRepository $trackings;
+    private MockPostQuery $postQuery;
 
-    protected function setUp(): void {
+    protected function setUp(): void
+    {
         $this->scripts = new MockScriptLoader();
         $this->settings = new MockSettingsRepository();
-        $this->users = new MockUserProvider();
-        $this->tracking = new MockTrackingRepository();
-        $this->posts = new MockPostQuery();
+        $this->userProvider = new MockUserProvider();
+        $this->trackings = new MockTrackingRepository();
+        $this->postQuery = new MockPostQuery();
     }
 
-    private function createShortcode(): Shortcode {
+    private function createShortcode(): Shortcode
+    {
         $assets = new Assets(
             $this->scripts,
             dirname(__DIR__, 2) . '/',
             'http://example.com/',
             '1.0.0',
             $this->settings,
-            $this->posts
+            $this->postQuery
         );
-        $trackingService = new TrackingService($this->users, $this->tracking, $this->settings);
-        $suggestionsQuery = new SuggestionsQuery($this->settings, $this->posts);
+        $trackingService = new TrackingService($this->userProvider, $this->trackings, $this->settings);
+        $suggestionsQuery = new SuggestionsQuery($this->settings, $this->postQuery);
 
-        return new Shortcode($assets, $trackingService, $suggestionsQuery, $this->posts);
+        return new Shortcode($assets, $trackingService, $suggestionsQuery, $this->postQuery);
     }
 
-    public function testInjectsInlineDataWhenServerSideEnabled(): void {
-        $this->settings = new MockSettingsRepository(['track_logged_in_users' => true]);
-        $this->users->userId = 42;
+    public function testInjectsInlineDataWhenServerSideEnabled(): void
+    {
+        $this->settings             = new MockSettingsRepository(['track_logged_in_users' => true]);
+        $this->userProvider->userId = 42;
 
         $shortcode = $this->createShortcode();
         $shortcode->render([]);
@@ -55,7 +58,8 @@ class ShortcodeTest extends TestCase {
         $this->assertStringContainsString('CompletionistInlineData', $inlineCode);
     }
 
-    public function testDoesNotInjectInlineDataWhenServerSideDisabled(): void {
+    public function testDoesNotInjectInlineDataWhenServerSideDisabled(): void
+    {
         $this->settings = new MockSettingsRepository(['track_logged_in_users' => false]);
 
         $shortcode = $this->createShortcode();
@@ -65,11 +69,12 @@ class ShortcodeTest extends TestCase {
         $this->assertStringNotContainsString('CompletionistInlineData', $inlineCode);
     }
 
-    public function testInlineDataContainsFullPostData(): void {
-        $this->settings = new MockSettingsRepository(['track_logged_in_users' => true]);
-        $this->users->userId = 42;
-        $this->tracking->track(42, 123, 'viewed');
-        $this->posts->postData[123] = [
+    public function testInlineDataContainsFullPostData(): void
+    {
+        $this->settings             = new MockSettingsRepository(['track_logged_in_users' => true]);
+        $this->userProvider->userId = 42;
+        $this->trackings->track(42, 123, 'viewed');
+        $this->postQuery->postData[123] = [
             'id' => 123,
             'title' => 'Test Post Title',
             'url' => '/test-post/',

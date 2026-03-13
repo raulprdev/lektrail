@@ -2,7 +2,8 @@
 
 namespace Completionist\Contracts;
 
-interface TrackingRepository {
+interface TrackingRepository
+{
     public function track(int $userId, int $postId, string $status): void;
     public function getViewedIds(int $userId): array;
     public function getReadIds(int $userId): array;

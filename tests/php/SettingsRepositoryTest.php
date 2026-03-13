@@ -3,22 +3,24 @@
 namespace Completionist\Tests;
 
 use Completionist\Settings;
-use Completionist\WordPress\SettingsRepository;
 use Completionist\Tests\Mocks\MockLocale;
 use Completionist\Tests\Mocks\MockOptions;
+use Completionist\WordPress\SettingsRepository;
 use PHPUnit\Framework\TestCase;
 
-class SettingsRepositoryTest extends TestCase {
-
+class SettingsRepositoryTest extends TestCase
+{
     private MockOptions $options;
     private MockLocale $locale;
 
-    protected function setUp(): void {
+    protected function setUp(): void
+    {
         $this->options = new MockOptions();
         $this->locale = new MockLocale();
     }
 
-    public function testLoadReturnsDefaultsWhenNoSavedSettings(): void {
+    public function testLoadReturnsDefaultsWhenNoSavedSettings(): void
+    {
         $repository = new SettingsRepository($this->options, $this->locale);
 
         $settings = $repository->load();
@@ -26,7 +28,8 @@ class SettingsRepositoryTest extends TestCase {
         $this->assertEquals(Settings::DEFAULT_POST_TYPES, $settings->postTypes());
     }
 
-    public function testLoadReturnsSavedSettings(): void {
+    public function testLoadReturnsSavedSettings(): void
+    {
         $this->options->set(SettingsRepository::OPTION_KEY, [
             'post_types' => ['post', 'page'],
             'max_viewed' => 10,
@@ -39,7 +42,8 @@ class SettingsRepositoryTest extends TestCase {
         $this->assertEquals(10, $settings->maxViewed());
     }
 
-    public function testSaveStoresSettings(): void {
+    public function testSaveStoresSettings(): void
+    {
         $repository = new SettingsRepository($this->options, $this->locale);
         $settings = Settings::fromArray(['max_viewed' => 7]);
 
@@ -49,7 +53,8 @@ class SettingsRepositoryTest extends TestCase {
         $this->assertEquals(7, $saved['max_viewed']);
     }
 
-    public function testLoadReturnsEnglishLabelsForEnglishLocale(): void {
+    public function testLoadReturnsEnglishLabelsForEnglishLocale(): void
+    {
         $this->locale->code = 'en_US';
         $repository = new SettingsRepository($this->options, $this->locale);
 
@@ -60,7 +65,8 @@ class SettingsRepositoryTest extends TestCase {
         $this->assertEquals('Suggested reading', $settings->labelSuggestions());
     }
 
-    public function testLoadReturnsSpanishLabelsForSpanishLocale(): void {
+    public function testLoadReturnsSpanishLabelsForSpanishLocale(): void
+    {
         $this->locale->code = 'es_ES';
         $repository = new SettingsRepository($this->options, $this->locale);
 
@@ -71,7 +77,8 @@ class SettingsRepositoryTest extends TestCase {
         $this->assertEquals('Lecturas sugeridas', $settings->labelSuggestions());
     }
 
-    public function testLoadReturnsSpanishLabelsForArgentineLocale(): void {
+    public function testLoadReturnsSpanishLabelsForArgentineLocale(): void
+    {
         $this->locale->code = 'es_AR';
         $repository = new SettingsRepository($this->options, $this->locale);
 
@@ -80,7 +87,8 @@ class SettingsRepositoryTest extends TestCase {
         $this->assertEquals('Seguir leyendo', $settings->labelContinue());
     }
 
-    public function testSavedLabelsOverrideLocaleDefaults(): void {
+    public function testSavedLabelsOverrideLocaleDefaults(): void
+    {
         $this->locale->code = 'es_ES';
         $this->options->set(SettingsRepository::OPTION_KEY, [
             'label_continue' => 'Custom label',
@@ -92,7 +100,8 @@ class SettingsRepositoryTest extends TestCase {
         $this->assertEquals('Custom label', $settings->labelContinue());
     }
 
-    public function testLoadReturnsSpanishConsentLabelsForSpanishLocale(): void {
+    public function testLoadReturnsSpanishConsentLabelsForSpanishLocale(): void
+    {
         $this->locale->code = 'es_ES';
         $repository = new SettingsRepository($this->options, $this->locale);
 

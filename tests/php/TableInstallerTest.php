@@ -6,19 +6,21 @@ use Completionist\TableInstaller;
 use Completionist\Tests\Mocks\MockDatabase;
 use PHPUnit\Framework\TestCase;
 
-class TableInstallerTest extends TestCase {
-
+class TableInstallerTest extends TestCase
+{
     private MockDatabase $db;
-    private TableInstaller $installer;
+    private TableInstaller $tableInstaller;
 
-    protected function setUp(): void {
+    protected function setUp(): void
+    {
         $this->db = new MockDatabase();
         $this->db->prefix = 'wp_';
-        $this->installer = new TableInstaller($this->db);
+        $this->tableInstaller = new TableInstaller($this->db);
     }
 
-    public function testCreateTableGeneratesCorrectSql(): void {
-        $this->installer->createTable();
+    public function testCreateTableGeneratesCorrectSql(): void
+    {
+        $this->tableInstaller->createTable();
 
         $sql = $this->db->queries[0];
         $this->assertStringContainsString('CREATE TABLE', $sql);
@@ -31,15 +33,17 @@ class TableInstallerTest extends TestCase {
         $this->assertStringContainsString('UNIQUE KEY', $sql);
     }
 
-    public function testDropTableGeneratesCorrectSql(): void {
-        $this->installer->dropTable();
+    public function testDropTableGeneratesCorrectSql(): void
+    {
+        $this->tableInstaller->dropTable();
 
         $sql = $this->db->queries[0];
         $this->assertStringContainsString('DROP TABLE IF EXISTS', $sql);
         $this->assertStringContainsString('wp_completionist_history', $sql);
     }
 
-    public function testUsesCorrectPrefix(): void {
+    public function testUsesCorrectPrefix(): void
+    {
         $this->db->prefix = 'custom_';
         $installer = new TableInstaller($this->db);
 

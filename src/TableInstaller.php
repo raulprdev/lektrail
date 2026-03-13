@@ -4,15 +4,17 @@ namespace Completionist;
 
 use Completionist\Contracts\Database;
 
-class TableInstaller {
-
+class TableInstaller
+{
     private Database $db;
 
-    public function __construct(Database $db) {
+    public function __construct(Database $db)
+    {
         $this->db = $db;
     }
 
-    public function createTable(): void {
+    public function createTable(): void
+    {
         $table = $this->db->getPrefix() . 'completionist_history';
         $sql = "CREATE TABLE IF NOT EXISTS {$table} (
             id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -27,7 +29,8 @@ class TableInstaller {
         $this->db->query($sql);
     }
 
-    public function dropTable(): void {
+    public function dropTable(): void
+    {
         $table = $this->db->getPrefix() . 'completionist_history';
         $this->db->query("DROP TABLE IF EXISTS {$table}");
     }

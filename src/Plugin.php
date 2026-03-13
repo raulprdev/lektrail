@@ -6,8 +6,8 @@ use Completionist\Contracts\Context;
 use Completionist\Contracts\Hooks;
 use Completionist\Contracts\SettingsRepository;
 
-class Plugin {
-
+class Plugin
+{
     private Hooks $hooks;
     private Assets $assets;
     private SettingsRepository $settings;
@@ -15,7 +15,7 @@ class Plugin {
     private SuggestionsEndpoint $suggestions;
     private Shortcode $shortcode;
     private AdminPage $adminPage;
-    private TrackingService $tracking;
+    private TrackingService $trackingService;
     private TrackingEndpoint $trackingEndpoint;
 
     public function __construct(
@@ -26,7 +26,7 @@ class Plugin {
         Shortcode $shortcode,
         AdminPage $adminPage,
         Hooks $hooks,
-        TrackingService $tracking,
+        TrackingService $trackingService,
         TrackingEndpoint $trackingEndpoint
     ) {
         $this->assets = $assets;
@@ -36,11 +36,12 @@ class Plugin {
         $this->shortcode = $shortcode;
         $this->adminPage = $adminPage;
         $this->hooks = $hooks;
-        $this->tracking = $tracking;
+        $this->trackingService = $trackingService;
         $this->trackingEndpoint = $trackingEndpoint;
     }
 
-    public function run(): void {
+    public function run(): void
+    {
         $this->suggestions->register($this->hooks);
         $this->shortcode->register($this->hooks);
         $this->adminPage->register($this->hooks);
@@ -48,17 +49,19 @@ class Plugin {
         $this->hooks->addAction('wp_enqueue_scripts', [$this, 'enqueueDetector']);
     }
 
-    public function enqueueDetector(): void {
+    public function enqueueDetector(): void
+    {
         if (!$this->shouldEnqueueDetector()) {
             return;
         }
         $postId = $this->context->getPostId();
-        $serverSideTracking = $this->tracking->shouldTrackServerSide();
-        $this->tracking->trackViewed($postId);
+        $serverSideTracking = $this->trackingService->shouldTrackServerSide();
+        $this->trackingService->trackViewed($postId);
         $this->assets->enqueueDetector($postId, $serverSideTracking);
     }
 
-    private function shouldEnqueueDetector(): bool {
+    private function shouldEnqueueDetector(): bool
+    {
         $postTypes = $this->settings->load()->postTypes();
         return $this->context->isSingular($postTypes);
     }

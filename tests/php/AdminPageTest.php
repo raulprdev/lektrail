@@ -7,31 +7,34 @@ use Completionist\Tests\Mocks\MockHooks;
 use Completionist\Tests\Mocks\MockSettingsRepository;
 use PHPUnit\Framework\TestCase;
 
-class AdminPageTest extends TestCase {
-
-    public function testRegistersAdminMenuHook(): void {
+class AdminPageTest extends TestCase
+{
+    public function testRegistersAdminMenuHook(): void
+    {
         $hooks = new MockHooks();
-        $repository = new MockSettingsRepository();
-        $page = new AdminPage($repository);
+        $settings = new MockSettingsRepository();
+        $page = new AdminPage($settings);
 
         $page->register($hooks);
 
         $this->assertArrayHasKey('admin_menu', $hooks->actions);
     }
 
-    public function testRegistersAdminInitHook(): void {
+    public function testRegistersAdminInitHook(): void
+    {
         $hooks = new MockHooks();
-        $repository = new MockSettingsRepository();
-        $page = new AdminPage($repository);
+        $settings = new MockSettingsRepository();
+        $page = new AdminPage($settings);
 
         $page->register($hooks);
 
         $this->assertArrayHasKey('admin_init', $hooks->actions);
     }
 
-    public function testGetSettingsReturnsFromRepository(): void {
-        $repository = new MockSettingsRepository(['max_viewed' => 12]);
-        $page = new AdminPage($repository);
+    public function testGetSettingsReturnsFromRepository(): void
+    {
+        $settings = new MockSettingsRepository(['max_viewed' => 12]);
+        $page = new AdminPage($settings);
 
         $settings = $page->getSettings();
 

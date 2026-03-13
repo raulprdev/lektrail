@@ -6,8 +6,8 @@ use Completionist\Contracts\PostQuery;
 use Completionist\Contracts\ScriptLoader;
 use Completionist\Contracts\SettingsRepository;
 
-class Assets {
-
+class Assets
+{
     public const HANDLE_STORAGE = 'completionist-storage';
     public const HANDLE_DETECTOR = 'completionist-detector';
     public const HANDLE_RENDER_ITEM = 'completionist-render-item';
@@ -25,7 +25,8 @@ class Assets {
     private SettingsRepository $settings;
     private PostQuery $postQuery;
 
-    public function __construct(ScriptLoader $scripts, string $pluginPath, string $pluginUrl, string $version, SettingsRepository $settings, PostQuery $postQuery) {
+    public function __construct(ScriptLoader $scripts, string $pluginPath, string $pluginUrl, string $version, SettingsRepository $settings, PostQuery $postQuery)
+    {
         $this->scripts = $scripts;
         $this->pluginPath = $pluginPath;
         $this->pluginUrl = $pluginUrl;
@@ -34,7 +35,8 @@ class Assets {
         $this->postQuery = $postQuery;
     }
 
-    public function enqueueDetector(int $postId, bool $serverSideTracking = false): void {
+    public function enqueueDetector(int $postId, bool $serverSideTracking = false): void
+    {
         $settings = $this->settings->load();
         $this->enqueueStorage();
         $this->enqueueNotifier();
@@ -81,7 +83,8 @@ class Assets {
         );
     }
 
-    private function trimExcerpt(string $excerpt, Settings $settings): string {
+    private function trimExcerpt(string $excerpt, Settings $settings): string
+    {
         $words = explode(' ', $excerpt);
         $length = $settings->excerptLength();
         if (count($words) <= $length) {
@@ -90,7 +93,8 @@ class Assets {
         return implode(' ', array_slice($words, 0, $length)) . '...';
     }
 
-    public function enqueueWidget(?array $inlineData = null): void {
+    public function enqueueWidget(?array $inlineData = null): void
+    {
         $settings = $this->settings->load();
         $this->enqueueStorage();
         $this->enqueueRenderItem();
@@ -135,7 +139,8 @@ class Assets {
         );
     }
 
-    private function enqueueStorage(): void {
+    private function enqueueStorage(): void
+    {
         $this->scripts->enqueueScript(
             self::HANDLE_STORAGE,
             $this->pluginUrl . 'assets/js/storage.js',
@@ -145,7 +150,8 @@ class Assets {
         );
     }
 
-    private function enqueueNotifier(): void {
+    private function enqueueNotifier(): void
+    {
         $this->scripts->enqueueScript(
             self::HANDLE_NOTIFIER,
             $this->pluginUrl . 'assets/js/notifier.js',
@@ -155,7 +161,8 @@ class Assets {
         );
     }
 
-    private function enqueueRenderItem(): void {
+    private function enqueueRenderItem(): void
+    {
         $this->scripts->enqueueScript(
             self::HANDLE_RENDER_ITEM,
             $this->pluginUrl . 'assets/js/render-item.js',
@@ -165,7 +172,8 @@ class Assets {
         );
     }
 
-    private function enqueueDataProvider(): void {
+    private function enqueueDataProvider(): void
+    {
         $this->scripts->enqueueScript(
             self::HANDLE_DATA_PROVIDER,
             $this->pluginUrl . 'assets/js/data-provider.js',
@@ -175,7 +183,8 @@ class Assets {
         );
     }
 
-    private function enqueueDataSource(): void {
+    private function enqueueDataSource(): void
+    {
         $this->scripts->enqueueScript(
             self::HANDLE_DATA_SOURCE,
             $this->pluginUrl . 'assets/js/data-source.js',
@@ -185,7 +194,8 @@ class Assets {
         );
     }
 
-    public function fileVersion(string $relativePath): string {
+    public function fileVersion(string $relativePath): string
+    {
         $file = $this->pluginPath . $relativePath;
         if (file_exists($file)) {
             return (string) filemtime($file);
@@ -193,7 +203,8 @@ class Assets {
         return $this->version;
     }
 
-    private function enqueueConsent(): void {
+    private function enqueueConsent(): void
+    {
         $this->scripts->enqueueScript(
             self::HANDLE_CONSENT_BUILTIN,
             $this->pluginUrl . 'assets/js/consent/builtin-provider.js',

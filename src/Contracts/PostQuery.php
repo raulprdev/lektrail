@@ -2,7 +2,8 @@
 
 namespace Completionist\Contracts;
 
-interface PostQuery {
+interface PostQuery
+{
     public function query(array $args): array;
     public function getRandom(int $count): array;
     public function getTotalCount(): int;

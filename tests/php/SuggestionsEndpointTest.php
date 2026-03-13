@@ -4,76 +4,84 @@ namespace Completionist\Tests;
 
 use Completionist\SuggestionsEndpoint;
 use Completionist\SuggestionsQuery;
-use Completionist\Tests\Mocks\MockPostQuery;
 use Completionist\Tests\Mocks\MockJsonResponse;
+use Completionist\Tests\Mocks\MockPostQuery;
 use Completionist\Tests\Mocks\MockSettingsRepository;
 use PHPUnit\Framework\TestCase;
 
-class SuggestionsEndpointTest extends TestCase {
+class SuggestionsEndpointTest extends TestCase
+{
+    private MockPostQuery $postQuery;
+    private MockJsonResponse $jsonResponse;
+    private SuggestionsQuery $suggestionsQuery;
+    private SuggestionsEndpoint $suggestionsEndpoint;
 
-    private MockPostQuery $posts;
-    private MockJsonResponse $response;
-    private SuggestionsQuery $query;
-    private SuggestionsEndpoint $endpoint;
-
-    protected function setUp(): void {
-        $this->posts = new MockPostQuery();
-        $this->posts->posts = [
+    protected function setUp(): void
+    {
+        $this->postQuery        = new MockPostQuery();
+        $this->postQuery->posts = [
             ['id' => 1, 'title' => 'Post 1', 'url' => '/post-1'],
             ['id' => 2, 'title' => 'Post 2', 'url' => '/post-2'],
             ['id' => 3, 'title' => 'Post 3', 'url' => '/post-3'],
         ];
-        $this->response = new MockJsonResponse();
-        $this->query = new SuggestionsQuery(new MockSettingsRepository(), $this->posts);
-        $this->endpoint = new SuggestionsEndpoint($this->query, $this->response);
+        $this->jsonResponse         = new MockJsonResponse();
+        $this->suggestionsQuery            = new SuggestionsQuery(new MockSettingsRepository(), $this->postQuery);
+        $this->suggestionsEndpoint         = new SuggestionsEndpoint($this->suggestionsQuery, $this->jsonResponse);
         $_GET = [];
     }
 
-    public function testParsesExcludeIds(): void {
-        $ids = $this->endpoint->parseExcludeIds('12,45,78');
+    public function testParsesExcludeIds(): void
+    {
+        $ids = $this->suggestionsEndpoint->parseExcludeIds('12,45,78');
 
         $this->assertEquals([12, 45, 78], $ids);
     }
 
-    public function testHandlesEmptyExclude(): void {
-        $ids = $this->endpoint->parseExcludeIds('');
+    public function testHandlesEmptyExclude(): void
+    {
+        $ids = $this->suggestionsEndpoint->parseExcludeIds('');
 
         $this->assertEquals([], $ids);
     }
 
-    public function testHandlesInvalidExcludeValues(): void {
-        $ids = $this->endpoint->parseExcludeIds('12,abc,45,0,-5');
+    public function testHandlesInvalidExcludeValues(): void
+    {
+        $ids = $this->suggestionsEndpoint->parseExcludeIds('12,abc,45,0,-5');
 
         $this->assertEquals([12, 45], $ids);
     }
 
-    public function testPassesExcludeIdsToQuery(): void {
+    public function testPassesExcludeIdsToQuery(): void
+    {
         $_GET['exclude'] = '1,2';
 
-        $this->endpoint->handle();
+        $this->suggestionsEndpoint->handle();
 
-        $this->assertEquals([1, 2], $this->posts->lastQueryArgs['post__not_in']);
+        $this->assertEquals([1, 2], $this->postQuery->lastQueryArgs['post__not_in']);
     }
 
-    public function testHandleReturnsFilteredPosts(): void {
+    public function testHandleReturnsFilteredPosts(): void
+    {
         $_GET['exclude'] = '1,2';
 
-        $this->endpoint->handle();
+        $this->suggestionsEndpoint->handle();
 
-        $data = $this->response->successData;
+        $data = $this->jsonResponse->successData;
         $this->assertCount(1, $data);
         $this->assertEquals('Post 3', $data[0]['title']);
     }
 
-    public function testHandleReturnsAllPostsWhenNoExclude(): void {
-        $this->endpoint->handle();
+    public function testHandleReturnsAllPostsWhenNoExclude(): void
+    {
+        $this->suggestionsEndpoint->handle();
 
-        $data = $this->response->successData;
+        $data = $this->jsonResponse->successData;
         $this->assertCount(3, $data);
     }
 
-    public function testHandleReturnsPostsWithExcerptAndThumbnail(): void {
-        $this->posts->posts = [
+    public function testHandleReturnsPostsWithExcerptAndThumbnail(): void
+    {
+        $this->postQuery->posts = [
             [
                 'id' => 1,
                 'title' => 'Test Post',
@@ -83,9 +91,9 @@ class SuggestionsEndpointTest extends TestCase {
             ],
         ];
 
-        $this->endpoint->handle();
+        $this->suggestionsEndpoint->handle();
 
-        $data = $this->response->successData;
+        $data = $this->jsonResponse->successData;
         $this->assertCount(1, $data);
         $this->assertEquals('This is a test excerpt.', $data[0]['excerpt']);
         $this->assertEquals('http://example.com/image.jpg', $data[0]['thumbnail']);

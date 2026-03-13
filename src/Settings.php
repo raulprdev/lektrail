@@ -2,8 +2,8 @@
 
 namespace Completionist;
 
-class Settings {
-
+class Settings
+{
     public const DEFAULT_POST_TYPES = ['post'];
     public const DEFAULT_MAX_VIEWED = 3;
     public const DEFAULT_MAX_READ = 5;
@@ -110,7 +110,8 @@ class Settings {
         $this->trackLoggedInUsers = $trackLoggedInUsers;
     }
 
-    public static function fromArray(array $data, array $defaults = []): self {
+    public static function fromArray(array $data, array $defaults = []): self
+    {
         return new self(
             $data['post_types'] ?? $defaults['post_types'] ?? self::DEFAULT_POST_TYPES,
             $data['max_viewed'] ?? $defaults['max_viewed'] ?? self::DEFAULT_MAX_VIEWED,
@@ -140,7 +141,8 @@ class Settings {
         );
     }
 
-    public function toArray(): array {
+    public function toArray(): array
+    {
         return [
             'post_types' => $this->postTypes,
             'max_viewed' => $this->maxViewed,
@@ -170,107 +172,133 @@ class Settings {
         ];
     }
 
-    public function postTypes(): array {
+    public function postTypes(): array
+    {
         return $this->postTypes;
     }
 
-    public function maxViewed(): int {
+    public function maxViewed(): int
+    {
         return $this->maxViewed;
     }
 
-    public function maxRead(): int {
+    public function maxRead(): int
+    {
         return $this->maxRead;
     }
 
-    public function maxSuggestions(): int {
+    public function maxSuggestions(): int
+    {
         return $this->maxSuggestions;
     }
 
-    public function labelContinue(): string {
+    public function labelContinue(): string
+    {
         return $this->labelContinue;
     }
 
-    public function labelCompleted(): string {
+    public function labelCompleted(): string
+    {
         return $this->labelCompleted;
     }
 
-    public function labelSuggestions(): string {
+    public function labelSuggestions(): string
+    {
         return $this->labelSuggestions;
     }
 
-    public function labelEmpty(): string {
+    public function labelEmpty(): string
+    {
         return $this->labelEmpty;
     }
 
-    public function labelLoading(): string {
+    public function labelLoading(): string
+    {
         return $this->labelLoading;
     }
 
-    public function viewedEnabled(): bool {
+    public function viewedEnabled(): bool
+    {
         return $this->viewedEnabled;
     }
 
-    public function completedEnabled(): bool {
+    public function completedEnabled(): bool
+    {
         return $this->completedEnabled;
     }
 
-    public function requireConsent(): bool {
+    public function requireConsent(): bool
+    {
         return $this->requireConsent;
     }
 
-    public function consentMessage(): string {
+    public function consentMessage(): string
+    {
         return $this->consentMessage;
     }
 
-    public function consentCheckboxLabel(): string {
+    public function consentCheckboxLabel(): string
+    {
         return $this->consentCheckboxLabel;
     }
 
-    public function suggestionsCacheHours(): int {
+    public function suggestionsCacheHours(): int
+    {
         return $this->suggestionsCacheHours;
     }
 
-    public function showExcerpt(): bool {
+    public function showExcerpt(): bool
+    {
         return $this->showExcerpt;
     }
 
-    public function showThumbnail(): bool {
+    public function showThumbnail(): bool
+    {
         return $this->showThumbnail;
     }
 
-    public function excerptLength(): int {
+    public function excerptLength(): int
+    {
         return $this->excerptLength;
     }
 
-    public function readThreshold(): int {
+    public function readThreshold(): int
+    {
         return $this->readThreshold;
     }
 
-    public function suggestionOrder(): string {
+    public function suggestionOrder(): string
+    {
         return $this->suggestionOrder;
     }
 
-    public function includeCategories(): array {
+    public function includeCategories(): array
+    {
         return $this->includeCategories;
     }
 
-    public function excludeCategories(): array {
+    public function excludeCategories(): array
+    {
         return $this->excludeCategories;
     }
 
-    public function showClearButton(): bool {
+    public function showClearButton(): bool
+    {
         return $this->showClearButton;
     }
 
-    public function labelClear(): string {
+    public function labelClear(): string
+    {
         return $this->labelClear;
     }
 
-    public function trackLoggedInUsers(): bool {
+    public function trackLoggedInUsers(): bool
+    {
         return $this->trackLoggedInUsers;
     }
 
-    public function toJsConfig(): array {
+    public function toJsConfig(): array
+    {
         return [
             'maxViewed' => $this->maxViewed,
             'maxRead' => $this->maxRead,

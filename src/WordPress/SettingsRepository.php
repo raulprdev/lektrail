@@ -7,8 +7,8 @@ use Completionist\Contracts\Options as OptionsInterface;
 use Completionist\Contracts\SettingsRepository as SettingsRepositoryInterface;
 use Completionist\Settings;
 
-class SettingsRepository implements SettingsRepositoryInterface {
-
+class SettingsRepository implements SettingsRepositoryInterface
+{
     public const OPTION_KEY = 'completionist_settings';
 
     private const LABELS_ES = [
@@ -25,22 +25,26 @@ class SettingsRepository implements SettingsRepositoryInterface {
     private OptionsInterface $options;
     private LocaleInterface $locale;
 
-    public function __construct(OptionsInterface $options, LocaleInterface $locale) {
+    public function __construct(OptionsInterface $options, LocaleInterface $locale)
+    {
         $this->options = $options;
         $this->locale = $locale;
     }
 
-    public function load(): Settings {
+    public function load(): Settings
+    {
         $data = $this->options->get(self::OPTION_KEY, []);
         $defaults = $this->getLocaleDefaults();
         return Settings::fromArray($data, $defaults);
     }
 
-    public function save(Settings $settings): void {
+    public function save(Settings $settings): void
+    {
         $this->options->set(self::OPTION_KEY, $settings->toArray());
     }
 
-    private function getLocaleDefaults(): array {
+    private function getLocaleDefaults(): array
+    {
         if (str_starts_with($this->locale->getCode(), 'es')) {
             return self::LABELS_ES;
         }

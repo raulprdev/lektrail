@@ -2,7 +2,8 @@
 
 namespace Completionist\Contracts;
 
-interface UserProvider {
+interface UserProvider
+{
     public function getCurrentUserId(): int;
     public function isLoggedIn(): bool;
 }
