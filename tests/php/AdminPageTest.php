@@ -3,7 +3,6 @@
 namespace Completionist\Tests;
 
 use Completionist\AdminPage;
-use Completionist\Settings;
 use Completionist\Tests\Mocks\MockHooks;
 use Completionist\Tests\Mocks\MockSettingsRepository;
 use PHPUnit\Framework\TestCase;
@@ -31,8 +30,7 @@ class AdminPageTest extends TestCase {
     }
 
     public function testGetSettingsReturnsFromRepository(): void {
-        $repository = new MockSettingsRepository();
-        $repository->settings = Settings::fromArray(['max_viewed' => 12]);
+        $repository = new MockSettingsRepository(['max_viewed' => 12]);
         $page = new AdminPage($repository);
 
         $settings = $page->getSettings();

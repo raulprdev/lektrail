@@ -28,6 +28,7 @@ class Settings {
     public const DEFAULT_EXCLUDE_CATEGORIES = [];
     public const DEFAULT_SHOW_CLEAR_BUTTON = true;
     public const DEFAULT_LABEL_CLEAR = 'Clear history';
+    public const DEFAULT_TRACK_LOGGED_IN_USERS = false;
 
     private array $postTypes;
     private int $maxViewed;
@@ -53,6 +54,7 @@ class Settings {
     private array $excludeCategories;
     private bool $showClearButton;
     private string $labelClear;
+    private bool $trackLoggedInUsers;
 
     public function __construct(
         array $postTypes = self::DEFAULT_POST_TYPES,
@@ -78,7 +80,8 @@ class Settings {
         array $includeCategories = self::DEFAULT_INCLUDE_CATEGORIES,
         array $excludeCategories = self::DEFAULT_EXCLUDE_CATEGORIES,
         bool $showClearButton = self::DEFAULT_SHOW_CLEAR_BUTTON,
-        string $labelClear = self::DEFAULT_LABEL_CLEAR
+        string $labelClear = self::DEFAULT_LABEL_CLEAR,
+        bool $trackLoggedInUsers = self::DEFAULT_TRACK_LOGGED_IN_USERS
     ) {
         $this->postTypes = $postTypes;
         $this->maxViewed = $maxViewed;
@@ -104,6 +107,7 @@ class Settings {
         $this->excludeCategories = $excludeCategories;
         $this->showClearButton = $showClearButton;
         $this->labelClear = $labelClear;
+        $this->trackLoggedInUsers = $trackLoggedInUsers;
     }
 
     public static function fromArray(array $data, array $defaults = []): self {
@@ -131,7 +135,8 @@ class Settings {
             $data['include_categories'] ?? $defaults['include_categories'] ?? self::DEFAULT_INCLUDE_CATEGORIES,
             $data['exclude_categories'] ?? $defaults['exclude_categories'] ?? self::DEFAULT_EXCLUDE_CATEGORIES,
             (bool) ($data['show_clear_button'] ?? $defaults['show_clear_button'] ?? self::DEFAULT_SHOW_CLEAR_BUTTON),
-            $data['label_clear'] ?? $defaults['label_clear'] ?? self::DEFAULT_LABEL_CLEAR
+            $data['label_clear'] ?? $defaults['label_clear'] ?? self::DEFAULT_LABEL_CLEAR,
+            (bool) ($data['track_logged_in_users'] ?? $defaults['track_logged_in_users'] ?? self::DEFAULT_TRACK_LOGGED_IN_USERS)
         );
     }
 
@@ -161,6 +166,7 @@ class Settings {
             'exclude_categories' => $this->excludeCategories,
             'show_clear_button' => $this->showClearButton,
             'label_clear' => $this->labelClear,
+            'track_logged_in_users' => $this->trackLoggedInUsers,
         ];
     }
 
@@ -258,6 +264,10 @@ class Settings {
 
     public function labelClear(): string {
         return $this->labelClear;
+    }
+
+    public function trackLoggedInUsers(): bool {
+        return $this->trackLoggedInUsers;
     }
 
     public function toJsConfig(): array {

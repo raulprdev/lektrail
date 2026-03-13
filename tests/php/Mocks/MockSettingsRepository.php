@@ -7,11 +7,11 @@ use Completionist\Settings;
 
 class MockSettingsRepository implements SettingsRepository {
 
-    public Settings $settings;
+    private Settings $settings;
     public bool $saveCalled = false;
 
-    public function __construct() {
-        $this->settings = new Settings();
+    public function __construct(array $config = []) {
+        $this->settings = Settings::fromArray($config);
     }
 
     public function load(): Settings {

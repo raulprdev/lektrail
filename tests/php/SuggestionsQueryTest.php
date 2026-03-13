@@ -2,9 +2,9 @@
 
 namespace Completionist\Tests;
 
-use Completionist\Settings;
 use Completionist\SuggestionsQuery;
 use Completionist\Tests\Mocks\MockPostQuery;
+use Completionist\Tests\Mocks\MockSettingsRepository;
 use PHPUnit\Framework\TestCase;
 
 class SuggestionsQueryTest extends TestCase {
@@ -21,7 +21,7 @@ class SuggestionsQueryTest extends TestCase {
     }
 
     public function testExcludesSpecifiedIds(): void {
-        $settings = new Settings();
+        $settings = new MockSettingsRepository();
         $query = new SuggestionsQuery($settings, $this->posts);
 
         $query->get([12, 45, 78]);
@@ -30,7 +30,7 @@ class SuggestionsQueryTest extends TestCase {
     }
 
     public function testUsesRandomOrderByDefault(): void {
-        $settings = new Settings();
+        $settings = new MockSettingsRepository();
         $query = new SuggestionsQuery($settings, $this->posts);
 
         $query->get([]);
@@ -39,7 +39,7 @@ class SuggestionsQueryTest extends TestCase {
     }
 
     public function testUsesRecentOrderWhenConfigured(): void {
-        $settings = Settings::fromArray(['suggestion_order' => 'recent']);
+        $settings = new MockSettingsRepository(['suggestion_order' => 'recent']);
         $query = new SuggestionsQuery($settings, $this->posts);
 
         $query->get([]);
@@ -49,7 +49,7 @@ class SuggestionsQueryTest extends TestCase {
     }
 
     public function testUsesRelatedOrderWithCategories(): void {
-        $settings = Settings::fromArray(['suggestion_order' => 'related']);
+        $settings = new MockSettingsRepository(['suggestion_order' => 'related']);
         $query = new SuggestionsQuery($settings, $this->posts);
 
         $query->get([10, 20], [5, 7]);
@@ -59,7 +59,7 @@ class SuggestionsQueryTest extends TestCase {
     }
 
     public function testRelatedFallsBackToRandomWhenNoCategories(): void {
-        $settings = Settings::fromArray(['suggestion_order' => 'related']);
+        $settings = new MockSettingsRepository(['suggestion_order' => 'related']);
         $query = new SuggestionsQuery($settings, $this->posts);
 
         $query->get([]);
@@ -69,7 +69,7 @@ class SuggestionsQueryTest extends TestCase {
     }
 
     public function testFiltersIncludeCategories(): void {
-        $settings = Settings::fromArray(['include_categories' => [1, 2, 3]]);
+        $settings = new MockSettingsRepository(['include_categories' => [1, 2, 3]]);
         $query = new SuggestionsQuery($settings, $this->posts);
 
         $query->get([]);
@@ -78,7 +78,7 @@ class SuggestionsQueryTest extends TestCase {
     }
 
     public function testFiltersExcludeCategories(): void {
-        $settings = Settings::fromArray(['exclude_categories' => [4, 5]]);
+        $settings = new MockSettingsRepository(['exclude_categories' => [4, 5]]);
         $query = new SuggestionsQuery($settings, $this->posts);
 
         $query->get([]);
@@ -87,7 +87,7 @@ class SuggestionsQueryTest extends TestCase {
     }
 
     public function testRelatedIgnoresIncludeExcludeCategories(): void {
-        $settings = Settings::fromArray([
+        $settings = new MockSettingsRepository([
             'suggestion_order' => 'related',
             'include_categories' => [1, 2],
             'exclude_categories' => [3, 4],
@@ -101,7 +101,7 @@ class SuggestionsQueryTest extends TestCase {
     }
 
     public function testUsesConfiguredPostTypes(): void {
-        $settings = Settings::fromArray(['post_types' => ['post', 'page', 'book']]);
+        $settings = new MockSettingsRepository(['post_types' => ['post', 'page', 'book']]);
         $query = new SuggestionsQuery($settings, $this->posts);
 
         $query->get([]);
@@ -110,7 +110,7 @@ class SuggestionsQueryTest extends TestCase {
     }
 
     public function testUsesConfiguredMaxSuggestions(): void {
-        $settings = Settings::fromArray(['max_suggestions' => 10]);
+        $settings = new MockSettingsRepository(['max_suggestions' => 10]);
         $query = new SuggestionsQuery($settings, $this->posts);
 
         $query->get([]);
@@ -119,7 +119,7 @@ class SuggestionsQueryTest extends TestCase {
     }
 
     public function testAlwaysFiltersPublishedPosts(): void {
-        $settings = new Settings();
+        $settings = new MockSettingsRepository();
         $query = new SuggestionsQuery($settings, $this->posts);
 
         $query->get([]);
@@ -128,7 +128,7 @@ class SuggestionsQueryTest extends TestCase {
     }
 
     public function testReturnsPostsFromQuery(): void {
-        $settings = new Settings();
+        $settings = new MockSettingsRepository();
         $query = new SuggestionsQuery($settings, $this->posts);
 
         $result = $query->get([]);
@@ -138,7 +138,7 @@ class SuggestionsQueryTest extends TestCase {
     }
 
     public function testExcludesPostsById(): void {
-        $settings = new Settings();
+        $settings = new MockSettingsRepository();
         $query = new SuggestionsQuery($settings, $this->posts);
 
         $result = $query->get([1, 2]);

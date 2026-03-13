@@ -3,9 +3,9 @@
 namespace Completionist\Tests;
 
 use Completionist\Assets;
-use Completionist\Settings;
 use Completionist\Tests\Mocks\MockScriptLoader;
 use Completionist\Tests\Mocks\MockPostQuery;
+use Completionist\Tests\Mocks\MockSettingsRepository;
 use PHPUnit\Framework\TestCase;
 
 class AssetsTest extends TestCase {
@@ -23,7 +23,7 @@ class AssetsTest extends TestCase {
     }
 
     private function createAssets(array $settingsData = []): Assets {
-        $settings = Settings::fromArray($settingsData);
+        $settings = new MockSettingsRepository($settingsData);
         return new Assets($this->loader, $this->pluginPath, $this->pluginUrl, '1.0.0', $settings, $this->postQuery);
     }
 

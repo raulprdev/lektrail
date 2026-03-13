@@ -4,6 +4,7 @@ namespace Completionist;
 
 use Completionist\Contracts\PostQuery;
 use Completionist\Contracts\ScriptLoader;
+use Completionist\Contracts\SettingsRepository;
 
 class Assets {
 
@@ -19,10 +20,10 @@ class Assets {
     private string $pluginPath;
     private string $pluginUrl;
     private string $version;
-    private Settings $settings;
+    private SettingsRepository $settings;
     private PostQuery $postQuery;
 
-    public function __construct(ScriptLoader $scripts, string $pluginPath, string $pluginUrl, string $version, Settings $settings, PostQuery $postQuery) {
+    public function __construct(ScriptLoader $scripts, string $pluginPath, string $pluginUrl, string $version, SettingsRepository $settings, PostQuery $postQuery) {
         $this->scripts = $scripts;
         $this->pluginPath = $pluginPath;
         $this->pluginUrl = $pluginUrl;
@@ -32,10 +33,11 @@ class Assets {
     }
 
     public function enqueueDetector(int $postId): void {
+        $settings = $this->settings->load();
         $this->enqueueStorage();
 
         $deps = [self::HANDLE_STORAGE];
-        if ($this->settings->requireConsent()) {
+        if ($settings->requireConsent()) {
             $this->enqueueConsent();
             $deps[] = self::HANDLE_CONSENT_MANAGER;
         }
@@ -56,7 +58,7 @@ class Assets {
 
         $postData = $this->postQuery->getPostData($postId);
         if (isset($postData['excerpt'])) {
-            $postData['excerpt'] = $this->trimExcerpt($postData['excerpt']);
+            $postData['excerpt'] = $this->trimExcerpt($postData['excerpt'], $settings);
         }
         $this->scripts->addInlineScript(
             self::HANDLE_DETECTOR,
@@ -66,27 +68,28 @@ class Assets {
 
         $this->scripts->addInlineScript(
             self::HANDLE_DETECTOR,
-            sprintf('window.CompletionistConfig = %s;', json_encode($this->settings->toJsConfig())),
+            sprintf('window.CompletionistConfig = %s;', json_encode($settings->toJsConfig())),
             'before'
         );
     }
 
-    private function trimExcerpt(string $excerpt): string {
+    private function trimExcerpt(string $excerpt, Settings $settings): string {
         $words = explode(' ', $excerpt);
-        $length = $this->settings->excerptLength();
+        $length = $settings->excerptLength();
         if (count($words) <= $length) {
             return $excerpt;
         }
         return implode(' ', array_slice($words, 0, $length)) . '...';
     }
 
-    public function enqueueWidget(): void {
+    public function enqueueWidget(?array $inlineData = null): void {
+        $settings = $this->settings->load();
         $this->enqueueStorage();
         $this->enqueueRenderItem();
         $this->enqueueDataProvider();
 
         $deps = [self::HANDLE_STORAGE, self::HANDLE_RENDER_ITEM, self::HANDLE_DATA_PROVIDER];
-        if ($this->settings->requireConsent()) {
+        if ($settings->requireConsent()) {
             $this->enqueueConsent();
             $deps[] = self::HANDLE_CONSENT_MANAGER;
         }
@@ -99,9 +102,18 @@ class Assets {
             true
         );
 
-        $config = array_merge($this->settings->toJsConfig(), [
+        $config = array_merge($settings->toJsConfig(), [
             'widgetId' => Shortcode::WIDGET_ID,
         ]);
+
+        if ($inlineData !== null) {
+            $this->scripts->addInlineScript(
+                self::HANDLE_WIDGET,
+                'window.CompletionistInlineData = ' . json_encode($inlineData) . ';',
+                'before'
+            );
+        }
+
         $this->scripts->addInlineScript(self::HANDLE_WIDGET, 'window.CompletionistConfig = ' . json_encode($config) . ';', 'before');
 
         $this->scripts->enqueueStyle(

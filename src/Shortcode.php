@@ -10,9 +10,13 @@ class Shortcode {
     public const WIDGET_ID = 'completionist-widget';
 
     private Assets $assets;
+    private TrackingService $tracking;
+    private SuggestionsQuery $suggestions;
 
-    public function __construct(Assets $assets) {
+    public function __construct(Assets $assets, TrackingService $tracking, SuggestionsQuery $suggestions) {
         $this->assets = $assets;
+        $this->tracking = $tracking;
+        $this->suggestions = $suggestions;
     }
 
     public function register(Hooks $hooks): void {
@@ -20,7 +24,22 @@ class Shortcode {
     }
 
     public function render(array $atts): string {
-        $this->assets->enqueueWidget();
+        $inlineData = null;
+
+        if ($this->tracking->shouldTrackServerSide()) {
+            $history = $this->tracking->getHistory();
+            $excludeIds = array_merge(
+                array_column($history['viewed'], 'id'),
+                array_column($history['read'], 'id')
+            );
+            $inlineData = [
+                'viewed' => $history['viewed'],
+                'read' => $history['read'],
+                'suggestions' => $this->suggestions->get($excludeIds),
+            ];
+        }
+
+        $this->assets->enqueueWidget($inlineData);
 
         return sprintf(
             '<div id="%s" data-endpoint="%s" data-posts-endpoint="%s"></div>',

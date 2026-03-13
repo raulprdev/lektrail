@@ -459,4 +459,25 @@ class SettingsTest extends TestCase {
         $this->assertTrue($jsConfig['showClearButton']);
         $this->assertEquals('Clear data', $jsConfig['labels']['clear']);
     }
+
+    public function testDefaultTrackLoggedInUsersIsFalse(): void {
+        $settings = new Settings();
+
+        $this->assertFalse($settings->trackLoggedInUsers());
+    }
+
+    public function testTrackLoggedInUsersFromArray(): void {
+        $settings = Settings::fromArray(['track_logged_in_users' => true]);
+
+        $this->assertTrue($settings->trackLoggedInUsers());
+    }
+
+    public function testTrackLoggedInUsersInToArray(): void {
+        $settings = Settings::fromArray(['track_logged_in_users' => true]);
+
+        $array = $settings->toArray();
+
+        $this->assertArrayHasKey('track_logged_in_users', $array);
+        $this->assertTrue($array['track_logged_in_users']);
+    }
 }

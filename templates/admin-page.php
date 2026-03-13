@@ -33,6 +33,22 @@
                             <?php endforeach; ?>
                         </td>
                     </tr>
+                    <tr>
+                        <th scope="row"><?= esc_html__('Track Logged-In Users', 'completionist') ?></th>
+                        <td>
+                            <input type="hidden"
+                                   name="<?= \Completionist\WordPress\SettingsRepository::OPTION_KEY ?>[track_logged_in_users]"
+                                   value="0">
+                            <label>
+                                <input type="checkbox"
+                                       name="<?= \Completionist\WordPress\SettingsRepository::OPTION_KEY ?>[track_logged_in_users]"
+                                       value="1"
+                                       <?php checked($settings->trackLoggedInUsers()); ?>>
+                                <?= esc_html__('Store reading history in database for logged-in users', 'completionist') ?>
+                            </label>
+                            <p class="description"><?= esc_html__('When enabled, logged-in users get server-side tracking. Anonymous users always use browser storage.', 'completionist') ?></p>
+                        </td>
+                    </tr>
                 </table>
             </div>
         </div>

@@ -3,6 +3,7 @@
 namespace Completionist;
 
 use Completionist\Contracts\PostQuery;
+use Completionist\Contracts\SettingsRepository;
 
 class SuggestionsQuery {
 
@@ -10,10 +11,10 @@ class SuggestionsQuery {
     public const ORDER_RECENT = 'recent';
     public const ORDER_RELATED = 'related';
 
-    private Settings $settings;
+    private SettingsRepository $settings;
     private PostQuery $posts;
 
-    public function __construct(Settings $settings, PostQuery $posts) {
+    public function __construct(SettingsRepository $settings, PostQuery $posts) {
         $this->settings = $settings;
         $this->posts = $posts;
     }
@@ -24,24 +25,25 @@ class SuggestionsQuery {
     }
 
     private function buildQueryArgs(array $excludeIds, array $relatedCategories): array {
+        $settings = $this->settings->load();
         $args = [
-            'post_type' => $this->settings->postTypes(),
+            'post_type' => $settings->postTypes(),
             'post_status' => 'publish',
-            'posts_per_page' => $this->settings->maxSuggestions(),
+            'posts_per_page' => $settings->maxSuggestions(),
         ];
 
         if (!empty($excludeIds)) {
             $args['post__not_in'] = $excludeIds;
         }
 
-        $this->applyOrderStrategy($args, $relatedCategories);
-        $this->applyCategoryFilters($args);
+        $this->applyOrderStrategy($args, $relatedCategories, $settings);
+        $this->applyCategoryFilters($args, $settings);
 
         return $args;
     }
 
-    private function applyOrderStrategy(array &$args, array $relatedCategories): void {
-        $order = $this->settings->suggestionOrder();
+    private function applyOrderStrategy(array &$args, array $relatedCategories, Settings $settings): void {
+        $order = $settings->suggestionOrder();
 
         if ($order === self::ORDER_RECENT) {
             $args['orderby'] = 'date';
@@ -56,13 +58,13 @@ class SuggestionsQuery {
         $args['orderby'] = 'rand';
     }
 
-    private function applyCategoryFilters(array &$args): void {
-        if ($this->settings->suggestionOrder() === self::ORDER_RELATED) {
+    private function applyCategoryFilters(array &$args, Settings $settings): void {
+        if ($settings->suggestionOrder() === self::ORDER_RELATED) {
             return;
         }
 
-        $include = $this->settings->includeCategories();
-        $exclude = $this->settings->excludeCategories();
+        $include = $settings->includeCategories();
+        $exclude = $settings->excludeCategories();
 
         if (!empty($include)) {
             $args['category__in'] = $include;

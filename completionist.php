@@ -15,6 +15,12 @@ defined('ABSPATH') || exit;
 define('COMPLETIONIST_VERSION', '1.0.0');
 define('COMPLETIONIST_PLUGIN_URL', plugin_dir_url(__FILE__));
 
+register_activation_hook(__FILE__, function () {
+    $db = new Completionist\WordPress\Database();
+    $installer = new Completionist\TableInstaller($db);
+    $installer->createTable();
+});
+
 spl_autoload_register(function ($class) {
     $prefix = 'Completionist\\';
     if (strpos($class, $prefix) !== 0) {
@@ -37,16 +43,21 @@ add_action('plugins_loaded', function () {
     $locale = new Completionist\WordPress\Locale();
 
     $settingsRepo = new Completionist\WordPress\SettingsRepository($options, $locale);
-    $settings = $settingsRepo->load();
     $posts = new Completionist\WordPress\PostQuery();
-    $assets = new Completionist\Assets($scripts, COMPLETIONIST_PLUGIN_PATH, COMPLETIONIST_PLUGIN_URL, COMPLETIONIST_VERSION, $settings, $posts);
+    $assets = new Completionist\Assets($scripts, COMPLETIONIST_PLUGIN_PATH, COMPLETIONIST_PLUGIN_URL, COMPLETIONIST_VERSION, $settingsRepo, $posts);
     $response = new Completionist\WordPress\JsonResponse();
 
-    $suggestionsQuery = new Completionist\SuggestionsQuery($settings, $posts);
-    $suggestions = new Completionist\SuggestionsEndpoint($suggestionsQuery, $response);
-    $shortcode = new Completionist\Shortcode($assets);
-    $adminPage = new Completionist\AdminPage($settingsRepo);
+    $db = new Completionist\WordPress\Database();
+    $users = new Completionist\WordPress\UserProvider();
+    $trackingRepo = new Completionist\WordPress\TrackingRepository($db);
+    $trackingService = new Completionist\TrackingService($users, $trackingRepo, $settingsRepo);
 
-    $plugin = new Completionist\Plugin($assets, $settingsRepo, $context, $suggestions, $shortcode, $adminPage, $hooks);
+    $suggestionsQuery = new Completionist\SuggestionsQuery($settingsRepo, $posts);
+    $suggestions = new Completionist\SuggestionsEndpoint($suggestionsQuery, $response);
+    $shortcode = new Completionist\Shortcode($assets, $trackingService, $suggestionsQuery);
+    $adminPage = new Completionist\AdminPage($settingsRepo);
+    $trackingEndpoint = new Completionist\TrackingEndpoint($trackingService, $response);
+
+    $plugin = new Completionist\Plugin($assets, $settingsRepo, $context, $suggestions, $shortcode, $adminPage, $hooks, $trackingService, $trackingEndpoint);
     $plugin->run();
 });
