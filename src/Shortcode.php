@@ -3,6 +3,7 @@
 namespace Completionist;
 
 use Completionist\Contracts\Hooks;
+use Completionist\Contracts\PostQuery;
 
 class Shortcode {
 
@@ -12,11 +13,13 @@ class Shortcode {
     private Assets $assets;
     private TrackingService $tracking;
     private SuggestionsQuery $suggestions;
+    private PostQuery $posts;
 
-    public function __construct(Assets $assets, TrackingService $tracking, SuggestionsQuery $suggestions) {
+    public function __construct(Assets $assets, TrackingService $tracking, SuggestionsQuery $suggestions, PostQuery $posts) {
         $this->assets = $assets;
         $this->tracking = $tracking;
         $this->suggestions = $suggestions;
+        $this->posts = $posts;
     }
 
     public function register(Hooks $hooks): void {
@@ -33,8 +36,8 @@ class Shortcode {
                 array_column($history['read'], 'id')
             );
             $inlineData = [
-                'viewed' => $history['viewed'],
-                'read' => $history['read'],
+                'viewed' => $this->enrichPosts($history['viewed']),
+                'read' => $this->enrichPosts($history['read']),
                 'suggestions' => $this->suggestions->get($excludeIds),
             ];
         }
@@ -47,5 +50,10 @@ class Shortcode {
             esc_url(SuggestionsEndpoint::url()),
             esc_url(rest_url('wp/v2/posts'))
         );
+    }
+
+    private function enrichPosts(array $posts): array {
+        $ids = array_column($posts, 'id');
+        return $this->posts->getPostsDataByIds($ids);
     }
 }

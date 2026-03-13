@@ -54,7 +54,7 @@ add_action('plugins_loaded', function () {
 
     $suggestionsQuery = new Completionist\SuggestionsQuery($settingsRepo, $posts);
     $suggestions = new Completionist\SuggestionsEndpoint($suggestionsQuery, $response);
-    $shortcode = new Completionist\Shortcode($assets, $trackingService, $suggestionsQuery);
+    $shortcode = new Completionist\Shortcode($assets, $trackingService, $suggestionsQuery, $posts);
     $adminPage = new Completionist\AdminPage($settingsRepo);
     $trackingEndpoint = new Completionist\TrackingEndpoint($trackingService, $response);
 

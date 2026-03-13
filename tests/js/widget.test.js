@@ -14,14 +14,26 @@ function post(id, title, options = {}) {
     return p;
 }
 
+const dataSourceCode = fs.readFileSync(
+    path.join(__dirname, '../../assets/js/data-source.js'),
+    'utf8'
+);
+
 const widgetCode = fs.readFileSync(
     path.join(__dirname, '../../assets/js/widget.js'),
     'utf8'
 );
 
+function loadWidget() {
+    eval(dataSourceCode);
+    eval(widgetCode);
+}
+
 afterEach(() => {
     delete window.CompletionistStorage;
     delete window.CompletionistConfig;
+    delete window.CompletionistInlineData;
+    delete window.CompletionistDataSource;
 });
 
 describe('Widget: loading and empty states', () => {
@@ -29,7 +41,7 @@ describe('Widget: loading and empty states', () => {
         const { container } = setupWidgetTest();
         window.CompletionistStorage = mockStorage();
 
-        eval(widgetCode);
+        loadWidget();
 
         expect(container.innerHTML).toContain('Loading');
     });
@@ -38,7 +50,7 @@ describe('Widget: loading and empty states', () => {
         const { container, xhrInstances } = setupWidgetTest();
         window.CompletionistStorage = mockStorage();
 
-        eval(widgetCode);
+        loadWidget();
         triggerXhrResponses(xhrInstances, { suggestions: [] });
 
         expect(container.innerHTML).toContain('Start reading');
@@ -52,7 +64,7 @@ describe('Widget: section counts in titles', () => {
             viewedPosts: [post(1, 'Post 1'), post(2, 'Post 2'), post(3, 'Post 3')]
         });
 
-        eval(widgetCode);
+        loadWidget();
         triggerXhrResponses(xhrInstances, { suggestions: [] });
 
         expect(container.innerHTML).toContain('Continue reading (3)');
@@ -64,7 +76,7 @@ describe('Widget: section counts in titles', () => {
             readPosts: [1, 2, 3, 4, 5].map(i => post(i, `Post ${i}`))
         });
 
-        eval(widgetCode);
+        loadWidget();
         triggerXhrResponses(xhrInstances, { suggestions: [] });
 
         expect(container.innerHTML).toContain('Completed (5)');
@@ -76,7 +88,7 @@ describe('Widget: section counts in titles', () => {
             readPosts: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(i => post(i, `Post ${i}`))
         });
 
-        eval(widgetCode);
+        loadWidget();
         triggerXhrResponses(xhrInstances, { suggestions: [] });
 
         expect(container.innerHTML).toContain('Completed (10)');
@@ -86,7 +98,7 @@ describe('Widget: section counts in titles', () => {
         const { container, xhrInstances } = setupWidgetTest();
         window.CompletionistStorage = mockStorage();
 
-        eval(widgetCode);
+        loadWidget();
         triggerXhrResponses(xhrInstances, {
             suggestions: [{ id: 1, title: 'Post 1' }, { id: 2, title: 'Post 2' }]
         });
@@ -103,7 +115,7 @@ describe('Widget: continue reading section', () => {
             viewedPosts: [post(1, 'Viewed Post')]
         });
 
-        eval(widgetCode);
+        loadWidget();
         triggerXhrResponses(xhrInstances, { suggestions: [] });
 
         expect(container.innerHTML).toContain('Continue reading');
@@ -117,7 +129,7 @@ describe('Widget: continue reading section', () => {
             readPosts: [post(2, 'Read Post')]
         });
 
-        eval(widgetCode);
+        loadWidget();
         triggerXhrResponses(xhrInstances, { suggestions: [] });
 
         const continueSection = container.innerHTML.split('Completed')[0];
@@ -131,7 +143,7 @@ describe('Widget: continue reading section', () => {
             viewedPosts: [1, 2, 3, 4, 5].map(i => post(i, `Post ${i}`))
         });
 
-        eval(widgetCode);
+        loadWidget();
         triggerXhrResponses(xhrInstances, { suggestions: [] });
 
         const section = container.innerHTML.split('Completed')[0];
@@ -146,7 +158,7 @@ describe('Widget: continue reading section', () => {
             readPosts: [post(1, 'Read Post')]
         });
 
-        eval(widgetCode);
+        loadWidget();
         triggerXhrResponses(xhrInstances, { suggestions: [] });
 
         expect(container.innerHTML).not.toContain('Continue reading');
@@ -160,7 +172,7 @@ describe('Widget: completed section', () => {
             readPosts: [post(1, 'Read Post')]
         });
 
-        eval(widgetCode);
+        loadWidget();
         triggerXhrResponses(xhrInstances, { suggestions: [] });
 
         expect(container.innerHTML).toContain('Completed');
@@ -173,7 +185,7 @@ describe('Widget: completed section', () => {
             readPosts: [1, 2, 3, 4, 5, 6, 7].map(i => post(i, `Post ${i}`))
         });
 
-        eval(widgetCode);
+        loadWidget();
         triggerXhrResponses(xhrInstances, { suggestions: [] });
 
         const section = container.innerHTML.split('Completed')[1] || '';
@@ -187,7 +199,7 @@ describe('Widget: completed section', () => {
             viewedPosts: [post(1, 'Viewed Post')]
         });
 
-        eval(widgetCode);
+        loadWidget();
         triggerXhrResponses(xhrInstances, { suggestions: [] });
 
         expect(container.innerHTML).not.toContain('Completed');
@@ -199,7 +211,7 @@ describe('Widget: suggested reading section', () => {
         const { container, xhrInstances } = setupWidgetTest();
         window.CompletionistStorage = mockStorage();
 
-        eval(widgetCode);
+        loadWidget();
         triggerXhrResponses(xhrInstances, {
             suggestions: [{ id: 1, title: 'New Post' }]
         });
@@ -214,7 +226,7 @@ describe('Widget: suggested reading section', () => {
             viewedPosts: [post(1, 'Viewed'), post(2, 'Also Viewed')]
         });
 
-        eval(widgetCode);
+        loadWidget();
 
         expect(xhrInstances[0].open).toHaveBeenCalledWith(
             'GET',
@@ -228,7 +240,7 @@ describe('Widget: suggested reading section', () => {
             readPosts: [post(3, 'Read'), post(4, 'Also Read')]
         });
 
-        eval(widgetCode);
+        loadWidget();
 
         expect(xhrInstances[0].open).toHaveBeenCalledWith(
             'GET',
@@ -240,7 +252,7 @@ describe('Widget: suggested reading section', () => {
         const { container, xhrInstances } = setupWidgetTest();
         window.CompletionistStorage = mockStorage();
 
-        eval(widgetCode);
+        loadWidget();
         triggerXhrResponses(xhrInstances, {
             suggestions: [1, 2, 3, 4, 5, 6, 7].map(i => ({ id: i, title: `Post ${i}` }))
         });
@@ -256,7 +268,7 @@ describe('Widget: suggested reading section', () => {
             readPosts: [post(2, 'Read')]
         });
 
-        eval(widgetCode);
+        loadWidget();
         triggerXhrResponses(xhrInstances, {
             suggestions: []
         });
@@ -273,7 +285,7 @@ describe('Widget: all sections together', () => {
             readPosts: [post(2, 'Read Post')]
         });
 
-        eval(widgetCode);
+        loadWidget();
         triggerXhrResponses(xhrInstances, {
             suggestions: [{ id: 3, title: 'New Post' }]
         });
@@ -295,7 +307,7 @@ describe('Widget: section enable/disable', () => {
             readPosts: [post(2, 'Read Post')]
         });
 
-        eval(widgetCode);
+        loadWidget();
         triggerXhrResponses(xhrInstances, {
             suggestions: [{ id: 3, title: 'New Post' }]
         });
@@ -313,7 +325,7 @@ describe('Widget: section enable/disable', () => {
             readPosts: [post(2, 'Read Post')]
         });
 
-        eval(widgetCode);
+        loadWidget();
         triggerXhrResponses(xhrInstances, {
             suggestions: [{ id: 3, title: 'New Post' }]
         });
@@ -334,7 +346,7 @@ describe('Widget: section enable/disable', () => {
             readPosts: [post(2, 'Read Post')]
         });
 
-        eval(widgetCode);
+        loadWidget();
         triggerXhrResponses(xhrInstances, {
             suggestions: [{ id: 3, title: 'New Post' }]
         });
@@ -369,7 +381,7 @@ describe('Widget: configurable labels', () => {
             }
         };
 
-        eval(widgetCode);
+        loadWidget();
         triggerXhrResponses(xhrInstances, {
             suggestions: [{ id: 3, title: 'Post 3' }]
         });
@@ -389,7 +401,7 @@ describe('Widget: configurable labels', () => {
             labels: { loading: 'Cargando...' }
         };
 
-        eval(widgetCode);
+        loadWidget();
 
         expect(container.innerHTML).toContain('Cargando...');
     });
@@ -404,7 +416,7 @@ describe('Widget: configurable labels', () => {
             labels: { empty: 'Empieza a leer' }
         };
 
-        eval(widgetCode);
+        loadWidget();
         triggerXhrResponses(xhrInstances, { suggestions: [] });
 
         expect(container.innerHTML).toContain('Empieza a leer');
@@ -421,7 +433,7 @@ describe('Widget: consent banner', () => {
             }
         };
 
-        eval(widgetCode);
+        loadWidget();
 
         expect(container.innerHTML).toContain('completionist-consent');
     });
@@ -435,7 +447,7 @@ describe('Widget: consent banner', () => {
             }
         };
 
-        eval(widgetCode);
+        loadWidget();
         triggerXhrResponses(xhrInstances, { suggestions: [] });
 
         expect(container.innerHTML).not.toContain('completionist-consent');
@@ -445,7 +457,7 @@ describe('Widget: consent banner', () => {
         const { container, xhrInstances } = setupWidgetTest({ requireConsent: false });
         window.CompletionistStorage = mockStorage();
 
-        eval(widgetCode);
+        loadWidget();
         triggerXhrResponses(xhrInstances, { suggestions: [] });
 
         expect(container.innerHTML).not.toContain('completionist-consent');
@@ -463,7 +475,7 @@ describe('Widget: caching', () => {
             isSuggestionsCacheValid: () => false
         };
 
-        eval(widgetCode);
+        loadWidget();
         triggerXhrResponses(xhrInstances, { suggestions: [] });
 
         expect(container.innerHTML).toContain('Cached Post');
@@ -479,7 +491,7 @@ describe('Widget: caching', () => {
             isSuggestionsCacheValid: () => false
         };
 
-        eval(widgetCode);
+        loadWidget();
         triggerXhrResponses(xhrInstances, { suggestions: [] });
 
         expect(container.innerHTML).toContain('Read Post');
@@ -495,7 +507,7 @@ describe('Widget: caching', () => {
             isSuggestionsCacheValid: () => true
         };
 
-        eval(widgetCode);
+        loadWidget();
 
         expect(container.innerHTML).toContain('Cached Suggestion');
         expect(xhrInstances.length).toBe(0);
@@ -513,7 +525,7 @@ describe('Widget: caching', () => {
             setSuggestions: setSuggestions
         };
 
-        eval(widgetCode);
+        loadWidget();
         triggerXhrResponses(xhrInstances, { suggestions: [{ id: 1, title: 'New Suggestion' }] });
 
         expect(container.innerHTML).toContain('New Suggestion');
@@ -526,7 +538,7 @@ describe('Widget: display options', () => {
         const { container, xhrInstances } = setupWidgetTest({ showExcerpt: true });
         window.CompletionistStorage = mockStorage();
 
-        eval(widgetCode);
+        loadWidget();
         triggerXhrResponses(xhrInstances, {
             suggestions: [{ id: 1, title: 'Post Title', excerpt: 'This is the excerpt.' }]
         });
@@ -541,7 +553,7 @@ describe('Widget: display options', () => {
             viewedPosts: [post(1, 'Post Title', { excerpt: 'Stored excerpt text.' })]
         });
 
-        eval(widgetCode);
+        loadWidget();
         triggerXhrResponses(xhrInstances, { suggestions: [] });
 
         expect(container.innerHTML).toContain('completionist-excerpt');
@@ -554,7 +566,7 @@ describe('Widget: display options', () => {
             viewedPosts: [post(1, 'Post Title', { thumbnail: 'http://example.com/image.jpg' })]
         });
 
-        eval(widgetCode);
+        loadWidget();
         triggerXhrResponses(xhrInstances, { suggestions: [] });
 
         expect(container.innerHTML).toContain('completionist-thumbnail');
@@ -569,7 +581,7 @@ describe('Widget: clear data button', () => {
             viewedPosts: [post(1, 'Post 1')]
         });
 
-        eval(widgetCode);
+        loadWidget();
         triggerXhrResponses(xhrInstances, { suggestions: [] });
 
         expect(container.innerHTML).toContain('completionist-clear');
@@ -581,7 +593,7 @@ describe('Widget: clear data button', () => {
             viewedPosts: [post(1, 'Post 1')]
         });
 
-        eval(widgetCode);
+        loadWidget();
         triggerXhrResponses(xhrInstances, { suggestions: [] });
 
         expect(container.innerHTML).not.toContain('completionist-clear');
@@ -591,7 +603,7 @@ describe('Widget: clear data button', () => {
         const { container, xhrInstances } = setupWidgetTest({ showClearButton: true });
         window.CompletionistStorage = mockStorage();
 
-        eval(widgetCode);
+        loadWidget();
         triggerXhrResponses(xhrInstances, { suggestions: [] });
 
         expect(container.innerHTML).not.toContain('completionist-clear');
@@ -605,7 +617,7 @@ describe('Widget: clear data button', () => {
             clearHistory: clearHistoryFn
         };
 
-        eval(widgetCode);
+        loadWidget();
         triggerXhrResponses(xhrInstances, { suggestions: [] });
 
         const button = container.querySelector('.completionist-clear-btn');
@@ -621,9 +633,66 @@ describe('Widget: clear data button', () => {
         });
         window.CompletionistConfig.labels = { clear: 'Borrar datos' };
 
-        eval(widgetCode);
+        loadWidget();
         triggerXhrResponses(xhrInstances, { suggestions: [] });
 
         expect(container.innerHTML).toContain('Borrar datos');
+    });
+});
+
+describe('Widget: server-side tracking (inline data)', () => {
+    test('uses inline data when CompletionistInlineData is present', () => {
+        const { container } = setupWidgetTest();
+        window.CompletionistInlineData = {
+            viewed: [post(1, 'Viewed Post')],
+            read: [post(2, 'Read Post')],
+            suggestions: [post(3, 'Suggestion')]
+        };
+
+        loadWidget();
+
+        expect(container.innerHTML).toContain('Viewed Post');
+        expect(container.innerHTML).toContain('Read Post');
+        expect(container.innerHTML).toContain('Suggestion');
+    });
+
+    test('does not fetch from API when inline data exists', () => {
+        const { container, xhrInstances } = setupWidgetTest();
+        window.CompletionistInlineData = {
+            viewed: [],
+            read: [],
+            suggestions: [post(1, 'Inline Suggestion')]
+        };
+
+        loadWidget();
+
+        expect(xhrInstances.length).toBe(0);
+        expect(container.innerHTML).toContain('Inline Suggestion');
+    });
+
+    test('shows correct count from inline data for viewed section', () => {
+        const { container } = setupWidgetTest();
+        window.CompletionistInlineData = {
+            viewed: [post(1, 'Post 1'), post(2, 'Post 2')],
+            read: [],
+            suggestions: []
+        };
+
+        loadWidget();
+
+        expect(container.innerHTML).toContain('Continue reading (2)');
+    });
+
+    test('shows correct count from inline data for read section', () => {
+        const { container } = setupWidgetTest();
+        window.CompletionistInlineData = {
+            viewed: [],
+            read: [post(1, 'Post 1'), post(2, 'Post 2'), post(3, 'Post 3')],
+            suggestions: []
+        };
+
+        loadWidget();
+
+        expect(container.innerHTML).toContain('Completed (3)');
     });
 });

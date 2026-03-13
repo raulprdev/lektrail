@@ -35,4 +35,8 @@ class MockPostQuery implements PostQuery {
     public function getPostData(int $postId): array {
         return $this->postData[$postId] ?? ['id' => $postId];
     }
+
+    public function getPostsDataByIds(array $ids): array {
+        return array_map(fn($id) => $this->getPostData($id), $ids);
+    }
 }

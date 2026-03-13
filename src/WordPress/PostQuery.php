@@ -57,4 +57,17 @@ class PostQuery implements PostQueryInterface {
     public function getPostData(int $postId): array {
         return $this->formatPost($postId);
     }
+
+    public function getPostsDataByIds(array $ids): array {
+        if (empty($ids)) {
+            return [];
+        }
+        return $this->query([
+            'post_type' => 'any',
+            'post_status' => 'publish',
+            'post__in' => $ids,
+            'orderby' => 'post__in',
+            'posts_per_page' => count($ids),
+        ]);
+    }
 }

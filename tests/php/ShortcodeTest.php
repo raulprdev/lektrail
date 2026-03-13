@@ -41,7 +41,7 @@ class ShortcodeTest extends TestCase {
         $trackingService = new TrackingService($this->users, $this->tracking, $this->settings);
         $suggestionsQuery = new SuggestionsQuery($this->settings, $this->posts);
 
-        return new Shortcode($assets, $trackingService, $suggestionsQuery);
+        return new Shortcode($assets, $trackingService, $suggestionsQuery, $this->posts);
     }
 
     public function testInjectsInlineDataWhenServerSideEnabled(): void {
@@ -63,5 +63,25 @@ class ShortcodeTest extends TestCase {
 
         $inlineCode = $this->scripts->inlineScripts[Assets::HANDLE_WIDGET]['code'];
         $this->assertStringNotContainsString('CompletionistInlineData', $inlineCode);
+    }
+
+    public function testInlineDataContainsFullPostData(): void {
+        $this->settings = new MockSettingsRepository(['track_logged_in_users' => true]);
+        $this->users->userId = 42;
+        $this->tracking->track(42, 123, 'viewed');
+        $this->posts->postData[123] = [
+            'id' => 123,
+            'title' => 'Test Post Title',
+            'url' => '/test-post/',
+            'excerpt' => 'Test excerpt',
+            'thumbnail' => 'http://example.com/image.jpg',
+        ];
+
+        $shortcode = $this->createShortcode();
+        $shortcode->render([]);
+
+        $inlineCode = $this->scripts->inlineScripts[Assets::HANDLE_WIDGET]['code'];
+        $this->assertStringContainsString('Test Post Title', $inlineCode);
+        $this->assertStringContainsString('test-post', $inlineCode);
     }
 }

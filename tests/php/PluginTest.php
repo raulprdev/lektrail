@@ -50,7 +50,7 @@ class PluginTest extends TestCase {
         $trackingService = new TrackingService($this->users, $this->tracking, $this->settings);
         $query = new SuggestionsQuery($this->settings, $posts);
         $suggestions = new SuggestionsEndpoint($query, new MockJsonResponse());
-        $shortcode = new Shortcode($assets, $trackingService, $query);
+        $shortcode = new Shortcode($assets, $trackingService, $query, $posts);
         $adminPage = new AdminPage($this->settings);
         $trackingEndpoint = new TrackingEndpoint($trackingService, new MockJsonResponse());
 

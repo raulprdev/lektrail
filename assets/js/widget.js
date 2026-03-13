@@ -125,9 +125,14 @@
 		}
 	}
 
-	function renderWidget(container, viewedPosts, readPosts, suggestions) {
+	function renderWidget(container, dataSource, suggestions) {
 		const config = getConfig();
 		const storage = getStorage();
+		const viewedPosts = dataSource.getViewed();
+		const readPosts = dataSource.getRead();
+		const viewedCount = dataSource.getViewedCount();
+		const readCount = dataSource.getReadCount();
+
 		const viewedSlice = config.viewedEnabled
 			? filterValid(viewedPosts).slice(0, config.maxViewed)
 			: [];
@@ -150,7 +155,7 @@
 
 		let html = '';
 
-		const hasUserData = storage.getViewedCount() > 0 || storage.getReadCount() > 0;
+		const hasUserData = viewedCount > 0 || readCount > 0;
 		if (config.showClearButton !== false && hasUserData) {
 			html += renderClearButton();
 		}
@@ -160,7 +165,7 @@
 				config.labels.continue,
 				viewedSlice,
 				'completionist-continue',
-				storage.getViewedCount()
+				viewedCount
 			);
 		}
 		if (config.completedEnabled) {
@@ -168,7 +173,7 @@
 				config.labels.completed,
 				readSlice,
 				'completionist-completed',
-				storage.getReadCount()
+				readCount
 			);
 		}
 		html += renderSection(
@@ -189,7 +194,8 @@
 		if (clearBtn) {
 			clearBtn.addEventListener('click', function () {
 				storage.clearHistory();
-				renderWidget(container, [], [], suggestions);
+				var emptySource = window.CompletionistDataSource.create({ inlineData: {} });
+				renderWidget(container, emptySource, suggestions);
 			});
 		}
 	}
@@ -224,41 +230,89 @@
 		initWidget(container, config);
 	}
 
-	function initWidget(container, config) {
-		var storage = getStorage();
-		var suggestionsEndpoint = container.dataset.endpoint;
-		var cacheHours = config.suggestionsCacheHours || 24;
-		var provider = getDataProvider(suggestionsEndpoint);
+	function createFetcher(endpoint, storage) {
+		return {
+			fetch: function (callback) {
+				var viewedIds = storage.getViewedIds ? storage.getViewedIds() : [];
+				var readIds = storage.getReadIds ? storage.getReadIds() : [];
+				var excludeIds = viewedIds.concat(readIds);
+				var url = endpoint + (endpoint.indexOf('?') >= 0 ? '&' : '?') +
+					'exclude=' + excludeIds.join(',');
 
-		var viewedPosts = provider ? provider.getViewed() : [];
-		var readPosts = provider ? provider.getRead() : [];
+				var xhr = new XMLHttpRequest();
+				xhr.open('GET', url);
+				xhr.onload = function () {
+					if (xhr.status === 200) {
+						try {
+							var response = JSON.parse(xhr.responseText);
+							callback(response.success ? response.data : []);
+						} catch (e) {
+							callback([]);
+						}
+					} else {
+						callback([]);
+					}
+				};
+				xhr.onerror = function () {
+					callback([]);
+				};
+				xhr.send();
+			}
+		};
+	}
 
-		var suggestionsValid =
-			storage.isSuggestionsCacheValid &&
-			storage.isSuggestionsCacheValid(cacheHours);
-		var suggestions =
-			suggestionsValid && storage.getSuggestions
-				? storage.getSuggestions()
-				: [];
-
-		if (suggestionsValid) {
-			renderWidget(container, viewedPosts, readPosts, suggestions);
-			return;
+	function createDataSource(config, container) {
+		if (window.CompletionistInlineData) {
+			return window.CompletionistDataSource.create({
+				inlineData: window.CompletionistInlineData
+			});
 		}
+
+		var storage = getStorage();
+		var provider = getDataProvider(container.dataset.endpoint);
+		var cacheHours = config.suggestionsCacheHours || 24;
+
+		return window.CompletionistDataSource.create({
+			storage: {
+				getViewedPosts: function () {
+					return provider ? provider.getViewed() : [];
+				},
+				getReadPosts: function () {
+					return provider ? provider.getRead() : [];
+				},
+				getViewedCount: function () {
+					return storage.getViewedCount ? storage.getViewedCount() : 0;
+				},
+				getReadCount: function () {
+					return storage.getReadCount ? storage.getReadCount() : 0;
+				},
+				getSuggestions: function () {
+					return storage.getSuggestions ? storage.getSuggestions() : [];
+				},
+				setSuggestions: function (suggestions) {
+					if (storage.setSuggestions) {
+						storage.setSuggestions(suggestions);
+					}
+				},
+				isSuggestionsCacheValid: function (hours) {
+					return storage.isSuggestionsCacheValid
+						? storage.isSuggestionsCacheValid(hours)
+						: false;
+				}
+			},
+			fetcher: createFetcher(container.dataset.endpoint, storage),
+			cacheHours: cacheHours
+		});
+	}
+
+	function initWidget(container, config) {
+		var dataSource = createDataSource(config, container);
 
 		renderLoading(container);
 
-		if (provider) {
-			provider.getSuggestions(function (fetched) {
-				suggestions = fetched;
-				if (storage.setSuggestions) {
-					storage.setSuggestions(fetched);
-				}
-				renderWidget(container, viewedPosts, readPosts, suggestions);
-			});
-		} else {
-			renderWidget(container, viewedPosts, readPosts, []);
-		}
+		dataSource.getSuggestions(function (suggestions) {
+			renderWidget(container, dataSource, suggestions);
+		});
 	}
 
 	if (document.readyState === 'loading') {
