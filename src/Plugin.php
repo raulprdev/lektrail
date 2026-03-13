@@ -53,8 +53,9 @@ class Plugin {
             return;
         }
         $postId = $this->context->getPostId();
+        $serverSideTracking = $this->tracking->shouldTrackServerSide();
         $this->tracking->trackViewed($postId);
-        $this->assets->enqueueDetector($postId);
+        $this->assets->enqueueDetector($postId, $serverSideTracking);
     }
 
     private function shouldEnqueueDetector(): bool {

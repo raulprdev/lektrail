@@ -16,6 +16,7 @@ class Assets {
     public const HANDLE_WIDGET = 'completionist-widget';
     public const HANDLE_CONSENT_BUILTIN = 'completionist-consent-builtin';
     public const HANDLE_CONSENT_MANAGER = 'completionist-consent-manager';
+    public const HANDLE_NOTIFIER = 'completionist-notifier';
 
     private ScriptLoader $scripts;
     private string $pluginPath;
@@ -33,12 +34,13 @@ class Assets {
         $this->postQuery = $postQuery;
     }
 
-    public function enqueueDetector(int $postId): void {
+    public function enqueueDetector(int $postId, bool $serverSideTracking = false): void {
         $settings = $this->settings->load();
         $this->enqueueStorage();
+        $this->enqueueNotifier();
 
-        $deps = [self::HANDLE_STORAGE];
-        if ($settings->requireConsent()) {
+        $deps = [self::HANDLE_STORAGE, self::HANDLE_NOTIFIER];
+        if ($settings->requireConsent() && !$serverSideTracking) {
             $this->enqueueConsent();
             $deps[] = self::HANDLE_CONSENT_MANAGER;
         }
@@ -67,9 +69,14 @@ class Assets {
             'before'
         );
 
+        $config = $settings->toJsConfig();
+        if ($serverSideTracking) {
+            $config['trackingEndpoint'] = admin_url('admin-ajax.php?action=' . TrackingEndpoint::ACTION);
+        }
+
         $this->scripts->addInlineScript(
             self::HANDLE_DETECTOR,
-            sprintf('window.CompletionistConfig = %s;', json_encode($settings->toJsConfig())),
+            sprintf('window.CompletionistConfig = %s;', json_encode($config)),
             'before'
         );
     }
@@ -134,6 +141,16 @@ class Assets {
             $this->pluginUrl . 'assets/js/storage.js',
             [],
             $this->fileVersion('assets/js/storage.js'),
+            true
+        );
+    }
+
+    private function enqueueNotifier(): void {
+        $this->scripts->enqueueScript(
+            self::HANDLE_NOTIFIER,
+            $this->pluginUrl . 'assets/js/notifier.js',
+            [],
+            $this->fileVersion('assets/js/notifier.js'),
             true
         );
     }

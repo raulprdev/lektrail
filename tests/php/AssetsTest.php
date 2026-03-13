@@ -136,6 +136,15 @@ class AssetsTest extends TestCase {
         $this->assertArrayNotHasKey(Assets::HANDLE_CONSENT_BUILTIN, $this->loader->scripts);
     }
 
+    public function testEnqueueDetectorSkipsConsentScriptsWhenServerSideTracking(): void {
+        $assets = $this->createAssets(['require_consent' => true]);
+
+        $assets->enqueueDetector(123, true);
+
+        $this->assertArrayNotHasKey(Assets::HANDLE_CONSENT_BUILTIN, $this->loader->scripts);
+        $this->assertArrayNotHasKey(Assets::HANDLE_CONSENT_MANAGER, $this->loader->scripts);
+    }
+
     public function testEnqueueDetectorOutputsPostData(): void {
         $this->postQuery->postData[123] = [
             'id' => 123,

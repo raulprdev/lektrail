@@ -42,15 +42,25 @@
 		return true;
 	}
 
-	function trackViewed(postId, storage, dispatch, postData) {
-		storage.addViewed(postId, postData);
+	function getNotifier(deps, storage) {
+		if (deps.notifier) {
+			return deps.notifier;
+		}
+		if (global.CompletionistNotifier) {
+			return global.CompletionistNotifier.create({ storage: storage });
+		}
+		return { trackViewed: function () {}, trackRead: function () {} };
+	}
+
+	function trackViewed(postId, notifier, dispatch, postData) {
+		notifier.trackViewed(postId, postData);
 		if (dispatch) {
 			dispatch('completionist:viewed', { postId });
 		}
 	}
 
-	function trackRead(postId, storage, dispatch) {
-		storage.addRead(postId);
+	function trackRead(postId, notifier, dispatch) {
+		notifier.trackRead(postId);
 		if (dispatch) {
 			dispatch('completionist:read', { postId });
 		}
@@ -87,6 +97,7 @@
 		deps = deps || {};
 		const dom = deps.dom || document;
 		const storage = deps.storage || global.CompletionistStorage;
+		const notifier = getNotifier(deps, storage);
 		const dispatch =
 			deps.dispatch ||
 			function (name, detail) {
@@ -110,7 +121,7 @@
 			}
 			const postId = getPostId(dom);
 			if (shouldMarkRead(postId, storage, markedRead)) {
-				trackRead(postId, storage, dispatch);
+				trackRead(postId, notifier, dispatch);
 				markedRead = true;
 				return true;
 			}
@@ -139,7 +150,7 @@
 				}
 				trackViewed(
 					postId,
-					storage,
+					notifier,
 					dispatch,
 					global.CompletionistPostData
 				);
@@ -192,11 +203,18 @@
 	};
 
 	if (typeof document !== 'undefined') {
-		let consentManager = null;
+		var consentManager = null;
 		if (global.CompletionistConsentManager) {
 			consentManager = global.CompletionistConsentManager.create();
 		}
-		const detector = createDetector({ consentManager });
+
+		var notifier = null;
+		var config = global.CompletionistConfig;
+		if (config && config.trackingEndpoint && global.CompletionistNotifier) {
+			notifier = global.CompletionistNotifier.create({ endpoint: config.trackingEndpoint });
+		}
+
+		var detector = createDetector({ consentManager: consentManager, notifier: notifier });
 		if (document.readyState === 'loading') {
 			document.addEventListener('DOMContentLoaded', function () {
 				detector.init();

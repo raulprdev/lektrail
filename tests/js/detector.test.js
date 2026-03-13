@@ -3,6 +3,11 @@ const path = require('path');
 const { mockStorage } = require('./helpers/test-helpers');
 const { mockDom } = require('./helpers/detector-helpers');
 
+const notifierCode = fs.readFileSync(
+    path.join(__dirname, '../../assets/js/notifier.js'),
+    'utf8'
+);
+
 const detectorCode = fs.readFileSync(
     path.join(__dirname, '../../assets/js/detector.js'),
     'utf8'
@@ -12,13 +17,16 @@ let D;
 
 beforeEach(() => {
     delete window.CompletionistDetector;
+    delete window.CompletionistNotifier;
     delete window.CompletionistPostData;
+    eval(notifierCode);
     eval(detectorCode);
     D = window.CompletionistDetector;
 });
 
 afterEach(() => {
     delete window.CompletionistPostData;
+    delete window.CompletionistNotifier;
 });
 
 function setPostData(postId) {
