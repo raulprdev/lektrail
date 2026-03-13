@@ -29,13 +29,28 @@ class SuggestionsQueryTest extends TestCase {
         $this->assertEquals([12, 45, 78], $this->posts->lastQueryArgs['post__not_in']);
     }
 
-    public function testUsesRandomOrderByDefault(): void {
-        $settings = new MockSettingsRepository();
+    public function testUsesDateOrderAndFetchesExtraForShuffle(): void {
+        $settings = new MockSettingsRepository(['max_suggestions' => 5]);
         $query = new SuggestionsQuery($settings, $this->posts);
 
         $query->get([]);
 
-        $this->assertEquals('rand', $this->posts->lastQueryArgs['orderby']);
+        $this->assertEquals('date', $this->posts->lastQueryArgs['orderby']);
+        $this->assertEquals('DESC', $this->posts->lastQueryArgs['order']);
+        $this->assertGreaterThan(5, $this->posts->lastQueryArgs['posts_per_page']);
+    }
+
+    public function testReturnsOnlyMaxSuggestionsAfterShuffle(): void {
+        $this->posts->posts = [];
+        for ($i = 1; $i <= 20; $i++) {
+            $this->posts->posts[] = ['id' => $i, 'title' => "Post $i", 'url' => "/post-$i"];
+        }
+        $settings = new MockSettingsRepository(['max_suggestions' => 5]);
+        $query = new SuggestionsQuery($settings, $this->posts);
+
+        $result = $query->get([]);
+
+        $this->assertCount(5, $result);
     }
 
     public function testUsesRecentOrderWhenConfigured(): void {
@@ -55,16 +70,16 @@ class SuggestionsQueryTest extends TestCase {
         $query->get([10, 20], [5, 7]);
 
         $this->assertEquals([5, 7], $this->posts->lastQueryArgs['category__in']);
-        $this->assertEquals('rand', $this->posts->lastQueryArgs['orderby']);
+        $this->assertEquals('date', $this->posts->lastQueryArgs['orderby']);
     }
 
-    public function testRelatedFallsBackToRandomWhenNoCategories(): void {
+    public function testRelatedFallsBackToShuffleWhenNoCategories(): void {
         $settings = new MockSettingsRepository(['suggestion_order' => 'related']);
         $query = new SuggestionsQuery($settings, $this->posts);
 
         $query->get([]);
 
-        $this->assertEquals('rand', $this->posts->lastQueryArgs['orderby']);
+        $this->assertEquals('date', $this->posts->lastQueryArgs['orderby']);
         $this->assertArrayNotHasKey('category__in', $this->posts->lastQueryArgs);
     }
 
@@ -109,13 +124,13 @@ class SuggestionsQueryTest extends TestCase {
         $this->assertEquals(['post', 'page', 'book'], $this->posts->lastQueryArgs['post_type']);
     }
 
-    public function testUsesConfiguredMaxSuggestions(): void {
+    public function testFetchesMultipleOfMaxSuggestionsForShuffle(): void {
         $settings = new MockSettingsRepository(['max_suggestions' => 10]);
         $query = new SuggestionsQuery($settings, $this->posts);
 
         $query->get([]);
 
-        $this->assertEquals(10, $this->posts->lastQueryArgs['posts_per_page']);
+        $this->assertEquals(30, $this->posts->lastQueryArgs['posts_per_page']);
     }
 
     public function testAlwaysFiltersPublishedPosts(): void {
@@ -128,13 +143,19 @@ class SuggestionsQueryTest extends TestCase {
     }
 
     public function testReturnsPostsFromQuery(): void {
+        $this->posts->posts = [
+            ['id' => 10, 'title' => 'Alpha'],
+            ['id' => 20, 'title' => 'Beta'],
+        ];
         $settings = new MockSettingsRepository();
         $query = new SuggestionsQuery($settings, $this->posts);
 
         $result = $query->get([]);
 
-        $this->assertCount(3, $result);
-        $this->assertEquals('Post 1', $result[0]['title']);
+        $this->assertCount(2, $result);
+        $titles = array_column($result, 'title');
+        $this->assertContains('Alpha', $titles);
+        $this->assertContains('Beta', $titles);
     }
 
     public function testExcludesPostsById(): void {

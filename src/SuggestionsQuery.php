@@ -19,47 +19,53 @@ class SuggestionsQuery {
         $this->posts = $posts;
     }
 
+    private const SHUFFLE_MULTIPLIER = 3;
+
     public function get(array $excludeIds, array $relatedCategories = []): array {
-        $args = $this->buildQueryArgs($excludeIds, $relatedCategories);
-        return $this->posts->query($args);
+        $settings = $this->settings->load();
+        $limit = $settings->maxSuggestions();
+        $order = $settings->suggestionOrder();
+        $args = $this->buildQueryArgs($excludeIds, $relatedCategories, $limit);
+        $posts = $this->posts->query($args);
+
+        if ($order === self::ORDER_RANDOM || $order === self::ORDER_RELATED) {
+            shuffle($posts);
+        }
+
+        return array_slice($posts, 0, $limit);
     }
 
-    private function buildQueryArgs(array $excludeIds, array $relatedCategories): array {
+    private function buildQueryArgs(array $excludeIds, array $relatedCategories, int $limit): array {
         $settings = $this->settings->load();
+        $order = $settings->suggestionOrder();
+        $fetchLimit = $order === self::ORDER_RANDOM || $order === self::ORDER_RELATED
+            ? $limit * self::SHUFFLE_MULTIPLIER
+            : $limit;
+
         $args = [
             'post_type' => $settings->postTypes(),
             'post_status' => 'publish',
-            'posts_per_page' => $settings->maxSuggestions(),
+            'posts_per_page' => $fetchLimit,
+            'orderby' => 'date',
+            'order' => 'DESC',
         ];
 
         if (!empty($excludeIds)) {
             $args['post__not_in'] = $excludeIds;
         }
 
-        $this->applyOrderStrategy($args, $relatedCategories, $settings);
-        $this->applyCategoryFilters($args, $settings);
+        $this->applyCategoryFilters($args, $relatedCategories, $settings);
 
         return $args;
     }
 
-    private function applyOrderStrategy(array &$args, array $relatedCategories, Settings $settings): void {
+    private function applyCategoryFilters(array &$args, array $relatedCategories, Settings $settings): void {
         $order = $settings->suggestionOrder();
 
-        if ($order === self::ORDER_RECENT) {
-            $args['orderby'] = 'date';
-            $args['order'] = 'DESC';
-            return;
-        }
-
-        if ($order === self::ORDER_RELATED && !empty($relatedCategories)) {
-            $args['category__in'] = $relatedCategories;
-        }
-
-        $args['orderby'] = 'rand';
-    }
-
-    private function applyCategoryFilters(array &$args, Settings $settings): void {
-        if ($settings->suggestionOrder() === self::ORDER_RELATED) {
+        if ($order === self::ORDER_RELATED) {
+            if (!empty($relatedCategories)) {
+                $args['category__in'] = $relatedCategories;
+            }
             return;
         }
 
