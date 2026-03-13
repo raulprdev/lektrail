@@ -376,7 +376,7 @@
                                        name="<?= \Completionist\WordPress\SettingsRepository::OPTION_KEY ?>[show_clear_button]"
                                        value="1"
                                        <?php checked($settings->showClearButton()); ?>>
-                                <?= esc_html__('Display a button to clear reading history', 'completionist') ?>
+                                <?= esc_html__('Display a button to clear reading history (stored in browser)', 'completionist') ?>
                             </label>
                         </td>
                     </tr>
