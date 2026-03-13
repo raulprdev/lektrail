@@ -171,4 +171,15 @@ class AssetsTest extends TestCase {
         $this->assertStringContainsString('one two three four five six seven eight nine ten...', $inlineScripts['code']);
         $this->assertStringNotContainsString('eleven', $inlineScripts['code']);
     }
+
+    public function testEnqueueWidgetDisablesConsentWhenInlineDataProvided(): void {
+        $assets = $this->createAssets(['require_consent' => true]);
+        $inlineData = ['viewed' => [], 'read' => [], 'suggestions' => []];
+
+        $assets->enqueueWidget($inlineData);
+
+        $inline = $this->loader->inlineScripts[Assets::HANDLE_WIDGET];
+        $this->assertStringContainsString('"requireConsent":false', $inline['code']);
+        $this->assertStringContainsString('"serverSideTracking":true', $inline['code']);
+    }
 }

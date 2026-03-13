@@ -107,6 +107,8 @@ class Assets {
         ]);
 
         if ($inlineData !== null) {
+            $config['requireConsent'] = false;
+            $config['serverSideTracking'] = true;
             $this->scripts->addInlineScript(
                 self::HANDLE_WIDGET,
                 'window.CompletionistInlineData = ' . json_encode($inlineData) . ';',
