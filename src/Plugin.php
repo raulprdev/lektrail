@@ -5,6 +5,7 @@ namespace Completionist;
 use Completionist\Contracts\Context;
 use Completionist\Contracts\Hooks;
 use Completionist\Contracts\SettingsRepository;
+use Completionist\Shortcodes\WidgetShortcode;
 
 class Plugin
 {
@@ -13,7 +14,7 @@ class Plugin
     private SettingsRepository $settings;
     private Context $context;
     private SuggestionsEndpoint $suggestions;
-    private Shortcode $shortcode;
+    private WidgetShortcode $widgetShortcode;
     private AdminPage $adminPage;
     private TrackingService $trackingService;
     private TrackingEndpoint $trackingEndpoint;
@@ -23,7 +24,7 @@ class Plugin
         SettingsRepository $settings,
         Context $context,
         SuggestionsEndpoint $suggestions,
-        Shortcode $shortcode,
+        WidgetShortcode $widgetShortcode,
         AdminPage $adminPage,
         Hooks $hooks,
         TrackingService $trackingService,
@@ -33,7 +34,7 @@ class Plugin
         $this->settings = $settings;
         $this->context = $context;
         $this->suggestions = $suggestions;
-        $this->shortcode = $shortcode;
+        $this->widgetShortcode = $widgetShortcode;
         $this->adminPage = $adminPage;
         $this->hooks = $hooks;
         $this->trackingService = $trackingService;
@@ -43,7 +44,7 @@ class Plugin
     public function run(): void
     {
         $this->suggestions->register($this->hooks);
-        $this->shortcode->register($this->hooks);
+        $this->widgetShortcode->register($this->hooks);
         $this->adminPage->register($this->hooks);
         $this->trackingEndpoint->register($this->hooks);
         $this->hooks->addAction('wp_enqueue_scripts', [$this, 'enqueueDetector']);

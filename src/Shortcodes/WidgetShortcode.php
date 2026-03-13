@@ -1,11 +1,15 @@
 <?php
 
-namespace Completionist;
+namespace Completionist\Shortcodes;
 
+use Completionist\Assets;
 use Completionist\Contracts\Hooks;
 use Completionist\Contracts\PostQuery;
+use Completionist\SuggestionsEndpoint;
+use Completionist\SuggestionsQuery;
+use Completionist\TrackingService;
 
-class Shortcode
+class WidgetShortcode
 {
     public const TAG = 'completionist';
     public const WIDGET_ID = 'completionist-widget';

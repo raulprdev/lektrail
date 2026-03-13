@@ -5,7 +5,7 @@ namespace Completionist\Tests;
 use Completionist\AdminPage;
 use Completionist\Assets;
 use Completionist\Plugin;
-use Completionist\Shortcode;
+use Completionist\Shortcodes\WidgetShortcode;
 use Completionist\SuggestionsEndpoint;
 use Completionist\SuggestionsQuery;
 use Completionist\Tests\Mocks\MockContext;
@@ -52,7 +52,7 @@ class PluginTest extends TestCase
         $trackingService = new TrackingService($this->users, $this->trackings, $this->settings);
         $query = new SuggestionsQuery($this->settings, $posts);
         $suggestions = new SuggestionsEndpoint($query, new MockJsonResponse());
-        $shortcode = new Shortcode($assets, $trackingService, $query, $posts);
+        $shortcode = new WidgetShortcode($assets, $trackingService, $query, $posts);
         $adminPage = new AdminPage($this->settings);
         $trackingEndpoint = new TrackingEndpoint($trackingService, new MockJsonResponse());
 
