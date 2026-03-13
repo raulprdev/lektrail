@@ -85,6 +85,7 @@ function mockConfig(options = {}) {
         completedEnabled: options.completedEnabled !== false,
         showClearButton: options.showClearButton !== false,
         requireConsent: options.requireConsent || false,
+        serverSideTracking: options.serverSideTracking || false,
         labels: Object.assign({}, defaultLabels, options.labels || {})
     };
 }

@@ -156,7 +156,8 @@
 		let html = '';
 
 		const hasUserData = viewedCount > 0 || readCount > 0;
-		if (config.showClearButton !== false && hasUserData) {
+		const canClear = !config.serverSideTracking;
+		if (config.showClearButton !== false && hasUserData && canClear) {
 			html += renderClearButton();
 		}
 

@@ -641,6 +641,19 @@ describe('Widget: clear data button', () => {
 });
 
 describe('Widget: server-side tracking (inline data)', () => {
+    test('hides clear button when server-side tracking is enabled', () => {
+        const { container } = setupWidgetTest({ showClearButton: true, serverSideTracking: true });
+        window.CompletionistInlineData = {
+            viewed: [post(1, 'Post 1')],
+            read: [],
+            suggestions: []
+        };
+
+        loadWidget();
+
+        expect(container.innerHTML).not.toContain('completionist-clear');
+    });
+
     test('uses inline data when CompletionistInlineData is present', () => {
         const { container } = setupWidgetTest();
         window.CompletionistInlineData = {
