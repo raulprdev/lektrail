@@ -46,7 +46,7 @@
                                        <?php checked($settings->trackLoggedInUsers()); ?>>
                                 <?= esc_html__('Store reading history in database for logged-in users', 'completionist') ?>
                             </label>
-                            <p class="description"><?= esc_html__('When enabled, logged-in users get server-side tracking. Anonymous users always use browser storage.', 'completionist') ?></p>
+                            <p class="description"><?= esc_html__('Useful for membership sites. Stores reading history in database for WordPress users (admins, members). Most sites without public registration can leave this disabled.', 'completionist') ?></p>
                         </td>
                     </tr>
                 </table>
