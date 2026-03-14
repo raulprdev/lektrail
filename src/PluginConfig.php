@@ -2,7 +2,7 @@
 
 namespace Completionist;
 
-class Settings
+class PluginConfig
 {
     public const DEFAULT_POST_TYPES = ['post'];
     public const DEFAULT_MAX_VIEWED = 3;

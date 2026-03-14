@@ -8,7 +8,7 @@ use Completionist\Shortcodes\WidgetShortcode;
 use Completionist\SuggestionsQuery;
 use Completionist\Tests\Mocks\MockPostQuery;
 use Completionist\Tests\Mocks\MockScriptLoader;
-use Completionist\Tests\Mocks\MockSettingsRepository;
+use Completionist\Tests\Mocks\MockPluginConfigRepository;
 use Completionist\Tests\Mocks\MockTrackingRepository;
 use Completionist\Tests\Mocks\MockUserProvider;
 use Completionist\TrackingService;
@@ -17,16 +17,16 @@ use PHPUnit\Framework\TestCase;
 class WidgetShortcodeTest extends TestCase
 {
     private MockScriptLoader $scripts;
-    private MockSettingsRepository $settings;
+    private MockPluginConfigRepository $pluginConfigs;
     private MockUserProvider $userProvider;
     private MockTrackingRepository $trackings;
     private MockPostQuery $postQuery;
 
     protected function setUp(): void
     {
-        $this->scripts = new MockScriptLoader();
-        $this->settings = new MockSettingsRepository();
-        $this->userProvider = new MockUserProvider();
+        $this->scripts       = new MockScriptLoader();
+        $this->pluginConfigs = new MockPluginConfigRepository();
+        $this->userProvider  = new MockUserProvider();
         $this->trackings = new MockTrackingRepository();
         $this->postQuery = new MockPostQuery();
     }
@@ -38,11 +38,11 @@ class WidgetShortcodeTest extends TestCase
             dirname(__DIR__, 2) . '/',
             'http://example.com/',
             '1.0.0',
-            $this->settings,
+            $this->pluginConfigs,
             $this->postQuery
         );
-        $trackingService = new TrackingService($this->userProvider, $this->trackings, $this->settings);
-        $suggestionsQuery = new SuggestionsQuery($this->settings, $this->postQuery);
+        $trackingService = new TrackingService($this->userProvider, $this->trackings, $this->pluginConfigs);
+        $suggestionsQuery = new SuggestionsQuery($this->pluginConfigs, $this->postQuery);
         $renderer = new WidgetRenderer($assets, $trackingService, $suggestionsQuery, $this->postQuery);
 
         return new WidgetShortcode($renderer);
@@ -50,7 +50,7 @@ class WidgetShortcodeTest extends TestCase
 
     public function testInjectsInlineDataWhenServerSideEnabled(): void
     {
-        $this->settings = new MockSettingsRepository(['track_logged_in_users' => true]);
+        $this->pluginConfigs        = new MockPluginConfigRepository([ 'track_logged_in_users' => true]);
         $this->userProvider->userId = 42;
 
         $shortcode = $this->createWidgetShortcode();
@@ -62,7 +62,7 @@ class WidgetShortcodeTest extends TestCase
 
     public function testDoesNotInjectInlineDataWhenServerSideDisabled(): void
     {
-        $this->settings = new MockSettingsRepository(['track_logged_in_users' => false]);
+        $this->pluginConfigs = new MockPluginConfigRepository([ 'track_logged_in_users' => false]);
 
         $shortcode = $this->createWidgetShortcode();
         $shortcode->render([]);
@@ -73,7 +73,7 @@ class WidgetShortcodeTest extends TestCase
 
     public function testInlineDataContainsFullPostData(): void
     {
-        $this->settings = new MockSettingsRepository(['track_logged_in_users' => true]);
+        $this->pluginConfigs        = new MockPluginConfigRepository([ 'track_logged_in_users' => true]);
         $this->userProvider->userId = 42;
         $this->trackings->track(42, 123, 'viewed');
         $this->postQuery->postData[123] = [

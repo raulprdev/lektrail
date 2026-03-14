@@ -4,10 +4,10 @@ namespace Completionist\WordPress;
 
 use Completionist\Contracts\Locale as LocaleInterface;
 use Completionist\Contracts\Options as OptionsInterface;
-use Completionist\Contracts\SettingsRepository as SettingsRepositoryInterface;
-use Completionist\Settings;
+use Completionist\Contracts\PluginConfigRepository as SettingsRepositoryInterface;
+use Completionist\PluginConfig;
 
-class SettingsRepository implements SettingsRepositoryInterface
+class PluginConfigRepository implements SettingsRepositoryInterface
 {
     public const OPTION_KEY = 'completionist_settings';
 
@@ -31,16 +31,16 @@ class SettingsRepository implements SettingsRepositoryInterface
         $this->locale = $locale;
     }
 
-    public function load(): Settings
+    public function load(): PluginConfig
     {
         $data = $this->options->get(self::OPTION_KEY, []);
         $defaults = $this->getLocaleDefaults();
-        return Settings::fromArray($data, $defaults);
+        return PluginConfig::fromArray($data, $defaults);
     }
 
-    public function save(Settings $settings): void
+    public function save(PluginConfig $pluginConfig): void
     {
-        $this->options->set(self::OPTION_KEY, $settings->toArray());
+        $this->options->set(self::OPTION_KEY, $pluginConfig->toArray());
     }
 
     private function getLocaleDefaults(): array

@@ -3,18 +3,18 @@
 namespace Completionist;
 
 use Completionist\Contracts\Hooks;
-use Completionist\Contracts\SettingsRepository;
-use Completionist\WordPress\SettingsRepository as WordPressSettingsRepository;
+use Completionist\Contracts\PluginConfigRepository;
+use Completionist\WordPress\PluginConfigRepository as WordPressSettingsRepository;
 
 class AdminPage
 {
     public const MENU_SLUG = 'completionist';
 
-    private SettingsRepository $settings;
+    private PluginConfigRepository $pluginConfigs;
 
-    public function __construct(SettingsRepository $settings)
+    public function __construct(PluginConfigRepository $pluginConfigs)
     {
-        $this->settings = $settings;
+        $this->pluginConfigs = $pluginConfigs;
     }
 
     public function register(Hooks $hooks): void
@@ -39,14 +39,14 @@ class AdminPage
         register_setting(self::MENU_SLUG, WordPressSettingsRepository::OPTION_KEY);
     }
 
-    public function getSettings(): Settings
+    public function getPluginConfig(): PluginConfig
     {
-        return $this->settings->load();
+        return $this->pluginConfigs->load();
     }
 
     public function render(): void
     {
-        $settings = $this->getSettings();
+        $pluginConfig = $this->getPluginConfig();
         include dirname(__DIR__) . '/templates/admin-page.php';
     }
 }

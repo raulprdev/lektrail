@@ -2,7 +2,7 @@
 
 namespace Completionist;
 
-use Completionist\Contracts\SettingsRepository;
+use Completionist\Contracts\PluginConfigRepository;
 use Completionist\Contracts\TrackingRepository;
 use Completionist\Contracts\UserProvider;
 
@@ -10,13 +10,13 @@ class TrackingService
 {
     private UserProvider $userProvider;
     private TrackingRepository $trackings;
-    private SettingsRepository $settings;
+    private PluginConfigRepository $pluginConfigs;
 
-    public function __construct(UserProvider $userProvider, TrackingRepository $trackings, SettingsRepository $settings)
+    public function __construct(UserProvider $userProvider, TrackingRepository $trackings, PluginConfigRepository $pluginConfigs)
     {
         $this->userProvider = $userProvider;
         $this->trackings    = $trackings;
-        $this->settings = $settings;
+        $this->pluginConfigs = $pluginConfigs;
     }
 
     public function trackViewed(int $postId): void
@@ -37,7 +37,7 @@ class TrackingService
 
     public function shouldTrackServerSide(): bool
     {
-        return $this->settings->load()->trackLoggedInUsers() && $this->userProvider->isLoggedIn();
+        return $this->pluginConfigs->load()->trackLoggedInUsers() && $this->userProvider->isLoggedIn();
     }
 
     public function getHistory(): array
@@ -46,10 +46,10 @@ class TrackingService
             return ['viewed' => [], 'read' => []];
         }
         $userId = $this->userProvider->getCurrentUserId();
-        $settings = $this->settings->load();
+        $pluginConfig = $this->pluginConfigs->load();
         return [
-            'viewed' => $this->trackings->getViewedPosts($userId, $settings->maxViewed()),
-            'read' => $this->trackings->getReadPosts($userId, $settings->maxRead()),
+            'viewed' => $this->trackings->getViewedPosts($userId, $pluginConfig->maxViewed()),
+            'read' => $this->trackings->getReadPosts($userId, $pluginConfig->maxRead()),
         ];
     }
 }

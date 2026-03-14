@@ -4,7 +4,7 @@ namespace Completionist\Tests;
 
 use Completionist\AdminPage;
 use Completionist\Tests\Mocks\MockHooks;
-use Completionist\Tests\Mocks\MockSettingsRepository;
+use Completionist\Tests\Mocks\MockPluginConfigRepository;
 use PHPUnit\Framework\TestCase;
 
 class AdminPageTest extends TestCase
@@ -12,8 +12,8 @@ class AdminPageTest extends TestCase
     public function testRegistersAdminMenuHook(): void
     {
         $hooks = new MockHooks();
-        $settings = new MockSettingsRepository();
-        $page = new AdminPage($settings);
+        $pluginConfigs = new MockPluginConfigRepository();
+        $page = new AdminPage($pluginConfigs);
 
         $page->register($hooks);
 
@@ -23,8 +23,8 @@ class AdminPageTest extends TestCase
     public function testRegistersAdminInitHook(): void
     {
         $hooks = new MockHooks();
-        $settings = new MockSettingsRepository();
-        $page = new AdminPage($settings);
+	    $pluginConfigs = new MockPluginConfigRepository();
+        $page = new AdminPage($pluginConfigs);
 
         $page->register($hooks);
 
@@ -33,11 +33,11 @@ class AdminPageTest extends TestCase
 
     public function testGetSettingsReturnsFromRepository(): void
     {
-        $settings = new MockSettingsRepository(['max_viewed' => 12]);
-        $page = new AdminPage($settings);
+	    $pluginConfigs = new MockPluginConfigRepository([ 'max_viewed' => 12]);
+        $page = new AdminPage($pluginConfigs);
 
-        $settings = $page->getSettings();
+	    $pluginConfig = $page->getPluginConfig();
 
-        $this->assertEquals(12, $settings->maxViewed());
+        $this->assertEquals(12, $pluginConfig->maxViewed());
     }
 }

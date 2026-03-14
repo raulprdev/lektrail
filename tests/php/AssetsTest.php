@@ -5,7 +5,7 @@ namespace Completionist\Tests;
 use Completionist\Assets;
 use Completionist\Tests\Mocks\MockPostQuery;
 use Completionist\Tests\Mocks\MockScriptLoader;
-use Completionist\Tests\Mocks\MockSettingsRepository;
+use Completionist\Tests\Mocks\MockPluginConfigRepository;
 use PHPUnit\Framework\TestCase;
 
 class AssetsTest extends TestCase
@@ -23,10 +23,10 @@ class AssetsTest extends TestCase
         $this->postQuery = new MockPostQuery();
     }
 
-    private function createAssets(array $settingsData = []): Assets
+    private function createAssets(array $configData = []): Assets
     {
-        $settings = new MockSettingsRepository($settingsData);
-        return new Assets($this->loader, $this->pluginPath, $this->pluginUrl, '1.0.0', $settings, $this->postQuery);
+        $pluginConfig = new MockPluginConfigRepository($configData);
+        return new Assets($this->loader, $this->pluginPath, $this->pluginUrl, '1.0.0', $pluginConfig, $this->postQuery);
     }
 
     public function testFileVersionReturnsTimestampForExistingFile(): void

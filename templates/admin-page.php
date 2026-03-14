@@ -25,9 +25,9 @@
                             <?php foreach (get_post_types(['public' => true], 'objects') as $postType): ?>
                                 <label>
                                     <input type="checkbox"
-                                           name="<?= \Completionist\WordPress\SettingsRepository::OPTION_KEY ?>[post_types][]"
+                                           name="<?= \Completionist\WordPress\PluginConfigRepository::OPTION_KEY ?>[post_types][]"
                                            value="<?= esc_attr($postType->name) ?>"
-                                           <?php checked(in_array($postType->name, $settings->postTypes())); ?>>
+                                           <?php checked(in_array($postType->name, $pluginConfig->postTypes())); ?>>
                                     <?= esc_html($postType->label) ?>
                                 </label><br>
                             <?php endforeach; ?>
@@ -37,13 +37,13 @@
                         <th scope="row"><?= esc_html__('Track Logged-In Users', 'completionist') ?></th>
                         <td>
                             <input type="hidden"
-                                   name="<?= \Completionist\WordPress\SettingsRepository::OPTION_KEY ?>[track_logged_in_users]"
+                                   name="<?= \Completionist\WordPress\PluginConfigRepository::OPTION_KEY ?>[track_logged_in_users]"
                                    value="0">
                             <label>
                                 <input type="checkbox"
-                                       name="<?= \Completionist\WordPress\SettingsRepository::OPTION_KEY ?>[track_logged_in_users]"
+                                       name="<?= \Completionist\WordPress\PluginConfigRepository::OPTION_KEY ?>[track_logged_in_users]"
                                        value="1"
-                                       <?php checked($settings->trackLoggedInUsers()); ?>>
+                                       <?php checked($pluginConfig->trackLoggedInUsers()); ?>>
                                 <?= esc_html__('Store reading history in database for logged-in users', 'completionist') ?>
                             </label>
                             <p class="description"><?= esc_html__('Useful for membership sites. Stores reading history in database for WordPress users (admins, members). Most sites without public registration can leave this disabled.', 'completionist') ?></p>
@@ -62,13 +62,13 @@
                         <th scope="row"><?= esc_html__('Show Excerpt', 'completionist') ?></th>
                         <td>
                             <input type="hidden"
-                                   name="<?= \Completionist\WordPress\SettingsRepository::OPTION_KEY ?>[show_excerpt]"
+                                   name="<?= \Completionist\WordPress\PluginConfigRepository::OPTION_KEY ?>[show_excerpt]"
                                    value="0">
                             <label>
                                 <input type="checkbox"
-                                       name="<?= \Completionist\WordPress\SettingsRepository::OPTION_KEY ?>[show_excerpt]"
+                                       name="<?= \Completionist\WordPress\PluginConfigRepository::OPTION_KEY ?>[show_excerpt]"
                                        value="1"
-                                       <?php checked($settings->showExcerpt()); ?>>
+                                       <?php checked($pluginConfig->showExcerpt()); ?>>
                                 <?= esc_html__('Display post excerpt below the title', 'completionist') ?>
                             </label>
                         </td>
@@ -77,13 +77,13 @@
                         <th scope="row"><?= esc_html__('Show Thumbnail', 'completionist') ?></th>
                         <td>
                             <input type="hidden"
-                                   name="<?= \Completionist\WordPress\SettingsRepository::OPTION_KEY ?>[show_thumbnail]"
+                                   name="<?= \Completionist\WordPress\PluginConfigRepository::OPTION_KEY ?>[show_thumbnail]"
                                    value="0">
                             <label>
                                 <input type="checkbox"
-                                       name="<?= \Completionist\WordPress\SettingsRepository::OPTION_KEY ?>[show_thumbnail]"
+                                       name="<?= \Completionist\WordPress\PluginConfigRepository::OPTION_KEY ?>[show_thumbnail]"
                                        value="1"
-                                       <?php checked($settings->showThumbnail()); ?>>
+                                       <?php checked($pluginConfig->showThumbnail()); ?>>
                                 <?= esc_html__('Display post thumbnail image', 'completionist') ?>
                             </label>
                         </td>
@@ -92,8 +92,8 @@
                         <th scope="row"><?= esc_html__('Excerpt Length', 'completionist') ?></th>
                         <td>
                             <input type="number"
-                                   name="<?= \Completionist\WordPress\SettingsRepository::OPTION_KEY ?>[excerpt_length]"
-                                   value="<?= esc_attr($settings->excerptLength()) ?>"
+                                   name="<?= \Completionist\WordPress\PluginConfigRepository::OPTION_KEY ?>[excerpt_length]"
+                                   value="<?= esc_attr($pluginConfig->excerptLength()) ?>"
                                    min="5" max="100" class="small-text">
                             <?= esc_html__('words', 'completionist') ?>
                             <p class="description"><?= esc_html__('Number of words to show in excerpt.', 'completionist') ?></p>
@@ -111,13 +111,13 @@
                         <th scope="row"><?= esc_html__('Require Consent', 'completionist') ?></th>
                         <td>
                             <input type="hidden"
-                                   name="<?= \Completionist\WordPress\SettingsRepository::OPTION_KEY ?>[require_consent]"
+                                   name="<?= \Completionist\WordPress\PluginConfigRepository::OPTION_KEY ?>[require_consent]"
                                    value="0">
                             <label>
                                 <input type="checkbox"
-                                       name="<?= \Completionist\WordPress\SettingsRepository::OPTION_KEY ?>[require_consent]"
+                                       name="<?= \Completionist\WordPress\PluginConfigRepository::OPTION_KEY ?>[require_consent]"
                                        value="1"
-                                       <?php checked($settings->requireConsent()); ?>>
+                                       <?php checked($pluginConfig->requireConsent()); ?>>
                                 <?= esc_html__('Ask users for consent before tracking', 'completionist') ?>
                             </label>
                             <p class="description"><?= esc_html__('If enabled, users must opt-in before their reading progress is tracked.', 'completionist') ?></p>
@@ -126,8 +126,8 @@
                     <tr>
                         <th scope="row"><?= esc_html__('Consent Message', 'completionist') ?></th>
                         <td>
-                            <textarea name="<?= \Completionist\WordPress\SettingsRepository::OPTION_KEY ?>[consent_message]"
-                                      rows="2" class="large-text"><?= esc_textarea($settings->consentMessage()) ?></textarea>
+                            <textarea name="<?= \Completionist\WordPress\PluginConfigRepository::OPTION_KEY ?>[consent_message]"
+                                      rows="2" class="large-text"><?= esc_textarea($pluginConfig->consentMessage()) ?></textarea>
                             <p class="description"><?= esc_html__('Message shown to users when asking for consent.', 'completionist') ?></p>
                         </td>
                     </tr>
@@ -135,8 +135,8 @@
                         <th scope="row"><?= esc_html__('Checkbox Label', 'completionist') ?></th>
                         <td>
                             <input type="text"
-                                   name="<?= \Completionist\WordPress\SettingsRepository::OPTION_KEY ?>[consent_checkbox_label]"
-                                   value="<?= esc_attr($settings->consentCheckboxLabel()) ?>"
+                                   name="<?= \Completionist\WordPress\PluginConfigRepository::OPTION_KEY ?>[consent_checkbox_label]"
+                                   value="<?= esc_attr($pluginConfig->consentCheckboxLabel()) ?>"
                                    class="regular-text">
                             <p class="description"><?= esc_html__('Label for the consent checkbox.', 'completionist') ?></p>
                         </td>
@@ -154,13 +154,13 @@
                         <th scope="row"><?= esc_html__('Enable', 'completionist') ?></th>
                         <td>
                             <input type="hidden"
-                                   name="<?= \Completionist\WordPress\SettingsRepository::OPTION_KEY ?>[viewed_enabled]"
+                                   name="<?= \Completionist\WordPress\PluginConfigRepository::OPTION_KEY ?>[viewed_enabled]"
                                    value="0">
                             <label>
                                 <input type="checkbox"
-                                       name="<?= \Completionist\WordPress\SettingsRepository::OPTION_KEY ?>[viewed_enabled]"
+                                       name="<?= \Completionist\WordPress\PluginConfigRepository::OPTION_KEY ?>[viewed_enabled]"
                                        value="1"
-                                       <?php checked($settings->viewedEnabled()); ?>>
+                                       <?php checked($pluginConfig->viewedEnabled()); ?>>
                                 <?= esc_html__('Show this section in the widget', 'completionist') ?>
                             </label>
                         </td>
@@ -169,8 +169,8 @@
                         <th scope="row"><?= esc_html__('Max Posts', 'completionist') ?></th>
                         <td>
                             <input type="number"
-                                   name="<?= \Completionist\WordPress\SettingsRepository::OPTION_KEY ?>[max_viewed]"
-                                   value="<?= esc_attr($settings->maxViewed()) ?>"
+                                   name="<?= \Completionist\WordPress\PluginConfigRepository::OPTION_KEY ?>[max_viewed]"
+                                   value="<?= esc_attr($pluginConfig->maxViewed()) ?>"
                                    min="1" max="20" class="small-text">
                         </td>
                     </tr>
@@ -178,8 +178,8 @@
                         <th scope="row"><?= esc_html__('Label', 'completionist') ?></th>
                         <td>
                             <input type="text"
-                                   name="<?= \Completionist\WordPress\SettingsRepository::OPTION_KEY ?>[label_continue]"
-                                   value="<?= esc_attr($settings->labelContinue()) ?>"
+                                   name="<?= \Completionist\WordPress\PluginConfigRepository::OPTION_KEY ?>[label_continue]"
+                                   value="<?= esc_attr($pluginConfig->labelContinue()) ?>"
                                    class="regular-text">
                         </td>
                     </tr>
@@ -196,13 +196,13 @@
                         <th scope="row"><?= esc_html__('Enable', 'completionist') ?></th>
                         <td>
                             <input type="hidden"
-                                   name="<?= \Completionist\WordPress\SettingsRepository::OPTION_KEY ?>[completed_enabled]"
+                                   name="<?= \Completionist\WordPress\PluginConfigRepository::OPTION_KEY ?>[completed_enabled]"
                                    value="0">
                             <label>
                                 <input type="checkbox"
-                                       name="<?= \Completionist\WordPress\SettingsRepository::OPTION_KEY ?>[completed_enabled]"
+                                       name="<?= \Completionist\WordPress\PluginConfigRepository::OPTION_KEY ?>[completed_enabled]"
                                        value="1"
-                                       <?php checked($settings->completedEnabled()); ?>>
+                                       <?php checked($pluginConfig->completedEnabled()); ?>>
                                 <?= esc_html__('Show this section in the widget', 'completionist') ?>
                             </label>
                         </td>
@@ -211,8 +211,8 @@
                         <th scope="row"><?= esc_html__('Read Threshold', 'completionist') ?></th>
                         <td>
                             <input type="number"
-                                   name="<?= \Completionist\WordPress\SettingsRepository::OPTION_KEY ?>[read_threshold]"
-                                   value="<?= esc_attr($settings->readThreshold()) ?>"
+                                   name="<?= \Completionist\WordPress\PluginConfigRepository::OPTION_KEY ?>[read_threshold]"
+                                   value="<?= esc_attr($pluginConfig->readThreshold()) ?>"
                                    min="10" max="100" class="small-text">
                             <?= esc_html__('%', 'completionist') ?>
                             <p class="description"><?= esc_html__('How far the user must scroll to mark the post as completed. Use lower values (e.g., 10%) for product pages where viewing is enough.', 'completionist') ?></p>
@@ -222,8 +222,8 @@
                         <th scope="row"><?= esc_html__('Max Posts', 'completionist') ?></th>
                         <td>
                             <input type="number"
-                                   name="<?= \Completionist\WordPress\SettingsRepository::OPTION_KEY ?>[max_read]"
-                                   value="<?= esc_attr($settings->maxRead()) ?>"
+                                   name="<?= \Completionist\WordPress\PluginConfigRepository::OPTION_KEY ?>[max_read]"
+                                   value="<?= esc_attr($pluginConfig->maxRead()) ?>"
                                    min="1" max="20" class="small-text">
                         </td>
                     </tr>
@@ -231,8 +231,8 @@
                         <th scope="row"><?= esc_html__('Label', 'completionist') ?></th>
                         <td>
                             <input type="text"
-                                   name="<?= \Completionist\WordPress\SettingsRepository::OPTION_KEY ?>[label_completed]"
-                                   value="<?= esc_attr($settings->labelCompleted()) ?>"
+                                   name="<?= \Completionist\WordPress\PluginConfigRepository::OPTION_KEY ?>[label_completed]"
+                                   value="<?= esc_attr($pluginConfig->labelCompleted()) ?>"
                                    class="regular-text">
                         </td>
                     </tr>
@@ -249,8 +249,8 @@
                         <th scope="row"><?= esc_html__('Max Posts', 'completionist') ?></th>
                         <td>
                             <input type="number"
-                                   name="<?= \Completionist\WordPress\SettingsRepository::OPTION_KEY ?>[max_suggestions]"
-                                   value="<?= esc_attr($settings->maxSuggestions()) ?>"
+                                   name="<?= \Completionist\WordPress\PluginConfigRepository::OPTION_KEY ?>[max_suggestions]"
+                                   value="<?= esc_attr($pluginConfig->maxSuggestions()) ?>"
                                    min="1" max="20" class="small-text">
                         </td>
                     </tr>
@@ -258,8 +258,8 @@
                         <th scope="row"><?= esc_html__('Label', 'completionist') ?></th>
                         <td>
                             <input type="text"
-                                   name="<?= \Completionist\WordPress\SettingsRepository::OPTION_KEY ?>[label_suggestions]"
-                                   value="<?= esc_attr($settings->labelSuggestions()) ?>"
+                                   name="<?= \Completionist\WordPress\PluginConfigRepository::OPTION_KEY ?>[label_suggestions]"
+                                   value="<?= esc_attr($pluginConfig->labelSuggestions()) ?>"
                                    class="regular-text">
                         </td>
                     </tr>
@@ -267,8 +267,8 @@
                         <th scope="row"><?= esc_html__('Cache Duration', 'completionist') ?></th>
                         <td>
                             <input type="number"
-                                   name="<?= \Completionist\WordPress\SettingsRepository::OPTION_KEY ?>[suggestions_cache_hours]"
-                                   value="<?= esc_attr($settings->suggestionsCacheHours()) ?>"
+                                   name="<?= \Completionist\WordPress\PluginConfigRepository::OPTION_KEY ?>[suggestions_cache_hours]"
+                                   value="<?= esc_attr($pluginConfig->suggestionsCacheHours()) ?>"
                                    min="1" max="168" class="small-text">
                             <?= esc_html__('hours', 'completionist') ?>
                             <p class="description"><?= esc_html__('How long to cache suggestions before refreshing. Also refreshes when you complete reading a post.', 'completionist') ?></p>
@@ -277,14 +277,14 @@
                     <tr>
                         <th scope="row"><?= esc_html__('Order', 'completionist') ?></th>
                         <td>
-                            <select name="<?= \Completionist\WordPress\SettingsRepository::OPTION_KEY ?>[suggestion_order]">
-                                <option value="random" <?php selected($settings->suggestionOrder(), 'random'); ?>>
+                            <select name="<?= \Completionist\WordPress\PluginConfigRepository::OPTION_KEY ?>[suggestion_order]">
+                                <option value="random" <?php selected($pluginConfig->suggestionOrder(), 'random'); ?>>
                                     <?= esc_html__('Random', 'completionist') ?>
                                 </option>
-                                <option value="recent" <?php selected($settings->suggestionOrder(), 'recent'); ?>>
+                                <option value="recent" <?php selected($pluginConfig->suggestionOrder(), 'recent'); ?>>
                                     <?= esc_html__('Recent (newest first)', 'completionist') ?>
                                 </option>
-                                <option value="related" <?php selected($settings->suggestionOrder(), 'related'); ?>>
+                                <option value="related" <?php selected($pluginConfig->suggestionOrder(), 'related'); ?>>
                                     <?= esc_html__('Related (same categories as read posts)', 'completionist') ?>
                                 </option>
                             </select>
@@ -300,9 +300,9 @@
                                 <?php foreach ($categories as $category): ?>
                                     <label>
                                         <input type="checkbox"
-                                               name="<?= \Completionist\WordPress\SettingsRepository::OPTION_KEY ?>[include_categories][]"
+                                               name="<?= \Completionist\WordPress\PluginConfigRepository::OPTION_KEY ?>[include_categories][]"
                                                value="<?= esc_attr($category->term_id) ?>"
-                                               <?php checked(in_array($category->term_id, $settings->includeCategories())); ?>>
+                                               <?php checked(in_array($category->term_id, $pluginConfig->includeCategories())); ?>>
                                         <?= esc_html($category->name) ?>
                                     </label><br>
                                 <?php endforeach; ?>
@@ -317,9 +317,9 @@
                                 <?php foreach ($categories as $category): ?>
                                     <label>
                                         <input type="checkbox"
-                                               name="<?= \Completionist\WordPress\SettingsRepository::OPTION_KEY ?>[exclude_categories][]"
+                                               name="<?= \Completionist\WordPress\PluginConfigRepository::OPTION_KEY ?>[exclude_categories][]"
                                                value="<?= esc_attr($category->term_id) ?>"
-                                               <?php checked(in_array($category->term_id, $settings->excludeCategories())); ?>>
+                                               <?php checked(in_array($category->term_id, $pluginConfig->excludeCategories())); ?>>
                                         <?= esc_html($category->name) ?>
                                     </label><br>
                                 <?php endforeach; ?>
@@ -340,8 +340,8 @@
                         <th scope="row"><?= esc_html__('Empty State', 'completionist') ?></th>
                         <td>
                             <input type="text"
-                                   name="<?= \Completionist\WordPress\SettingsRepository::OPTION_KEY ?>[label_empty]"
-                                   value="<?= esc_attr($settings->labelEmpty()) ?>"
+                                   name="<?= \Completionist\WordPress\PluginConfigRepository::OPTION_KEY ?>[label_empty]"
+                                   value="<?= esc_attr($pluginConfig->labelEmpty()) ?>"
                                    class="regular-text">
                             <p class="description"><?= esc_html__('Shown when there is nothing to display.', 'completionist') ?></p>
                         </td>
@@ -350,8 +350,8 @@
                         <th scope="row"><?= esc_html__('Loading', 'completionist') ?></th>
                         <td>
                             <input type="text"
-                                   name="<?= \Completionist\WordPress\SettingsRepository::OPTION_KEY ?>[label_loading]"
-                                   value="<?= esc_attr($settings->labelLoading()) ?>"
+                                   name="<?= \Completionist\WordPress\PluginConfigRepository::OPTION_KEY ?>[label_loading]"
+                                   value="<?= esc_attr($pluginConfig->labelLoading()) ?>"
                                    class="regular-text">
                             <p class="description"><?= esc_html__('Shown while fetching suggestions.', 'completionist') ?></p>
                         </td>
@@ -369,13 +369,13 @@
                         <th scope="row"><?= esc_html__('Show Clear Button', 'completionist') ?></th>
                         <td>
                             <input type="hidden"
-                                   name="<?= \Completionist\WordPress\SettingsRepository::OPTION_KEY ?>[show_clear_button]"
+                                   name="<?= \Completionist\WordPress\PluginConfigRepository::OPTION_KEY ?>[show_clear_button]"
                                    value="0">
                             <label>
                                 <input type="checkbox"
-                                       name="<?= \Completionist\WordPress\SettingsRepository::OPTION_KEY ?>[show_clear_button]"
+                                       name="<?= \Completionist\WordPress\PluginConfigRepository::OPTION_KEY ?>[show_clear_button]"
                                        value="1"
-                                       <?php checked($settings->showClearButton()); ?>>
+                                       <?php checked($pluginConfig->showClearButton()); ?>>
                                 <?= esc_html__('Display a button to clear reading history (stored in browser)', 'completionist') ?>
                             </label>
                         </td>
@@ -384,8 +384,8 @@
                         <th scope="row"><?= esc_html__('Button Label', 'completionist') ?></th>
                         <td>
                             <input type="text"
-                                   name="<?= \Completionist\WordPress\SettingsRepository::OPTION_KEY ?>[label_clear]"
-                                   value="<?= esc_attr($settings->labelClear()) ?>"
+                                   name="<?= \Completionist\WordPress\PluginConfigRepository::OPTION_KEY ?>[label_clear]"
+                                   value="<?= esc_attr($pluginConfig->labelClear()) ?>"
                                    class="regular-text">
                         </td>
                     </tr>

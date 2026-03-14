@@ -9,7 +9,7 @@ use Completionist\SuggestionsQuery;
 use Completionist\Tests\Mocks\MockHooks;
 use Completionist\Tests\Mocks\MockPostQuery;
 use Completionist\Tests\Mocks\MockScriptLoader;
-use Completionist\Tests\Mocks\MockSettingsRepository;
+use Completionist\Tests\Mocks\MockPluginConfigRepository;
 use Completionist\Tests\Mocks\MockTrackingRepository;
 use Completionist\Tests\Mocks\MockUserProvider;
 use Completionist\TrackingService;
@@ -27,20 +27,20 @@ class WidgetBlockTest extends TestCase
     private function createBlock(): WidgetBlock
     {
         $scripts = new MockScriptLoader();
-        $settings = new MockSettingsRepository();
+        $pluginConfigs = new MockPluginConfigRepository();
         $postQuery = new MockPostQuery();
         $assets = new Assets(
             $scripts,
             dirname(__DIR__, 2) . '/',
             'http://example.com/',
             '1.0.0',
-            $settings,
+            $pluginConfigs,
             $postQuery
         );
         $userProvider = new MockUserProvider();
         $trackings = new MockTrackingRepository();
-        $trackingService = new TrackingService($userProvider, $trackings, $settings);
-        $suggestionsQuery = new SuggestionsQuery($settings, $postQuery);
+        $trackingService = new TrackingService($userProvider, $trackings, $pluginConfigs);
+        $suggestionsQuery = new SuggestionsQuery($pluginConfigs, $postQuery);
         $renderer = new WidgetRenderer($assets, $trackingService, $suggestionsQuery, $postQuery);
 
         return new WidgetBlock($renderer);

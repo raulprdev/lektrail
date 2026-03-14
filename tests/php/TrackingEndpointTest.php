@@ -3,7 +3,7 @@
 namespace Completionist\Tests;
 
 use Completionist\Tests\Mocks\MockJsonResponse;
-use Completionist\Tests\Mocks\MockSettingsRepository;
+use Completionist\Tests\Mocks\MockPluginConfigRepository;
 use Completionist\Tests\Mocks\MockTrackingRepository;
 use Completionist\Tests\Mocks\MockUserProvider;
 use Completionist\TrackingEndpoint;
@@ -23,8 +23,8 @@ class TrackingEndpointTest extends TestCase
         $this->users     = new MockUserProvider();
         $this->trackings = new MockTrackingRepository();
         $this->response  = new MockJsonResponse();
-        $settings        = new MockSettingsRepository(['track_logged_in_users' => true]);
-        $this->service   = new TrackingService($this->users, $this->trackings, $settings);
+        $pluginConfigs        = new MockPluginConfigRepository([ 'track_logged_in_users' => true]);
+        $this->service   = new TrackingService($this->users, $this->trackings, $pluginConfigs);
         $this->endpoint  = new TrackingEndpoint($this->service, $this->response);
         $_POST = [];
     }

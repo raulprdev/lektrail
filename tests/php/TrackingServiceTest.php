@@ -2,7 +2,7 @@
 
 namespace Completionist\Tests;
 
-use Completionist\Tests\Mocks\MockSettingsRepository;
+use Completionist\Tests\Mocks\MockPluginConfigRepository;
 use Completionist\Tests\Mocks\MockTrackingRepository;
 use Completionist\Tests\Mocks\MockUserProvider;
 use Completionist\TrackingService;
@@ -12,15 +12,15 @@ class TrackingServiceTest extends TestCase
 {
     private MockUserProvider $users;
     private MockTrackingRepository $trackings;
-    private MockSettingsRepository $settings;
+    private MockPluginConfigRepository $pluginConfigs;
     private TrackingService $service;
 
     protected function setUp(): void
     {
         $this->users     = new MockUserProvider();
         $this->trackings = new MockTrackingRepository();
-        $this->settings  = new MockSettingsRepository(['track_logged_in_users' => true]);
-        $this->service   = new TrackingService($this->users, $this->trackings, $this->settings);
+        $this->pluginConfigs  = new MockPluginConfigRepository([ 'track_logged_in_users' => true]);
+        $this->service   = new TrackingService($this->users, $this->trackings, $this->pluginConfigs);
     }
 
     public function testTrackViewedForLoggedInUser(): void
@@ -54,8 +54,8 @@ class TrackingServiceTest extends TestCase
     public function testDoesNothingWhenTrackingDisabled(): void
     {
         $this->users->userId = 42;
-        $settings = new MockSettingsRepository(['track_logged_in_users' => false]);
-        $service = new TrackingService($this->users, $this->trackings, $settings);
+        $pluginConfigs = new MockPluginConfigRepository([ 'track_logged_in_users' => false]);
+        $service = new TrackingService($this->users, $this->trackings, $pluginConfigs);
 
         $service->trackViewed(123);
 
@@ -79,8 +79,8 @@ class TrackingServiceTest extends TestCase
     public function testShouldTrackServerSideReturnsFalseWhenDisabled(): void
     {
         $this->users->userId = 42;
-        $settings = new MockSettingsRepository(['track_logged_in_users' => false]);
-        $service = new TrackingService($this->users, $this->trackings, $settings);
+        $pluginConfigs = new MockPluginConfigRepository([ 'track_logged_in_users' => false]);
+        $service = new TrackingService($this->users, $this->trackings, $pluginConfigs);
 
         $this->assertFalse($service->shouldTrackServerSide());
     }

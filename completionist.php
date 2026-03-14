@@ -42,26 +42,26 @@ add_action('plugins_loaded', function () {
     $context = new Completionist\WordPress\Context();
     $locale = new Completionist\WordPress\Locale();
 
-    $settingsRepo = new Completionist\WordPress\SettingsRepository($options, $locale);
+    $pluginConfigs = new Completionist\WordPress\PluginConfigRepository($options, $locale);
     $posts = new Completionist\WordPress\PostQuery();
-    $assets = new Completionist\Assets($scripts, COMPLETIONIST_PLUGIN_PATH, COMPLETIONIST_PLUGIN_URL, COMPLETIONIST_VERSION, $settingsRepo, $posts);
+    $assets = new Completionist\Assets($scripts, COMPLETIONIST_PLUGIN_PATH, COMPLETIONIST_PLUGIN_URL, COMPLETIONIST_VERSION, $pluginConfigs, $posts);
     $response = new Completionist\WordPress\JsonResponse();
 
     $db = new Completionist\WordPress\Database();
     $users = new Completionist\WordPress\UserProvider();
-    $trackingRepo = new Completionist\WordPress\TrackingRepository($db);
-    $trackingService = new Completionist\TrackingService($users, $trackingRepo, $settingsRepo);
+    $trackings = new Completionist\WordPress\TrackingRepository($db);
+    $trackingService = new Completionist\TrackingService($users, $trackings, $pluginConfigs);
 
-    $suggestionsQuery = new Completionist\SuggestionsQuery($settingsRepo, $posts);
+    $suggestionsQuery = new Completionist\SuggestionsQuery($pluginConfigs, $posts);
     $suggestions = new Completionist\SuggestionsEndpoint($suggestionsQuery, $response);
     $widgetRenderer = new Completionist\Blocks\Widget\WidgetRenderer($assets, $trackingService, $suggestionsQuery, $posts);
     $shortcode = new Completionist\Shortcodes\WidgetShortcode($widgetRenderer);
-    $adminPage = new Completionist\AdminPage($settingsRepo);
+    $adminPage = new Completionist\AdminPage($pluginConfigs);
     $trackingEndpoint = new Completionist\TrackingEndpoint($trackingService, $response);
 
     $widgetBlock = new Completionist\Blocks\Widget\WidgetBlock($widgetRenderer);
     $widgetBlock->register($hooks);
 
-    $plugin = new Completionist\Plugin($assets, $settingsRepo, $context, $suggestions, $shortcode, $adminPage, $hooks, $trackingService, $trackingEndpoint);
+    $plugin = new Completionist\Plugin($assets, $pluginConfigs, $context, $suggestions, $shortcode, $adminPage, $hooks, $trackingService, $trackingEndpoint);
     $plugin->run();
 });

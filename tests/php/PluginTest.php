@@ -14,7 +14,7 @@ use Completionist\Tests\Mocks\MockHooks;
 use Completionist\Tests\Mocks\MockJsonResponse;
 use Completionist\Tests\Mocks\MockPostQuery;
 use Completionist\Tests\Mocks\MockScriptLoader;
-use Completionist\Tests\Mocks\MockSettingsRepository;
+use Completionist\Tests\Mocks\MockPluginConfigRepository;
 use Completionist\Tests\Mocks\MockTrackingRepository;
 use Completionist\Tests\Mocks\MockUserProvider;
 use Completionist\TrackingEndpoint;
@@ -24,16 +24,16 @@ use PHPUnit\Framework\TestCase;
 class PluginTest extends TestCase
 {
     private MockScriptLoader $scripts;
-    private MockSettingsRepository $settings;
+    private MockPluginConfigRepository $pluginConfigs;
     private MockContext $context;
     private MockUserProvider $users;
     private MockTrackingRepository $trackings;
 
     protected function setUp(): void
     {
-        $this->scripts = new MockScriptLoader();
-        $this->settings = new MockSettingsRepository();
-        $this->context = new MockContext();
+        $this->scripts       = new MockScriptLoader();
+        $this->pluginConfigs = new MockPluginConfigRepository();
+        $this->context       = new MockContext();
         $this->users = new MockUserProvider();
         $this->trackings = new MockTrackingRepository();
     }
@@ -47,20 +47,20 @@ class PluginTest extends TestCase
             dirname(__DIR__, 2) . '/',
             'http://example.com/',
             '1.0.0',
-            $this->settings,
+            $this->pluginConfigs,
             $posts
         );
-        $trackingService = new TrackingService($this->users, $this->trackings, $this->settings);
-        $query = new SuggestionsQuery($this->settings, $posts);
+        $trackingService = new TrackingService($this->users, $this->trackings, $this->pluginConfigs);
+        $query = new SuggestionsQuery($this->pluginConfigs, $posts);
         $suggestions = new SuggestionsEndpoint($query, new MockJsonResponse());
         $renderer = new WidgetRenderer($assets, $trackingService, $query, $posts);
         $shortcode = new WidgetShortcode($renderer);
-        $adminPage = new AdminPage($this->settings);
+        $adminPage = new AdminPage($this->pluginConfigs);
         $trackingEndpoint = new TrackingEndpoint($trackingService, new MockJsonResponse());
 
         return new Plugin(
             $assets,
-            $this->settings,
+            $this->pluginConfigs,
             $this->context,
             $suggestions,
             $shortcode,
@@ -73,7 +73,7 @@ class PluginTest extends TestCase
 
     public function testEnqueuesDetectorForConfiguredPostType(): void
     {
-        $this->settings = new MockSettingsRepository(['post_types' => ['post', 'page']]);
+        $this->pluginConfigs             = new MockPluginConfigRepository([ 'post_types' => ['post', 'page']]);
         $this->context->singularPostType = 'post';
         $this->context->postId = 123;
 
@@ -85,7 +85,7 @@ class PluginTest extends TestCase
 
     public function testDoesNotEnqueueDetectorForNonConfiguredPostType(): void
     {
-        $this->settings = new MockSettingsRepository(['post_types' => ['post']]);
+        $this->pluginConfigs             = new MockPluginConfigRepository([ 'post_types' => ['post']]);
         $this->context->singularPostType = 'page';
         $this->context->postId = 123;
 
@@ -97,7 +97,7 @@ class PluginTest extends TestCase
 
     public function testDoesNotEnqueueDetectorOnNonSingularPage(): void
     {
-        $this->settings = new MockSettingsRepository(['post_types' => ['post']]);
+        $this->pluginConfigs             = new MockPluginConfigRepository([ 'post_types' => ['post']]);
         $this->context->singularPostType = null;
         $this->context->postId = 0;
 
@@ -109,7 +109,7 @@ class PluginTest extends TestCase
 
     public function testTracksViewedWhenServerSideEnabled(): void
     {
-        $this->settings = new MockSettingsRepository([
+        $this->pluginConfigs = new MockPluginConfigRepository([
             'post_types' => ['post'],
             'track_logged_in_users' => true,
         ]);
@@ -125,7 +125,7 @@ class PluginTest extends TestCase
 
     public function testDoesNotTrackViewedWhenServerSideDisabled(): void
     {
-        $this->settings = new MockSettingsRepository([
+        $this->pluginConfigs = new MockPluginConfigRepository([
             'post_types' => ['post'],
             'track_logged_in_users' => false,
         ]);
@@ -141,7 +141,7 @@ class PluginTest extends TestCase
 
     public function testDoesNotTrackViewedForAnonymousUser(): void
     {
-        $this->settings = new MockSettingsRepository([
+        $this->pluginConfigs = new MockPluginConfigRepository([
             'post_types' => ['post'],
             'track_logged_in_users' => true,
         ]);

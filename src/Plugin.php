@@ -4,14 +4,14 @@ namespace Completionist;
 
 use Completionist\Contracts\Context;
 use Completionist\Contracts\Hooks;
-use Completionist\Contracts\SettingsRepository;
+use Completionist\Contracts\PluginConfigRepository;
 use Completionist\Shortcodes\WidgetShortcode;
 
 class Plugin
 {
     private Hooks $hooks;
     private Assets $assets;
-    private SettingsRepository $settings;
+    private PluginConfigRepository $pluginConfigs;
     private Context $context;
     private SuggestionsEndpoint $suggestions;
     private WidgetShortcode $widgetShortcode;
@@ -21,7 +21,7 @@ class Plugin
 
     public function __construct(
         Assets $assets,
-        SettingsRepository $settings,
+        PluginConfigRepository $pluginConfigs,
         Context $context,
         SuggestionsEndpoint $suggestions,
         WidgetShortcode $widgetShortcode,
@@ -30,9 +30,9 @@ class Plugin
         TrackingService $trackingService,
         TrackingEndpoint $trackingEndpoint
     ) {
-        $this->assets = $assets;
-        $this->settings = $settings;
-        $this->context = $context;
+        $this->assets        = $assets;
+        $this->pluginConfigs = $pluginConfigs;
+        $this->context       = $context;
         $this->suggestions = $suggestions;
         $this->widgetShortcode = $widgetShortcode;
         $this->adminPage = $adminPage;
@@ -63,7 +63,7 @@ class Plugin
 
     private function shouldEnqueueDetector(): bool
     {
-        $postTypes = $this->settings->load()->postTypes();
+        $postTypes = $this->pluginConfigs->load()->postTypes();
         return $this->context->isSingular($postTypes);
     }
 }

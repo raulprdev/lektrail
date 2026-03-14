@@ -6,7 +6,7 @@ use Completionist\SuggestionsEndpoint;
 use Completionist\SuggestionsQuery;
 use Completionist\Tests\Mocks\MockJsonResponse;
 use Completionist\Tests\Mocks\MockPostQuery;
-use Completionist\Tests\Mocks\MockSettingsRepository;
+use Completionist\Tests\Mocks\MockPluginConfigRepository;
 use PHPUnit\Framework\TestCase;
 
 class SuggestionsEndpointTest extends TestCase
@@ -25,7 +25,7 @@ class SuggestionsEndpointTest extends TestCase
             ['id' => 3, 'title' => 'Post 3', 'url' => '/post-3'],
         ];
         $this->jsonResponse         = new MockJsonResponse();
-        $this->suggestionsQuery            = new SuggestionsQuery(new MockSettingsRepository(), $this->postQuery);
+        $this->suggestionsQuery            = new SuggestionsQuery(new MockPluginConfigRepository(), $this->postQuery);
         $this->suggestionsEndpoint         = new SuggestionsEndpoint($this->suggestionsQuery, $this->jsonResponse);
         $_GET = [];
     }
