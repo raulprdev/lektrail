@@ -64,7 +64,7 @@ class Assets
 
         $postData = $this->postQuery->getPostData($postId);
         if (isset($postData['excerpt'])) {
-            $postData['excerpt'] = $this->trimExcerpt($postData['excerpt'], $pluginConfigs);
+            $postData['excerpt'] = $this->trimExcerpt($postData['excerpt'], $pluginConfig);
         }
         $this->scripts->addInlineScript(
             self::HANDLE_DETECTOR,
@@ -72,7 +72,7 @@ class Assets
             'before'
         );
 
-        $config = $pluginConfigs->toJsConfig();
+        $config = $pluginConfig->toJsConfig();
         if ($serverSideTracking) {
             $config['trackingEndpoint'] = admin_url('admin-ajax.php?action=' . TrackingEndpoint::ACTION);
         }
