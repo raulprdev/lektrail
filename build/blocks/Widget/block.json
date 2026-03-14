@@ -1,0 +1,23 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "completionist/widget",
+  "version": "1.0.0",
+  "title": "Completionist Widget",
+  "category": "widgets",
+  "icon": "book-alt",
+  "description": "Display reading progress and suggestions for your visitors.",
+  "keywords": [
+    "reading",
+    "progress",
+    "tracker",
+    "suggestions"
+  ],
+  "textdomain": "completionist",
+  "supports": {
+    "html": false,
+    "multiple": false
+  },
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css"
+}

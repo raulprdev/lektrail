@@ -5,7 +5,7 @@ namespace Completionist;
 use Completionist\Contracts\PostQuery;
 use Completionist\Contracts\ScriptLoader;
 use Completionist\Contracts\SettingsRepository;
-use Completionist\Shortcodes\WidgetShortcode;
+use Completionist\Blocks\Widget\WidgetRenderer;
 
 class Assets
 {
@@ -117,7 +117,7 @@ class Assets
         );
 
         $config = array_merge($settings->toJsConfig(), [
-            'widgetId' => WidgetShortcode::WIDGET_ID,
+            'widgetId' => WidgetRenderer::WIDGET_ID,
         ]);
 
         if ($inlineData !== null) {

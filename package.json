@@ -4,13 +4,18 @@
   "description": "Track reading progress and suggest unread posts",
   "private": true,
   "scripts": {
+    "build": "wp-scripts build --webpack-src-dir=src/blocks --output-path=build/blocks",
+    "start": "wp-scripts start --webpack-src-dir=src/blocks --output-path=build/blocks",
     "test": "jest",
     "test:watch": "jest --watch",
     "lint": "eslint assets/js",
     "lint:fix": "eslint assets/js --fix"
   },
   "devDependencies": {
+    "@babel/runtime": "^7.28.6",
     "@wordpress/eslint-plugin": "^24.3.0",
+    "@wordpress/icons": "^11.8.0",
+    "@wordpress/scripts": "^29.0.0",
     "eslint": "^8.57.1",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0"
