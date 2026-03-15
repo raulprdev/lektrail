@@ -12,9 +12,6 @@
 
 defined('ABSPATH') || exit;
 
-define('COMPLETIONIST_VERSION', '1.0.0');
-define('COMPLETIONIST_PLUGIN_URL', plugin_dir_url(__FILE__));
-
 register_activation_hook(__FILE__, function () {
     $db = new Completionist\WordPress\Database();
     $installer = new Completionist\TableInstaller($db);
@@ -33,9 +30,11 @@ spl_autoload_register(function ($class) {
     }
 });
 
-define('COMPLETIONIST_PLUGIN_PATH', plugin_dir_path(__FILE__));
-
 add_action('plugins_loaded', function () {
+    $pluginPath = plugin_dir_path(__FILE__);
+    $pluginUrl = plugin_dir_url(__FILE__);
+    $version = '1.0.0';
+
     $scripts = new Completionist\WordPress\ScriptLoader();
     $options = new Completionist\WordPress\Options();
     $hooks = new Completionist\WordPress\Hooks();
@@ -44,7 +43,7 @@ add_action('plugins_loaded', function () {
 
     $pluginConfigs = new Completionist\WordPress\PluginConfigRepository($options, $locale);
     $posts = new Completionist\WordPress\PostQuery();
-    $assets = new Completionist\Assets($scripts, COMPLETIONIST_PLUGIN_PATH, COMPLETIONIST_PLUGIN_URL, COMPLETIONIST_VERSION, $pluginConfigs, $posts);
+    $assets = new Completionist\Assets($scripts, $pluginPath, $pluginUrl, $version, $pluginConfigs, $posts);
     $response = new Completionist\WordPress\JsonResponse();
 
     $db = new Completionist\WordPress\Database();
@@ -59,7 +58,7 @@ add_action('plugins_loaded', function () {
     $adminPage = new Completionist\AdminPage($pluginConfigs);
     $trackingEndpoint = new Completionist\TrackingEndpoint($trackingService, $response);
 
-    $widgetBlock = new Completionist\Blocks\Widget\WidgetBlock($widgetRenderer, $pluginConfigs);
+    $widgetBlock = new Completionist\Blocks\Widget\WidgetBlock($widgetRenderer, $pluginConfigs, $pluginPath);
     $widgetBlock->register($hooks);
 
     $plugin = new Completionist\Plugin($assets, $pluginConfigs, $context, $suggestions, $shortcode, $adminPage, $hooks, $trackingService, $trackingEndpoint);

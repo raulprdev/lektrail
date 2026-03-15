@@ -3,35 +3,38 @@
 
 	function createLocalStorageNotifier(storage) {
 		return {
-			trackViewed: function (postId, postData) {
+			trackViewed(postId, postData) {
 				storage.addViewed(postId, postData);
 			},
-			trackRead: function (postId) {
+			trackRead(postId) {
 				storage.addRead(postId);
-			}
+			},
 		};
 	}
 
 	function createServerSideNotifier(endpoint) {
 		return {
-			trackViewed: function () {
+			trackViewed() {
 				// Server-side viewed tracking is done on page load by PHP
 			},
-			trackRead: function (postId) {
-				var xhr = new XMLHttpRequest();
+			trackRead(postId) {
+				const xhr = new XMLHttpRequest();
 				xhr.open('POST', endpoint);
-				xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+				xhr.setRequestHeader(
+					'Content-Type',
+					'application/x-www-form-urlencoded'
+				);
 				xhr.send('post_id=' + postId);
-			}
+			},
 		};
 	}
 
 	window.CompletionistNotifier = {
-		create: function (options) {
+		create(options) {
 			if (options.endpoint) {
 				return createServerSideNotifier(options.endpoint);
 			}
 			return createLocalStorageNotifier(options.storage);
-		}
+		},
 	};
 })();

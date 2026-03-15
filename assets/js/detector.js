@@ -47,9 +47,9 @@
 			return deps.notifier;
 		}
 		if (global.CompletionistNotifier) {
-			return global.CompletionistNotifier.create({ storage: storage });
+			return global.CompletionistNotifier.create({ storage });
 		}
-		return { trackViewed: function () {}, trackRead: function () {} };
+		return { trackViewed() {}, trackRead() {} };
 	}
 
 	function trackViewed(postId, notifier, dispatch, postData) {
@@ -131,7 +131,6 @@
 		function init() {
 			const article = findArticle(dom);
 			const postId = getPostId(dom);
-			const threshold = getReadThreshold();
 
 			if (!article || !postId) {
 				return {
@@ -156,12 +155,15 @@
 				);
 			}
 
+			const threshold = getReadThreshold();
+
 			if (!Observer) {
 				global.addEventListener(
 					'scroll',
 					function () {
 						const totalHeight = global.scrollY + global.innerHeight;
-						const percent = (totalHeight / dom.body.scrollHeight) * 100;
+						const percent =
+							(totalHeight / dom.body.scrollHeight) * 100;
 						if (percent >= threshold) {
 							handleIntersection();
 						}
@@ -203,18 +205,23 @@
 	};
 
 	if (typeof document !== 'undefined') {
-		var consentManager = null;
+		let consentManager = null;
 		if (global.CompletionistConsentManager) {
 			consentManager = global.CompletionistConsentManager.create();
 		}
 
-		var notifier = null;
-		var config = global.CompletionistConfig;
+		let notifier = null;
+		const config = global.CompletionistConfig;
 		if (config && config.trackingEndpoint && global.CompletionistNotifier) {
-			notifier = global.CompletionistNotifier.create({ endpoint: config.trackingEndpoint });
+			notifier = global.CompletionistNotifier.create({
+				endpoint: config.trackingEndpoint,
+			});
 		}
 
-		var detector = createDetector({ consentManager: consentManager, notifier: notifier });
+		const detector = createDetector({
+			consentManager,
+			notifier,
+		});
 		if (document.readyState === 'loading') {
 			document.addEventListener('DOMContentLoaded', function () {
 				detector.init();

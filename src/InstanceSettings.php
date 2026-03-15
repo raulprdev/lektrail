@@ -95,7 +95,7 @@ class InstanceSettings
     {
         return array_filter(
             $data,
-            fn($key) => in_array($key, self::INSTANCE_KEYS, true),
+            fn ($key) => in_array($key, self::INSTANCE_KEYS, true),
             ARRAY_FILTER_USE_KEY
         );
     }

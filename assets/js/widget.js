@@ -7,13 +7,17 @@
 		if (!window.CompletionistConfig) {
 			throw new Error('CompletionistConfig not found');
 		}
-		var config = window.CompletionistConfig;
+		let config = window.CompletionistConfig;
 		if (container && container.dataset.config) {
 			try {
-				var instanceConfig = JSON.parse(container.dataset.config);
+				const instanceConfig = JSON.parse(container.dataset.config);
 				config = Object.assign({}, config, instanceConfig);
 				if (instanceConfig.labels) {
-					config.labels = Object.assign({}, config.labels, instanceConfig.labels);
+					config.labels = Object.assign(
+						{},
+						config.labels,
+						instanceConfig.labels
+					);
 				}
 			} catch (e) {
 				// Invalid JSON, use global config
@@ -48,7 +52,7 @@
 		if (window.CompletionistDataProvider) {
 			return window.CompletionistDataProvider.create({
 				dataMode: 'async',
-				endpoint: endpoint
+				endpoint,
 			});
 		}
 		return null;
@@ -203,7 +207,9 @@
 		if (clearBtn) {
 			clearBtn.addEventListener('click', function () {
 				storage.clearHistory();
-				var emptySource = window.CompletionistDataSource.create({ inlineData: {} });
+				const emptySource = window.CompletionistDataSource.create({
+					inlineData: {},
+				});
 				renderWidget(container, emptySource, suggestions, config);
 			});
 		}
@@ -243,19 +249,24 @@
 
 	function createFetcher(endpoint, storage) {
 		return {
-			fetch: function (callback) {
-				var viewedIds = storage.getViewedIds ? storage.getViewedIds() : [];
-				var readIds = storage.getReadIds ? storage.getReadIds() : [];
-				var excludeIds = viewedIds.concat(readIds);
-				var url = endpoint + (endpoint.indexOf('?') >= 0 ? '&' : '?') +
-					'exclude=' + excludeIds.join(',');
+			fetch(callback) {
+				const viewedIds = storage.getViewedIds
+					? storage.getViewedIds()
+					: [];
+				const readIds = storage.getReadIds ? storage.getReadIds() : [];
+				const excludeIds = viewedIds.concat(readIds);
+				const url =
+					endpoint +
+					(endpoint.indexOf('?') >= 0 ? '&' : '?') +
+					'exclude=' +
+					excludeIds.join(',');
 
-				var xhr = new XMLHttpRequest();
+				const xhr = new XMLHttpRequest();
 				xhr.open('GET', url);
 				xhr.onload = function () {
 					if (xhr.status === 200) {
 						try {
-							var response = JSON.parse(xhr.responseText);
+							const response = JSON.parse(xhr.responseText);
 							callback(response.success ? response.data : []);
 						} catch (e) {
 							callback([]);
@@ -268,56 +279,60 @@
 					callback([]);
 				};
 				xhr.send();
-			}
+			},
 		};
 	}
 
 	function createDataSource(config, container) {
 		if (window.CompletionistInlineData) {
 			return window.CompletionistDataSource.create({
-				inlineData: window.CompletionistInlineData
+				inlineData: window.CompletionistInlineData,
 			});
 		}
 
-		var storage = getStorage();
-		var provider = getDataProvider(container.dataset.endpoint);
-		var cacheHours = config.suggestionsCacheHours || 24;
+		const storage = getStorage();
+		const provider = getDataProvider(container.dataset.endpoint);
+		const cacheHours = config.suggestionsCacheHours || 24;
 
 		return window.CompletionistDataSource.create({
 			storage: {
-				getViewedPosts: function () {
+				getViewedPosts() {
 					return provider ? provider.getViewed() : [];
 				},
-				getReadPosts: function () {
+				getReadPosts() {
 					return provider ? provider.getRead() : [];
 				},
-				getViewedCount: function () {
-					return storage.getViewedCount ? storage.getViewedCount() : 0;
+				getViewedCount() {
+					return storage.getViewedCount
+						? storage.getViewedCount()
+						: 0;
 				},
-				getReadCount: function () {
+				getReadCount() {
 					return storage.getReadCount ? storage.getReadCount() : 0;
 				},
-				getSuggestions: function () {
-					return storage.getSuggestions ? storage.getSuggestions() : [];
+				getSuggestions() {
+					return storage.getSuggestions
+						? storage.getSuggestions()
+						: [];
 				},
-				setSuggestions: function (suggestions) {
+				setSuggestions(suggestions) {
 					if (storage.setSuggestions) {
 						storage.setSuggestions(suggestions);
 					}
 				},
-				isSuggestionsCacheValid: function (hours) {
+				isSuggestionsCacheValid(hours) {
 					return storage.isSuggestionsCacheValid
 						? storage.isSuggestionsCacheValid(hours)
 						: false;
-				}
+				},
 			},
 			fetcher: createFetcher(container.dataset.endpoint, storage),
-			cacheHours: cacheHours
+			cacheHours,
 		});
 	}
 
 	function initWidget(container, config) {
-		var dataSource = createDataSource(config, container);
+		const dataSource = createDataSource(config, container);
 
 		renderLoading(container, config);
 

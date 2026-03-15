@@ -3,28 +3,28 @@
 
 	function createAsyncProvider(storage, endpoint) {
 		return {
-			getViewed: function () {
+			getViewed() {
 				return storage.getViewedPosts();
 			},
-			getRead: function () {
+			getRead() {
 				return storage.getReadPosts();
 			},
-			getSuggestions: function (callback) {
-				var excludeIds = storage
+			getSuggestions(callback) {
+				const excludeIds = storage
 					.getViewedIds()
 					.concat(storage.getReadIds());
 
-				var url = endpoint;
+				let url = endpoint;
 				if (excludeIds.length > 0) {
 					url += '&exclude=' + excludeIds.join(',');
 				}
 
-				var xhr = new XMLHttpRequest();
+				const xhr = new XMLHttpRequest();
 				xhr.open('GET', url);
 				xhr.onload = function () {
 					if (xhr.status === 200) {
 						try {
-							var response = JSON.parse(xhr.responseText);
+							const response = JSON.parse(xhr.responseText);
 							callback(response.success ? response.data : []);
 						} catch (e) {
 							callback([]);
@@ -37,39 +37,39 @@
 					callback([]);
 				};
 				xhr.send();
-			}
+			},
 		};
 	}
 
 	function createInlineProvider(inlineData) {
 		return {
-			getViewed: function () {
+			getViewed() {
 				return inlineData.viewed || [];
 			},
-			getRead: function () {
+			getRead() {
 				return inlineData.read || [];
 			},
-			getSuggestions: function (callback) {
+			getSuggestions(callback) {
 				callback(inlineData.suggestions || []);
-			}
+			},
 		};
 	}
 
 	function getStorage() {
 		return (
 			window.CompletionistStorage || {
-				getViewedPosts: function () {
+				getViewedPosts() {
 					return [];
 				},
-				getReadPosts: function () {
+				getReadPosts() {
 					return [];
 				},
-				getViewedIds: function () {
+				getViewedIds() {
 					return [];
 				},
-				getReadIds: function () {
+				getReadIds() {
 					return [];
-				}
+				},
 			}
 		);
 	}
@@ -82,6 +82,6 @@
 	}
 
 	window.CompletionistDataProvider = {
-		create: create
+		create,
 	};
 })();

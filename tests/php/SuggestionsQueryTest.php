@@ -3,8 +3,8 @@
 namespace Completionist\Tests;
 
 use Completionist\SuggestionsQuery;
-use Completionist\Tests\Mocks\MockPostQuery;
 use Completionist\Tests\Mocks\MockPluginConfigRepository;
+use Completionist\Tests\Mocks\MockPostQuery;
 use PHPUnit\Framework\TestCase;
 
 class SuggestionsQueryTest extends TestCase

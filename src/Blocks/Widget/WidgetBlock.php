@@ -10,11 +10,13 @@ class WidgetBlock
 {
     private WidgetRenderer $renderer;
     private PluginConfigRepository $pluginConfigs;
+    private string $pluginPath;
 
-    public function __construct(WidgetRenderer $renderer, PluginConfigRepository $pluginConfigs)
+    public function __construct(WidgetRenderer $renderer, PluginConfigRepository $pluginConfigs, string $pluginPath)
     {
         $this->renderer = $renderer;
         $this->pluginConfigs = $pluginConfigs;
+        $this->pluginPath = $pluginPath;
     }
 
     public function register(Hooks $hooks): void
@@ -26,7 +28,7 @@ class WidgetBlock
     public function registerBlock(): void
     {
         register_block_type(
-            COMPLETIONIST_PLUGIN_PATH . 'build/blocks/Widget',
+            $this->pluginPath . 'build/blocks/Widget',
             ['render_callback' => [$this, 'renderBlock']]
         );
     }

@@ -2,44 +2,44 @@
 	'use strict';
 
 	function createServerSideSource(inlineData) {
-		var viewed = inlineData.viewed || [];
-		var read = inlineData.read || [];
-		var suggestions = inlineData.suggestions || [];
+		const viewed = inlineData.viewed || [];
+		const read = inlineData.read || [];
+		const suggestions = inlineData.suggestions || [];
 
 		return {
-			getViewed: function () {
+			getViewed() {
 				return viewed;
 			},
-			getRead: function () {
+			getRead() {
 				return read;
 			},
-			getViewedCount: function () {
+			getViewedCount() {
 				return viewed.length;
 			},
-			getReadCount: function () {
+			getReadCount() {
 				return read.length;
 			},
-			getSuggestions: function (callback) {
+			getSuggestions(callback) {
 				callback(suggestions);
-			}
+			},
 		};
 	}
 
 	function createLocalStorageSource(storage, fetcher, cacheHours) {
 		return {
-			getViewed: function () {
+			getViewed() {
 				return storage.getViewedPosts();
 			},
-			getRead: function () {
+			getRead() {
 				return storage.getReadPosts();
 			},
-			getViewedCount: function () {
+			getViewedCount() {
 				return storage.getViewedCount();
 			},
-			getReadCount: function () {
+			getReadCount() {
 				return storage.getReadCount();
 			},
-			getSuggestions: function (callback) {
+			getSuggestions(callback) {
 				if (storage.isSuggestionsCacheValid(cacheHours)) {
 					callback(storage.getSuggestions());
 					return;
@@ -48,12 +48,12 @@
 					storage.setSuggestions(suggestions);
 					callback(suggestions);
 				});
-			}
+			},
 		};
 	}
 
 	window.CompletionistDataSource = {
-		create: function (options) {
+		create(options) {
 			if (options.inlineData) {
 				return createServerSideSource(options.inlineData);
 			}
@@ -62,6 +62,6 @@
 				options.fetcher,
 				options.cacheHours || 24
 			);
-		}
+		},
 	};
 })();

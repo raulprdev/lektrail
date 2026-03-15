@@ -7,9 +7,9 @@ use Completionist\Blocks\Widget\WidgetBlock;
 use Completionist\Blocks\Widget\WidgetRenderer;
 use Completionist\SuggestionsQuery;
 use Completionist\Tests\Mocks\MockHooks;
+use Completionist\Tests\Mocks\MockPluginConfigRepository;
 use Completionist\Tests\Mocks\MockPostQuery;
 use Completionist\Tests\Mocks\MockScriptLoader;
-use Completionist\Tests\Mocks\MockPluginConfigRepository;
 use Completionist\Tests\Mocks\MockTrackingRepository;
 use Completionist\Tests\Mocks\MockUserProvider;
 use Completionist\TrackingService;
@@ -43,7 +43,7 @@ class WidgetBlockTest extends TestCase
         $suggestionsQuery = new SuggestionsQuery($pluginConfigs, $postQuery);
         $renderer = new WidgetRenderer($assets, $trackingService, $suggestionsQuery, $postQuery, $pluginConfigs);
 
-        return new WidgetBlock($renderer, $pluginConfigs);
+        return new WidgetBlock($renderer, $pluginConfigs, dirname(__DIR__, 2) . '/');
     }
 
     public function testRegistersInitAction(): void

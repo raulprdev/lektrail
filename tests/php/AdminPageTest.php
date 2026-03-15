@@ -23,7 +23,7 @@ class AdminPageTest extends TestCase
     public function testRegistersAdminInitHook(): void
     {
         $hooks = new MockHooks();
-	    $pluginConfigs = new MockPluginConfigRepository();
+        $pluginConfigs = new MockPluginConfigRepository();
         $page = new AdminPage($pluginConfigs);
 
         $page->register($hooks);
@@ -33,10 +33,10 @@ class AdminPageTest extends TestCase
 
     public function testGetSettingsReturnsFromRepository(): void
     {
-	    $pluginConfigs = new MockPluginConfigRepository([ 'max_viewed' => 12]);
+        $pluginConfigs = new MockPluginConfigRepository([ 'max_viewed' => 12]);
         $page = new AdminPage($pluginConfigs);
 
-	    $pluginConfig = $page->getPluginConfig();
+        $pluginConfig = $page->getPluginConfig();
 
         $this->assertEquals(12, $pluginConfig->maxViewed());
     }

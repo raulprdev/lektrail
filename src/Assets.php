@@ -2,10 +2,10 @@
 
 namespace Completionist;
 
+use Completionist\Blocks\Widget\WidgetRenderer;
+use Completionist\Contracts\PluginConfigRepository;
 use Completionist\Contracts\PostQuery;
 use Completionist\Contracts\ScriptLoader;
-use Completionist\Contracts\PluginConfigRepository;
-use Completionist\Blocks\Widget\WidgetRenderer;
 
 class Assets
 {

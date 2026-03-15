@@ -34,9 +34,9 @@ class PluginConfigRepositoryTest extends TestCase
             'post_types' => ['post', 'page'],
             'max_viewed' => 10,
         ]);
-	    $pluginConfigs = new PluginConfigRepository($this->options, $this->locale);
+        $pluginConfigs = new PluginConfigRepository($this->options, $this->locale);
 
-	    $pluginConfig = $pluginConfigs->load();
+        $pluginConfig = $pluginConfigs->load();
 
         $this->assertEquals(['post', 'page'], $pluginConfig->postTypes());
         $this->assertEquals(10, $pluginConfig->maxViewed());
@@ -44,10 +44,10 @@ class PluginConfigRepositoryTest extends TestCase
 
     public function testSaveStoresSettings(): void
     {
-	    $pluginConfigs = new PluginConfigRepository($this->options, $this->locale);
-	    $pluginConfig = PluginConfig::fromArray([ 'max_viewed' => 7]);
+        $pluginConfigs = new PluginConfigRepository($this->options, $this->locale);
+        $pluginConfig = PluginConfig::fromArray([ 'max_viewed' => 7]);
 
-	    $pluginConfigs->save($pluginConfig);
+        $pluginConfigs->save($pluginConfig);
 
         $saved = $this->options->get(PluginConfigRepository::OPTION_KEY);
         $this->assertEquals(7, $saved['max_viewed']);
@@ -56,9 +56,9 @@ class PluginConfigRepositoryTest extends TestCase
     public function testLoadReturnsEnglishLabelsForEnglishLocale(): void
     {
         $this->locale->code = 'en_US';
-	    $pluginConfigs = new PluginConfigRepository($this->options, $this->locale);
+        $pluginConfigs = new PluginConfigRepository($this->options, $this->locale);
 
-	    $pluginConfig = $pluginConfigs->load();
+        $pluginConfig = $pluginConfigs->load();
 
         $this->assertEquals('Continue reading', $pluginConfig->labelContinue());
         $this->assertEquals('Completed', $pluginConfig->labelCompleted());
@@ -68,9 +68,9 @@ class PluginConfigRepositoryTest extends TestCase
     public function testLoadReturnsSpanishLabelsForSpanishLocale(): void
     {
         $this->locale->code = 'es_ES';
-	    $pluginConfigs = new PluginConfigRepository($this->options, $this->locale);
+        $pluginConfigs = new PluginConfigRepository($this->options, $this->locale);
 
-	    $pluginConfig = $pluginConfigs->load();
+        $pluginConfig = $pluginConfigs->load();
 
         $this->assertEquals('Seguir leyendo', $pluginConfig->labelContinue());
         $this->assertEquals('Completados', $pluginConfig->labelCompleted());
@@ -80,9 +80,9 @@ class PluginConfigRepositoryTest extends TestCase
     public function testLoadReturnsSpanishLabelsForArgentineLocale(): void
     {
         $this->locale->code = 'es_AR';
-	    $pluginConfigs = new PluginConfigRepository($this->options, $this->locale);
+        $pluginConfigs = new PluginConfigRepository($this->options, $this->locale);
 
-	    $pluginConfig = $pluginConfigs->load();
+        $pluginConfig = $pluginConfigs->load();
 
         $this->assertEquals('Seguir leyendo', $pluginConfig->labelContinue());
     }
@@ -93,9 +93,9 @@ class PluginConfigRepositoryTest extends TestCase
         $this->options->set(PluginConfigRepository::OPTION_KEY, [
             'label_continue' => 'Custom label',
         ]);
-	    $pluginConfigs = new PluginConfigRepository($this->options, $this->locale);
+        $pluginConfigs = new PluginConfigRepository($this->options, $this->locale);
 
-	    $pluginConfig = $pluginConfigs->load();
+        $pluginConfig = $pluginConfigs->load();
 
         $this->assertEquals('Custom label', $pluginConfig->labelContinue());
     }
@@ -103,9 +103,9 @@ class PluginConfigRepositoryTest extends TestCase
     public function testLoadReturnsSpanishConsentLabelsForSpanishLocale(): void
     {
         $this->locale->code = 'es_ES';
-	    $pluginConfigs = new PluginConfigRepository($this->options, $this->locale);
+        $pluginConfigs = new PluginConfigRepository($this->options, $this->locale);
 
-	    $pluginConfig = $pluginConfigs->load();
+        $pluginConfig = $pluginConfigs->load();
 
         $this->assertEquals('¿Seguir tu progreso de lectura en este sitio?', $pluginConfig->consentMessage());
         $this->assertEquals('Sí, seguir mi lectura', $pluginConfig->consentCheckboxLabel());

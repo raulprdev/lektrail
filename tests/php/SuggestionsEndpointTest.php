@@ -5,8 +5,8 @@ namespace Completionist\Tests;
 use Completionist\SuggestionsEndpoint;
 use Completionist\SuggestionsQuery;
 use Completionist\Tests\Mocks\MockJsonResponse;
-use Completionist\Tests\Mocks\MockPostQuery;
 use Completionist\Tests\Mocks\MockPluginConfigRepository;
+use Completionist\Tests\Mocks\MockPostQuery;
 use PHPUnit\Framework\TestCase;
 
 class SuggestionsEndpointTest extends TestCase

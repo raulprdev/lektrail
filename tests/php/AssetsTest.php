@@ -3,9 +3,9 @@
 namespace Completionist\Tests;
 
 use Completionist\Assets;
+use Completionist\Tests\Mocks\MockPluginConfigRepository;
 use Completionist\Tests\Mocks\MockPostQuery;
 use Completionist\Tests\Mocks\MockScriptLoader;
-use Completionist\Tests\Mocks\MockPluginConfigRepository;
 use PHPUnit\Framework\TestCase;
 
 class AssetsTest extends TestCase

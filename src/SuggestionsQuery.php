@@ -2,8 +2,8 @@
 
 namespace Completionist;
 
-use Completionist\Contracts\PostQuery;
 use Completionist\Contracts\PluginConfigRepository;
+use Completionist\Contracts\PostQuery;
 
 class SuggestionsQuery
 {

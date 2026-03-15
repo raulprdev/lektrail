@@ -58,8 +58,8 @@
 	}
 
 	function isInSuggestions(postId) {
-		var data = getData();
-		for (var i = 0; i < data.suggestions.length; i++) {
+		const data = getData();
+		for (let i = 0; i < data.suggestions.length; i++) {
 			if (data.suggestions[i].id === postId) {
 				return true;
 			}
@@ -69,7 +69,7 @@
 
 	function clearSuggestionsIfNeeded(postId) {
 		if (isInSuggestions(postId)) {
-			var data = getData();
+			const data = getData();
 			data.suggestions = [];
 			data.suggestionsUpdatedAt = null;
 			setData(data);
