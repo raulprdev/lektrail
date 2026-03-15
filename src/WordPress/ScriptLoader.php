@@ -16,6 +16,11 @@ class ScriptLoader implements ScriptLoaderInterface
         wp_enqueue_style($handle, $url, $deps, $version);
     }
 
+    public function registerStyle(string $handle, string $url, array $deps, string $version): void
+    {
+        wp_register_style($handle, $url, $deps, $version);
+    }
+
     public function addInlineScript(string $handle, string $code, string $position): void
     {
         wp_add_inline_script($handle, $code, $position);

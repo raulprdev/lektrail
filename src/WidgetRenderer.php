@@ -56,7 +56,8 @@ class WidgetRenderer
         }
 
         return sprintf(
-            '<div id="%s" data-endpoint="%s" data-posts-endpoint="%s"%s></div>',
+            '<div id="%s" class="%s" data-endpoint="%s" data-posts-endpoint="%s"%s></div>',
+            self::WIDGET_ID,
             self::WIDGET_ID,
             esc_url(SuggestionsEndpoint::url()),
             esc_url(rest_url('wp/v2/posts')),

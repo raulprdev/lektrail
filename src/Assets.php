@@ -232,6 +232,16 @@ class Assets
         return $this->version;
     }
 
+    public function registerWidgetStyle(): void
+    {
+        $this->scripts->registerStyle(
+            self::HANDLE_WIDGET,
+            $this->pluginUrl . 'assets/css/widget.css',
+            [],
+            $this->fileVersion('assets/css/widget.css')
+        );
+    }
+
     private function enqueueConsent(): void
     {
         $this->scripts->enqueueScript(

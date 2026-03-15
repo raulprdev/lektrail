@@ -156,7 +156,7 @@
 			config.maxSuggestions
 		);
 
-		const classes = [];
+		const classes = ['completionist-widget'];
 		if (config.showExcerpt) {
 			classes.push('completionist-show-excerpt');
 		}

@@ -28,6 +28,8 @@ class WidgetBlock
 
     public function registerBlock(): void
     {
+        $this->assets->registerWidgetStyle();
+
         register_block_type(
             $this->pluginPath . 'build/blocks/Widget',
             ['render_callback' => [$this, 'renderBlock']]

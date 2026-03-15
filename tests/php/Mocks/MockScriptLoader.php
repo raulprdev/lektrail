@@ -8,6 +8,7 @@ class MockScriptLoader implements ScriptLoader
 {
     public array $scripts = [];
     public array $styles = [];
+    public array $registeredStyles = [];
     public array $inlineScripts = [];
 
     public function enqueueScript(string $handle, string $url, array $deps, string $version, bool $inFooter): void
@@ -18,6 +19,11 @@ class MockScriptLoader implements ScriptLoader
     public function enqueueStyle(string $handle, string $url, array $deps, string $version): void
     {
         $this->styles[$handle] = compact('url', 'deps', 'version');
+    }
+
+    public function registerStyle(string $handle, string $url, array $deps, string $version): void
+    {
+        $this->registeredStyles[$handle] = compact('url', 'deps', 'version');
     }
 
     public function addInlineScript(string $handle, string $code, string $position): void

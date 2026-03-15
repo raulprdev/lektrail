@@ -661,6 +661,18 @@ describe('Widget: clear data button', () => {
     });
 });
 
+describe('Widget: base class preservation', () => {
+    test('preserves completionist-widget class after rendering', () => {
+        const { container, xhrInstances } = setupWidgetTest();
+        window.CompletionistStorage = mockStorage();
+
+        loadWidget();
+        triggerXhrResponses(xhrInstances, { suggestions: [] });
+
+        expect(container.className).toContain('completionist-widget');
+    });
+});
+
 describe('Widget: server-side tracking (inline data)', () => {
     test('hides clear button when server-side tracking is enabled', () => {
         const { container } = setupWidgetTest({ showClearButton: true, serverSideTracking: true });

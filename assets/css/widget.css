@@ -1,4 +1,4 @@
-#completionist-widget {
+.completionist-widget {
     padding: 1rem;
     border: 1px solid #ddd;
     border-radius: 4px;
@@ -32,25 +32,25 @@
     color: #555;
 }
 
-#completionist-widget .completionist-list {
+.completionist-widget .completionist-list {
     margin: 0;
     padding: 0;
     list-style: none;
     list-style-type: none;
 }
 
-#completionist-widget .completionist-list .completionist-item {
+.completionist-widget .completionist-list .completionist-item {
     margin-bottom: 0.75rem;
     padding: 0;
     list-style: none;
     list-style-type: none;
 }
 
-#completionist-widget .completionist-list .completionist-item::before {
+.completionist-widget .completionist-list .completionist-item::before {
     content: none;
 }
 
-#completionist-widget .completionist-list .completionist-item:last-child {
+.completionist-widget .completionist-list .completionist-item:last-child {
     margin-bottom: 0;
 }
 
