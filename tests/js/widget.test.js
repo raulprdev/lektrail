@@ -462,6 +462,27 @@ describe('Widget: consent banner', () => {
 
         expect(container.innerHTML).not.toContain('completionist-consent');
     });
+
+    test('skips consent when serverSideTracking is enabled even if requireConsent is true', () => {
+        const { container } = setupWidgetTest({
+            requireConsent: true,
+            serverSideTracking: true
+        });
+        window.CompletionistInlineData = {
+            viewed: [],
+            read: [],
+            suggestions: []
+        };
+        window.CompletionistConsentManager = {
+            create: function() {
+                return mockConsentManager({ consent: null, isBuiltIn: true });
+            }
+        };
+
+        loadWidget();
+
+        expect(container.innerHTML).not.toContain('completionist-consent');
+    });
 });
 
 describe('Widget: caching', () => {

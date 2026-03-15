@@ -231,7 +231,7 @@
 
 		const config = getConfig(container);
 
-		if (config.requireConsent) {
+		if (config.requireConsent && !config.serverSideTracking) {
 			const consentManager = getConsentManager();
 			if (consentManager && consentManager.hasConsent() !== true) {
 				if (consentManager.isBuiltInProvider()) {
