@@ -43,7 +43,7 @@ class WidgetShortcodeTest extends TestCase
         );
         $trackingService = new TrackingService($this->userProvider, $this->trackings, $this->pluginConfigs);
         $suggestionsQuery = new SuggestionsQuery($this->pluginConfigs, $this->postQuery);
-        $renderer = new WidgetRenderer($assets, $trackingService, $suggestionsQuery, $this->postQuery);
+        $renderer = new WidgetRenderer($assets, $trackingService, $suggestionsQuery, $this->postQuery, $this->pluginConfigs);
 
         return new WidgetShortcode($renderer);
     }

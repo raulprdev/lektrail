@@ -24,6 +24,7 @@ class PluginConfigRepository implements SettingsRepositoryInterface
 
     private OptionsInterface $options;
     private LocaleInterface $locale;
+    private ?PluginConfig $cached = null;
 
     public function __construct(OptionsInterface $options, LocaleInterface $locale)
     {
@@ -33,14 +34,19 @@ class PluginConfigRepository implements SettingsRepositoryInterface
 
     public function load(): PluginConfig
     {
+        if ($this->cached !== null) {
+            return $this->cached;
+        }
         $data = $this->options->get(self::OPTION_KEY, []);
         $defaults = $this->getLocaleDefaults();
-        return PluginConfig::fromArray($data, $defaults);
+        $this->cached = PluginConfig::fromArray($data, $defaults);
+        return $this->cached;
     }
 
     public function save(PluginConfig $pluginConfig): void
     {
         $this->options->set(self::OPTION_KEY, $pluginConfig->toArray());
+        $this->cached = $pluginConfig;
     }
 
     private function getLocaleDefaults(): array

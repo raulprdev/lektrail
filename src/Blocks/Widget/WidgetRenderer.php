@@ -3,7 +3,9 @@
 namespace Completionist\Blocks\Widget;
 
 use Completionist\Assets;
+use Completionist\Contracts\PluginConfigRepository;
 use Completionist\Contracts\PostQuery;
+use Completionist\InstanceSettings;
 use Completionist\SuggestionsEndpoint;
 use Completionist\SuggestionsQuery;
 use Completionist\TrackingService;
@@ -16,20 +18,23 @@ class WidgetRenderer
     private TrackingService $trackingService;
     private SuggestionsQuery $suggestionsQuery;
     private PostQuery $postQuery;
+    private PluginConfigRepository $pluginConfigs;
 
     public function __construct(
         Assets $assets,
         TrackingService $trackingService,
         SuggestionsQuery $suggestionsQuery,
-        PostQuery $postQuery
+        PostQuery $postQuery,
+        PluginConfigRepository $pluginConfigs
     ) {
         $this->assets = $assets;
         $this->trackingService = $trackingService;
         $this->suggestionsQuery = $suggestionsQuery;
         $this->postQuery = $postQuery;
+        $this->pluginConfigs = $pluginConfigs;
     }
 
-    public function render(): string
+    public function render(array $overrides = []): string
     {
         $inlineData = null;
 
@@ -48,11 +53,19 @@ class WidgetRenderer
 
         $this->assets->enqueueWidget($inlineData);
 
+        $configAttr = '';
+        if (!empty($overrides)) {
+            $globalConfig = $this->pluginConfigs->load();
+            $mergedConfig = InstanceSettings::merge($globalConfig, $overrides);
+            $configAttr = sprintf(' data-config="%s"', esc_attr(json_encode($mergedConfig->toJsConfig())));
+        }
+
         return sprintf(
-            '<div id="%s" data-endpoint="%s" data-posts-endpoint="%s"></div>',
+            '<div id="%s" data-endpoint="%s" data-posts-endpoint="%s"%s></div>',
             self::WIDGET_ID,
             esc_url(SuggestionsEndpoint::url()),
-            esc_url(rest_url('wp/v2/posts'))
+            esc_url(rest_url('wp/v2/posts')),
+            $configAttr
         );
     }
 

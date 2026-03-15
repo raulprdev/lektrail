@@ -54,12 +54,12 @@ add_action('plugins_loaded', function () {
 
     $suggestionsQuery = new Completionist\SuggestionsQuery($pluginConfigs, $posts);
     $suggestions = new Completionist\SuggestionsEndpoint($suggestionsQuery, $response);
-    $widgetRenderer = new Completionist\Blocks\Widget\WidgetRenderer($assets, $trackingService, $suggestionsQuery, $posts);
+    $widgetRenderer = new Completionist\Blocks\Widget\WidgetRenderer($assets, $trackingService, $suggestionsQuery, $posts, $pluginConfigs);
     $shortcode = new Completionist\Shortcodes\WidgetShortcode($widgetRenderer);
     $adminPage = new Completionist\AdminPage($pluginConfigs);
     $trackingEndpoint = new Completionist\TrackingEndpoint($trackingService, $response);
 
-    $widgetBlock = new Completionist\Blocks\Widget\WidgetBlock($widgetRenderer);
+    $widgetBlock = new Completionist\Blocks\Widget\WidgetBlock($widgetRenderer, $pluginConfigs);
     $widgetBlock->register($hooks);
 
     $plugin = new Completionist\Plugin($assets, $pluginConfigs, $context, $suggestions, $shortcode, $adminPage, $hooks, $trackingService, $trackingEndpoint);

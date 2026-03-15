@@ -3,11 +3,23 @@
 
 	const CONSENT_CHECKBOX_ID = 'completionist-consent-checkbox';
 
-	function getConfig() {
+	function getConfig(container) {
 		if (!window.CompletionistConfig) {
 			throw new Error('CompletionistConfig not found');
 		}
-		return window.CompletionistConfig;
+		var config = window.CompletionistConfig;
+		if (container && container.dataset.config) {
+			try {
+				var instanceConfig = JSON.parse(container.dataset.config);
+				config = Object.assign({}, config, instanceConfig);
+				if (instanceConfig.labels) {
+					config.labels = Object.assign({}, config.labels, instanceConfig.labels);
+				}
+			} catch (e) {
+				// Invalid JSON, use global config
+			}
+		}
+		return config;
 	}
 
 	function getStorage() {
@@ -59,8 +71,7 @@
 		);
 	}
 
-	function renderLoading(container) {
-		const config = getConfig();
+	function renderLoading(container, config) {
 		container.innerHTML =
 			'<div class="completionist-loading">' +
 			config.labels.loading +
@@ -86,15 +97,13 @@
 		return html;
 	}
 
-	function renderEmptyState() {
-		const config = getConfig();
+	function renderEmptyState(config) {
 		return (
 			'<div class="completionist-empty">' + config.labels.empty + '</div>'
 		);
 	}
 
-	function renderClearButton() {
-		const config = getConfig();
+	function renderClearButton(config) {
 		const label = config.labels.clear || 'Clear my data';
 		return (
 			'<div class="completionist-clear">' +
@@ -125,8 +134,7 @@
 		}
 	}
 
-	function renderWidget(container, dataSource, suggestions) {
-		const config = getConfig();
+	function renderWidget(container, dataSource, suggestions, config) {
 		const storage = getStorage();
 		const viewedPosts = dataSource.getViewed();
 		const readPosts = dataSource.getRead();
@@ -158,7 +166,7 @@
 		const hasUserData = viewedCount > 0 || readCount > 0;
 		const canClear = !config.serverSideTracking;
 		if (config.showClearButton !== false && hasUserData && canClear) {
-			html += renderClearButton();
+			html += renderClearButton(config);
 		}
 
 		if (config.viewedEnabled) {
@@ -186,7 +194,7 @@
 		const hasContent =
 			viewedSlice.length || readSlice.length || suggestionsSlice.length;
 		if (!hasContent) {
-			html += renderEmptyState();
+			html += renderEmptyState(config);
 		}
 
 		container.innerHTML = html;
@@ -196,7 +204,7 @@
 			clearBtn.addEventListener('click', function () {
 				storage.clearHistory();
 				var emptySource = window.CompletionistDataSource.create({ inlineData: {} });
-				renderWidget(container, emptySource, suggestions);
+				renderWidget(container, emptySource, suggestions, config);
 			});
 		}
 	}
@@ -209,11 +217,13 @@
 	}
 
 	function init() {
-		const config = getConfig();
-		const container = document.getElementById(config.widgetId);
+		const globalConfig = getConfig();
+		const container = document.getElementById(globalConfig.widgetId);
 		if (!container) {
 			return;
 		}
+
+		const config = getConfig(container);
 
 		if (config.requireConsent) {
 			const consentManager = getConsentManager();
@@ -309,10 +319,10 @@
 	function initWidget(container, config) {
 		var dataSource = createDataSource(config, container);
 
-		renderLoading(container);
+		renderLoading(container, config);
 
 		dataSource.getSuggestions(function (suggestions) {
-			renderWidget(container, dataSource, suggestions);
+			renderWidget(container, dataSource, suggestions, config);
 		});
 	}
 

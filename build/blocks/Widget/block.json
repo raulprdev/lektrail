@@ -18,6 +18,64 @@
     "html": false,
     "multiple": false
   },
+  "attributes": {
+    "maxViewed": {
+      "type": "number"
+    },
+    "maxRead": {
+      "type": "number"
+    },
+    "maxSuggestions": {
+      "type": "number"
+    },
+    "showExcerpt": {
+      "type": "boolean"
+    },
+    "showThumbnail": {
+      "type": "boolean"
+    },
+    "excerptLength": {
+      "type": "number"
+    },
+    "viewedEnabled": {
+      "type": "boolean"
+    },
+    "completedEnabled": {
+      "type": "boolean"
+    },
+    "showClearButton": {
+      "type": "boolean"
+    },
+    "labelContinue": {
+      "type": "string"
+    },
+    "labelCompleted": {
+      "type": "string"
+    },
+    "labelSuggestions": {
+      "type": "string"
+    },
+    "labelEmpty": {
+      "type": "string"
+    },
+    "labelLoading": {
+      "type": "string"
+    },
+    "labelClear": {
+      "type": "string"
+    },
+    "suggestionOrder": {
+      "type": "string",
+      "enum": [
+        "random",
+        "recent",
+        "related"
+      ]
+    },
+    "suggestionsCacheHours": {
+      "type": "number"
+    }
+  },
   "editorScript": "file:./index.js",
   "editorStyle": "file:./index.css"
 }

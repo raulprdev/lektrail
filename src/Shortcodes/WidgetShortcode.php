@@ -4,6 +4,7 @@ namespace Completionist\Shortcodes;
 
 use Completionist\Blocks\Widget\WidgetRenderer;
 use Completionist\Contracts\Hooks;
+use Completionist\InstanceSettings;
 
 class WidgetShortcode
 {
@@ -23,6 +24,7 @@ class WidgetShortcode
 
     public function render(array $atts): string
     {
-        return $this->renderer->render();
+        $overrides = InstanceSettings::fromShortcodeAttributes($atts);
+        return $this->renderer->render($overrides);
     }
 }

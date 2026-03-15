@@ -41,9 +41,9 @@ class WidgetBlockTest extends TestCase
         $trackings = new MockTrackingRepository();
         $trackingService = new TrackingService($userProvider, $trackings, $pluginConfigs);
         $suggestionsQuery = new SuggestionsQuery($pluginConfigs, $postQuery);
-        $renderer = new WidgetRenderer($assets, $trackingService, $suggestionsQuery, $postQuery);
+        $renderer = new WidgetRenderer($assets, $trackingService, $suggestionsQuery, $postQuery, $pluginConfigs);
 
-        return new WidgetBlock($renderer);
+        return new WidgetBlock($renderer, $pluginConfigs);
     }
 
     public function testRegistersInitAction(): void
