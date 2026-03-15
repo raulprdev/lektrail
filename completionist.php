@@ -59,7 +59,7 @@ add_action('plugins_loaded', function () {
     $adminPage = new Completionist\AdminPage($pluginConfigs);
     $trackingEndpoint = new Completionist\TrackingEndpoint($trackingService, $response);
 
-    $widgetBlock = new Completionist\Blocks\Widget\WidgetBlock($widgetRenderer, $pluginConfigs, $assets, $pluginPath);
+    $widgetBlock = new Completionist\Blocks\Widget\WidgetBlock($widgetRenderer, $assets, $pluginPath);
     $widgetBlock->register($hooks);
 
     $plugin = new Completionist\Plugin($assets, $pluginConfigs, $context, $suggestions, $previewEndpoint, $shortcode, $adminPage, $hooks, $trackingService, $trackingEndpoint);

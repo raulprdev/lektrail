@@ -160,6 +160,13 @@ class Assets
             [],
             $this->fileVersion('assets/css/widget.css')
         );
+
+        $config = $this->pluginConfigs->load();
+        $this->scripts->addInlineScript(
+            'wp-blocks',
+            'window.completionistDefaults = ' . json_encode($config->toJsConfig()) . ';',
+            'before'
+        );
     }
 
     private function enqueueStorage(): void
