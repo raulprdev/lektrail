@@ -297,6 +297,9 @@ class PluginConfig
         return $this->trackLoggedInUsers;
     }
 
+    /**
+     * @see src/Blocks/Widget/edit.js buildConfig() - must match this structure
+     */
     public function toJsConfig(): array
     {
         return [

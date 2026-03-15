@@ -14,6 +14,10 @@ import apiFetch from '@wordpress/api-fetch';
 
 const defaults = window.completionistDefaults;
 
+/**
+ * Build widget config for editor preview.
+ * Structure must match PluginConfig::toJsConfig() in src/PluginConfig.php
+ */
 function buildConfig(attributes) {
 	return {
 		widgetId: 'completionist-editor-preview',
