@@ -52,7 +52,7 @@ export default function Edit({ attributes, setAttributes }) {
 	const maxSuggestions = attributes.maxSuggestions ?? defaults?.maxSuggestions;
 	const showExcerpt = attributes.showExcerpt ?? defaults?.showExcerpt;
 	const showThumbnail = attributes.showThumbnail ?? defaults?.showThumbnail;
-	const excerptLength = attributes.excerptLength;
+	const excerptLength = attributes.excerptLength ?? defaults?.excerptLength;
 	const viewedEnabled = attributes.viewedEnabled ?? defaults?.viewedEnabled;
 	const completedEnabled = attributes.completedEnabled ?? defaults?.completedEnabled;
 	const showClearButton = attributes.showClearButton ?? defaults?.showClearButton;

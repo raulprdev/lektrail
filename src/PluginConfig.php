@@ -312,6 +312,7 @@ class PluginConfig
             'suggestionsCacheHours' => $this->suggestionsCacheHours,
             'showExcerpt' => $this->showExcerpt,
             'showThumbnail' => $this->showThumbnail,
+            'excerptLength' => $this->excerptLength,
             'readThreshold' => $this->readThreshold,
             'showClearButton' => $this->showClearButton,
             'labels' => [
