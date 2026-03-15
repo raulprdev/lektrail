@@ -1,18 +1,48 @@
 import { useBlockProps, InspectorControls } from '@wordpress/block-editor';
 import {
-	Placeholder,
 	PanelBody,
 	TextControl,
 	ToggleControl,
 	RangeControl,
 	SelectControl,
+	Spinner,
 } from '@wordpress/components';
-import { pages } from '@wordpress/icons';
 import { __ } from '@wordpress/i18n';
+import { useEffect, useRef, useState, useMemo } from '@wordpress/element';
+import { useDebounce } from '@wordpress/compose';
+import apiFetch from '@wordpress/api-fetch';
 
 const defaults = window.completionistDefaults;
 
+function buildConfig(attributes) {
+	return {
+		widgetId: 'completionist-editor-preview',
+		maxViewed: attributes.maxViewed ?? defaults?.maxViewed ?? 3,
+		maxRead: attributes.maxRead ?? defaults?.maxRead ?? 3,
+		maxSuggestions: attributes.maxSuggestions ?? defaults?.maxSuggestions ?? 3,
+		showExcerpt: attributes.showExcerpt ?? defaults?.showExcerpt ?? false,
+		showThumbnail: attributes.showThumbnail ?? defaults?.showThumbnail ?? false,
+		viewedEnabled: attributes.viewedEnabled ?? defaults?.viewedEnabled ?? true,
+		completedEnabled: attributes.completedEnabled ?? defaults?.completedEnabled ?? true,
+		showClearButton: false,
+		requireConsent: false,
+		serverSideTracking: true,
+		labels: {
+			continue: attributes.labelContinue ?? defaults?.labels?.continue ?? 'Continue reading',
+			completed: attributes.labelCompleted ?? defaults?.labels?.completed ?? 'Completed',
+			suggestions: attributes.labelSuggestions ?? defaults?.labels?.suggestions ?? 'Suggested reading',
+			empty: attributes.labelEmpty ?? defaults?.labels?.empty ?? 'Start reading!',
+			loading: attributes.labelLoading ?? defaults?.labels?.loading ?? 'Loading...',
+			clear: attributes.labelClear ?? defaults?.labels?.clear ?? 'Clear history',
+		},
+	};
+}
+
 export default function Edit({ attributes, setAttributes }) {
+	const containerRef = useRef(null);
+	const [previewData, setPreviewData] = useState(null);
+	const [isLoading, setIsLoading] = useState(true);
+
 	const maxViewed = attributes.maxViewed ?? defaults?.maxViewed;
 	const maxRead = attributes.maxRead ?? defaults?.maxRead;
 	const maxSuggestions = attributes.maxSuggestions ?? defaults?.maxSuggestions;
@@ -29,7 +59,34 @@ export default function Edit({ attributes, setAttributes }) {
 	const labelLoading = attributes.labelLoading ?? defaults?.labels?.loading;
 	const labelClear = attributes.labelClear ?? defaults?.labels?.clear;
 	const suggestionOrder = attributes.suggestionOrder;
-	const suggestionsCacheHours = attributes.suggestionsCacheHours ?? defaults?.suggestionsCacheHours;
+	const suggestionsCacheHours =
+		attributes.suggestionsCacheHours ?? defaults?.suggestionsCacheHours;
+
+	const config = useMemo(() => buildConfig(attributes), [attributes]);
+
+	useEffect(() => {
+		apiFetch({ path: '/completionist/v1/preview' })
+			.then((data) => {
+				setPreviewData(data);
+				setIsLoading(false);
+			})
+			.catch(() => {
+				setIsLoading(false);
+			});
+	}, []);
+
+	const initWidget = useDebounce(() => {
+		if (!containerRef.current || !previewData || !window.CompletionistWidget) {
+			return;
+		}
+		window.CompletionistWidget.init(containerRef.current, previewData, config);
+	}, 300);
+
+	useEffect(() => {
+		if (previewData) {
+			initWidget();
+		}
+	}, [previewData, config, initWidget]);
 
 	return (
 		<>
@@ -111,12 +168,17 @@ export default function Edit({ attributes, setAttributes }) {
 						label={__('Suggestion Order', 'completionist')}
 						value={suggestionOrder}
 						options={[
-							{ label: __('Default (use global)', 'completionist'), value: '' },
+							{
+								label: __('Default (use global)', 'completionist'),
+								value: '',
+							},
 							{ label: __('Random', 'completionist'), value: 'random' },
 							{ label: __('Recent', 'completionist'), value: 'recent' },
 							{ label: __('Related', 'completionist'), value: 'related' },
 						]}
-						onChange={(value) => setAttributes({ suggestionOrder: value || undefined })}
+						onChange={(value) =>
+							setAttributes({ suggestionOrder: value || undefined })
+						}
 					/>
 				</PanelBody>
 
@@ -127,37 +189,52 @@ export default function Edit({ attributes, setAttributes }) {
 					<TextControl
 						label={__('Continue Reading Label', 'completionist')}
 						value={labelContinue || ''}
-						onChange={(value) => setAttributes({ labelContinue: value || undefined })}
+						onChange={(value) =>
+							setAttributes({ labelContinue: value || undefined })
+						}
 						placeholder={__('Continue reading', 'completionist')}
 					/>
 					<TextControl
 						label={__('Completed Label', 'completionist')}
 						value={labelCompleted || ''}
-						onChange={(value) => setAttributes({ labelCompleted: value || undefined })}
+						onChange={(value) =>
+							setAttributes({ labelCompleted: value || undefined })
+						}
 						placeholder={__('Completed', 'completionist')}
 					/>
 					<TextControl
 						label={__('Suggestions Label', 'completionist')}
 						value={labelSuggestions || ''}
-						onChange={(value) => setAttributes({ labelSuggestions: value || undefined })}
+						onChange={(value) =>
+							setAttributes({ labelSuggestions: value || undefined })
+						}
 						placeholder={__('Suggested reading', 'completionist')}
 					/>
 					<TextControl
 						label={__('Empty State Label', 'completionist')}
 						value={labelEmpty || ''}
-						onChange={(value) => setAttributes({ labelEmpty: value || undefined })}
-						placeholder={__('Start reading to track your progress!', 'completionist')}
+						onChange={(value) =>
+							setAttributes({ labelEmpty: value || undefined })
+						}
+						placeholder={__(
+							'Start reading to track your progress!',
+							'completionist'
+						)}
 					/>
 					<TextControl
 						label={__('Loading Label', 'completionist')}
 						value={labelLoading || ''}
-						onChange={(value) => setAttributes({ labelLoading: value || undefined })}
+						onChange={(value) =>
+							setAttributes({ labelLoading: value || undefined })
+						}
 						placeholder={__('Loading suggestions...', 'completionist')}
 					/>
 					<TextControl
 						label={__('Clear Button Label', 'completionist')}
 						value={labelClear || ''}
-						onChange={(value) => setAttributes({ labelClear: value || undefined })}
+						onChange={(value) =>
+							setAttributes({ labelClear: value || undefined })
+						}
 						placeholder={__('Clear history', 'completionist')}
 					/>
 				</PanelBody>
@@ -169,7 +246,9 @@ export default function Edit({ attributes, setAttributes }) {
 					<RangeControl
 						label={__('Suggestions Cache (hours)', 'completionist')}
 						value={suggestionsCacheHours}
-						onChange={(value) => setAttributes({ suggestionsCacheHours: value })}
+						onChange={(value) =>
+							setAttributes({ suggestionsCacheHours: value })
+						}
 						min={1}
 						max={168}
 						allowReset
@@ -179,14 +258,23 @@ export default function Edit({ attributes, setAttributes }) {
 			</InspectorControls>
 
 			<div {...useBlockProps()}>
-				<Placeholder
-					icon={pages}
-					label={__('Completionist Widget', 'completionist')}
-					instructions={__(
-						'Displays reading progress and suggestions. Use the sidebar to customize this instance.',
-						'completionist'
-					)}
-				/>
+				{isLoading ? (
+					<div
+						style={{
+							display: 'flex',
+							justifyContent: 'center',
+							padding: '20px',
+						}}
+					>
+						<Spinner />
+					</div>
+				) : (
+					<div
+						ref={containerRef}
+						id="completionist-editor-preview"
+						className="completionist-widget"
+					/>
+				)}
 			</div>
 		</>
 	);

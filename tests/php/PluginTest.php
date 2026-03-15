@@ -6,6 +6,7 @@ use Completionist\AdminPage;
 use Completionist\Assets;
 use Completionist\Blocks\Widget\WidgetRenderer;
 use Completionist\Plugin;
+use Completionist\PreviewEndpoint;
 use Completionist\Shortcodes\WidgetShortcode;
 use Completionist\SuggestionsEndpoint;
 use Completionist\SuggestionsQuery;
@@ -53,6 +54,7 @@ class PluginTest extends TestCase
         $trackingService = new TrackingService($this->users, $this->trackings, $this->pluginConfigs);
         $query = new SuggestionsQuery($this->pluginConfigs, $posts);
         $suggestions = new SuggestionsEndpoint($query, new MockJsonResponse());
+        $preview = new PreviewEndpoint($posts);
         $renderer = new WidgetRenderer($assets, $trackingService, $query, $posts, $this->pluginConfigs);
         $shortcode = new WidgetShortcode($renderer);
         $adminPage = new AdminPage($this->pluginConfigs);
@@ -63,6 +65,7 @@ class PluginTest extends TestCase
             $this->pluginConfigs,
             $this->context,
             $suggestions,
+            $preview,
             $shortcode,
             $adminPage,
             $hooks,

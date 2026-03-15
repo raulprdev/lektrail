@@ -346,4 +346,12 @@
 	} else {
 		init();
 	}
+
+	window.CompletionistWidget = {
+		init(container, previewData, config) {
+			window.CompletionistInlineData = previewData;
+			window.CompletionistConfig = config;
+			initWidget(container, config);
+		},
+	};
 })();

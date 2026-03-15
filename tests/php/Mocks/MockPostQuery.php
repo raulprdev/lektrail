@@ -30,6 +30,11 @@ class MockPostQuery implements PostQuery
         return array_slice($this->posts, 0, $count);
     }
 
+    public function getRecent(int $count): array
+    {
+        return array_slice($this->posts, 0, $count);
+    }
+
     public function getTotalCount(): int
     {
         return count($this->posts);

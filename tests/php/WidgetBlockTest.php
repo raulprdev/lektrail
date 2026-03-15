@@ -43,7 +43,7 @@ class WidgetBlockTest extends TestCase
         $suggestionsQuery = new SuggestionsQuery($pluginConfigs, $postQuery);
         $renderer = new WidgetRenderer($assets, $trackingService, $suggestionsQuery, $postQuery, $pluginConfigs);
 
-        return new WidgetBlock($renderer, $pluginConfigs, dirname(__DIR__, 2) . '/');
+        return new WidgetBlock($renderer, $pluginConfigs, $assets, dirname(__DIR__, 2) . '/');
     }
 
     public function testRegistersInitAction(): void

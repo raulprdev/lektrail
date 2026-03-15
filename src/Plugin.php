@@ -14,6 +14,7 @@ class Plugin
     private PluginConfigRepository $pluginConfigs;
     private Context $context;
     private SuggestionsEndpoint $suggestions;
+    private PreviewEndpoint $preview;
     private WidgetShortcode $widgetShortcode;
     private AdminPage $adminPage;
     private TrackingService $trackingService;
@@ -24,6 +25,7 @@ class Plugin
         PluginConfigRepository $pluginConfigs,
         Context $context,
         SuggestionsEndpoint $suggestions,
+        PreviewEndpoint $preview,
         WidgetShortcode $widgetShortcode,
         AdminPage $adminPage,
         Hooks $hooks,
@@ -34,6 +36,7 @@ class Plugin
         $this->pluginConfigs = $pluginConfigs;
         $this->context       = $context;
         $this->suggestions = $suggestions;
+        $this->preview = $preview;
         $this->widgetShortcode = $widgetShortcode;
         $this->adminPage = $adminPage;
         $this->hooks = $hooks;
@@ -44,6 +47,7 @@ class Plugin
     public function run(): void
     {
         $this->suggestions->register($this->hooks);
+        $this->preview->register($this->hooks);
         $this->widgetShortcode->register($this->hooks);
         $this->adminPage->register($this->hooks);
         $this->trackingEndpoint->register($this->hooks);

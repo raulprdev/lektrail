@@ -2,6 +2,7 @@
 
 namespace Completionist\Blocks\Widget;
 
+use Completionist\Assets;
 use Completionist\Contracts\Hooks;
 use Completionist\Contracts\PluginConfigRepository;
 use Completionist\InstanceSettings;
@@ -10,12 +11,18 @@ class WidgetBlock
 {
     private WidgetRenderer $renderer;
     private PluginConfigRepository $pluginConfigs;
+    private Assets $assets;
     private string $pluginPath;
 
-    public function __construct(WidgetRenderer $renderer, PluginConfigRepository $pluginConfigs, string $pluginPath)
-    {
+    public function __construct(
+        WidgetRenderer $renderer,
+        PluginConfigRepository $pluginConfigs,
+        Assets $assets,
+        string $pluginPath
+    ) {
         $this->renderer = $renderer;
         $this->pluginConfigs = $pluginConfigs;
+        $this->assets = $assets;
         $this->pluginPath = $pluginPath;
     }
 
@@ -35,6 +42,8 @@ class WidgetBlock
 
     public function enqueueEditorAssets(): void
     {
+        $this->assets->enqueueWidgetForEditor();
+
         $config = $this->pluginConfigs->load();
         wp_add_inline_script(
             'wp-blocks',

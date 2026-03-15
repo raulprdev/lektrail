@@ -140,6 +140,28 @@ class Assets
         );
     }
 
+    public function enqueueWidgetForEditor(): void
+    {
+        $this->enqueueStorage();
+        $this->enqueueRenderItem();
+        $this->enqueueDataSource();
+
+        $this->scripts->enqueueScript(
+            self::HANDLE_WIDGET,
+            $this->pluginUrl . 'assets/js/widget.js',
+            [self::HANDLE_STORAGE, self::HANDLE_RENDER_ITEM, self::HANDLE_DATA_SOURCE],
+            $this->fileVersion('assets/js/widget.js'),
+            true
+        );
+
+        $this->scripts->enqueueStyle(
+            self::HANDLE_WIDGET,
+            $this->pluginUrl . 'assets/css/widget.css',
+            [],
+            $this->fileVersion('assets/css/widget.css')
+        );
+    }
+
     private function enqueueStorage(): void
     {
         $this->scripts->enqueueScript(

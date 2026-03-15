@@ -29,6 +29,17 @@ class PostQuery implements PostQueryInterface
         ]);
     }
 
+    public function getRecent(int $count): array
+    {
+        return $this->query([
+            'post_type' => 'post',
+            'post_status' => 'publish',
+            'posts_per_page' => $count,
+            'orderby' => 'date',
+            'order' => 'DESC',
+        ]);
+    }
+
     private function formatPost(int $postId): array
     {
         $post = [
