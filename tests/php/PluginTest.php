@@ -4,7 +4,6 @@ namespace Completionist\Tests;
 
 use Completionist\AdminPage;
 use Completionist\Assets;
-use Completionist\Blocks\Widget\WidgetRenderer;
 use Completionist\Plugin;
 use Completionist\PreviewEndpoint;
 use Completionist\Shortcodes\WidgetShortcode;
@@ -20,6 +19,7 @@ use Completionist\Tests\Mocks\MockTrackingRepository;
 use Completionist\Tests\Mocks\MockUserProvider;
 use Completionist\TrackingEndpoint;
 use Completionist\TrackingService;
+use Completionist\WidgetRenderer;
 use PHPUnit\Framework\TestCase;
 
 class PluginTest extends TestCase

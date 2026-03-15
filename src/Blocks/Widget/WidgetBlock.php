@@ -5,6 +5,7 @@ namespace Completionist\Blocks\Widget;
 use Completionist\Assets;
 use Completionist\Contracts\Hooks;
 use Completionist\InstanceSettings;
+use Completionist\WidgetRenderer;
 
 class WidgetBlock
 {

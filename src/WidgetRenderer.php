@@ -1,14 +1,9 @@
 <?php
 
-namespace Completionist\Blocks\Widget;
+namespace Completionist;
 
-use Completionist\Assets;
 use Completionist\Contracts\PluginConfigRepository;
 use Completionist\Contracts\PostQuery;
-use Completionist\InstanceSettings;
-use Completionist\SuggestionsEndpoint;
-use Completionist\SuggestionsQuery;
-use Completionist\TrackingService;
 
 class WidgetRenderer
 {

@@ -4,7 +4,6 @@ namespace Completionist\Tests;
 
 use Completionist\Assets;
 use Completionist\Blocks\Widget\WidgetBlock;
-use Completionist\Blocks\Widget\WidgetRenderer;
 use Completionist\SuggestionsQuery;
 use Completionist\Tests\Mocks\MockHooks;
 use Completionist\Tests\Mocks\MockPluginConfigRepository;
@@ -13,6 +12,7 @@ use Completionist\Tests\Mocks\MockScriptLoader;
 use Completionist\Tests\Mocks\MockTrackingRepository;
 use Completionist\Tests\Mocks\MockUserProvider;
 use Completionist\TrackingService;
+use Completionist\WidgetRenderer;
 use PHPUnit\Framework\TestCase;
 
 class WidgetBlockTest extends TestCase

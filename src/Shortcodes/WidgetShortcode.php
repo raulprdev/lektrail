@@ -2,9 +2,9 @@
 
 namespace Completionist\Shortcodes;
 
-use Completionist\Blocks\Widget\WidgetRenderer;
 use Completionist\Contracts\Hooks;
 use Completionist\InstanceSettings;
+use Completionist\WidgetRenderer;
 
 class WidgetShortcode
 {

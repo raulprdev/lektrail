@@ -54,7 +54,7 @@ add_action('plugins_loaded', function () {
     $suggestionsQuery = new Completionist\SuggestionsQuery($pluginConfigs, $posts);
     $suggestions = new Completionist\SuggestionsEndpoint($suggestionsQuery, $response);
     $previewEndpoint = new Completionist\PreviewEndpoint($posts);
-    $widgetRenderer = new Completionist\Blocks\Widget\WidgetRenderer($assets, $trackingService, $suggestionsQuery, $posts, $pluginConfigs);
+    $widgetRenderer = new Completionist\WidgetRenderer($assets, $trackingService, $suggestionsQuery, $posts, $pluginConfigs);
     $shortcode = new Completionist\Shortcodes\WidgetShortcode($widgetRenderer);
     $adminPage = new Completionist\AdminPage($pluginConfigs);
     $trackingEndpoint = new Completionist\TrackingEndpoint($trackingService, $response);

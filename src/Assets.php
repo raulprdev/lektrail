@@ -2,7 +2,6 @@
 
 namespace Completionist;
 
-use Completionist\Blocks\Widget\WidgetRenderer;
 use Completionist\Contracts\PluginConfigRepository;
 use Completionist\Contracts\PostQuery;
 use Completionist\Contracts\ScriptLoader;
