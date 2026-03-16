@@ -9,6 +9,7 @@ class MockPostQuery implements PostQuery
     public array $posts = [];
     public array $postData = [];
     public ?array $lastQueryArgs = null;
+    public ?int $lastRecentLimit = null;
 
     public function query(array $args): array
     {
@@ -32,6 +33,7 @@ class MockPostQuery implements PostQuery
 
     public function getRecent(int $count): array
     {
+        $this->lastRecentLimit = $count;
         return array_slice($this->posts, 0, $count);
     }
 

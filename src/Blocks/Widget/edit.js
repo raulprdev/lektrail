@@ -68,8 +68,13 @@ export default function Edit({ attributes, setAttributes }) {
 
 	const config = useMemo(() => buildConfig(attributes), [attributes]);
 
-	useEffect(() => {
-		apiFetch({ path: '/completionist/v1/preview' })
+	const fetchPreview = useDebounce(() => {
+		const params = new URLSearchParams({
+			maxViewed: maxViewed ?? 3,
+			maxRead: maxRead ?? 3,
+			maxSuggestions: maxSuggestions ?? 3,
+		});
+		apiFetch({ path: `/completionist/v1/preview?${params}` })
 			.then((data) => {
 				setPreviewData(data);
 				setIsLoading(false);
@@ -77,7 +82,11 @@ export default function Edit({ attributes, setAttributes }) {
 			.catch(() => {
 				setIsLoading(false);
 			});
-	}, []);
+	}, 300);
+
+	useEffect(() => {
+		fetchPreview();
+	}, [maxViewed, maxRead, maxSuggestions, fetchPreview]);
 
 	const initWidget = useDebounce(() => {
 		if (!containerRef.current || !previewData || !window.CompletionistWidget) {

@@ -36,14 +36,31 @@ class PreviewEndpoint
         return current_user_can('edit_posts');
     }
 
+    private const DEFAULT_MAX = 3;
+
     public function handle(): array
     {
-        $posts = $this->postQuery->getRecent(9);
+        $maxViewed = $this->getIntParam('maxViewed', self::DEFAULT_MAX);
+        $maxRead = $this->getIntParam('maxRead', self::DEFAULT_MAX);
+        $maxSuggestions = $this->getIntParam('maxSuggestions', self::DEFAULT_MAX);
+
+        $total = $maxViewed + $maxRead + $maxSuggestions;
+        $posts = $this->postQuery->getRecent($total);
 
         return [
-            'viewed' => array_slice($posts, 0, 3),
-            'read' => array_slice($posts, 3, 3),
-            'suggestions' => array_slice($posts, 6, 3),
+            'viewed' => array_slice($posts, 0, $maxViewed),
+            'read' => array_slice($posts, $maxViewed, $maxRead),
+            'suggestions' => array_slice($posts, $maxViewed + $maxRead, $maxSuggestions),
         ];
+    }
+
+    private function getIntParam(string $name, int $default): int
+    {
+        $value = $_GET[$name] ?? null;
+        if ($value === null) {
+            return $default;
+        }
+        $int = (int) $value;
+        return $int > 0 ? $int : $default;
     }
 }
