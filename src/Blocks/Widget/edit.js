@@ -68,7 +68,7 @@ export default function Edit({ attributes, setAttributes }) {
 
 	const config = useMemo(() => buildConfig(attributes), [attributes]);
 
-	const fetchPreview = useDebounce(() => {
+	useEffect(() => {
 		const params = new URLSearchParams({
 			maxViewed: maxViewed ?? 3,
 			maxRead: maxRead ?? 3,
@@ -82,11 +82,7 @@ export default function Edit({ attributes, setAttributes }) {
 			.catch(() => {
 				setIsLoading(false);
 			});
-	}, 300);
-
-	useEffect(() => {
-		fetchPreview();
-	}, [maxViewed, maxRead, maxSuggestions, fetchPreview]);
+	}, [maxViewed, maxRead, maxSuggestions]);
 
 	const initWidget = useDebounce(() => {
 		if (!containerRef.current || !previewData || !window.CompletionistWidget) {
