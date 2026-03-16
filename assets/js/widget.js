@@ -156,11 +156,14 @@
 			config.maxSuggestions
 		);
 
-		const classes = ['completionist-widget'];
-		if (config.showExcerpt) {
+		var classes = container.className ? container.className.split(' ') : [];
+		if (classes.indexOf('completionist-widget') === -1) {
+			classes.push('completionist-widget');
+		}
+		if (config.showExcerpt && classes.indexOf('completionist-show-excerpt') === -1) {
 			classes.push('completionist-show-excerpt');
 		}
-		if (config.showThumbnail) {
+		if (config.showThumbnail && classes.indexOf('completionist-show-thumbnail') === -1) {
 			classes.push('completionist-show-thumbnail');
 		}
 		container.className = classes.join(' ');

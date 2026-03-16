@@ -114,4 +114,21 @@ class WidgetRendererTest extends TestCase
         $inlineCode = $this->scripts->inlineScripts[Assets::HANDLE_WIDGET]['code'];
         $this->assertStringContainsString('Test Post', $inlineCode);
     }
+
+    public function testIncludesWrapperAttributesWhenProvided(): void
+    {
+        $renderer = $this->createRenderer();
+        $html = $renderer->render([], 'class="wp-block-completionist-widget has-background"');
+
+        $this->assertStringContainsString('class="wp-block-completionist-widget has-background"', $html);
+        $this->assertStringContainsString('id="completionist-widget"', $html);
+    }
+
+    public function testUsesDefaultClassWhenNoWrapperAttributes(): void
+    {
+        $renderer = $this->createRenderer();
+        $html = $renderer->render();
+
+        $this->assertStringContainsString('class="completionist-widget"', $html);
+    }
 }

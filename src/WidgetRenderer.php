@@ -29,7 +29,7 @@ class WidgetRenderer
         $this->pluginConfigs = $pluginConfigs;
     }
 
-    public function render(array $overrides = []): string
+    public function render(array $overrides = [], string $wrapperAttributes = ''): string
     {
         $inlineData = null;
 
@@ -53,6 +53,17 @@ class WidgetRenderer
             $globalConfig = $this->pluginConfigs->load();
             $mergedConfig = InstanceSettings::merge($globalConfig, $overrides);
             $configAttr = sprintf(' data-config="%s"', esc_attr(json_encode($mergedConfig->toJsConfig())));
+        }
+
+        if ($wrapperAttributes) {
+            return sprintf(
+                '<div %s id="%s" data-endpoint="%s" data-posts-endpoint="%s"%s></div>',
+                $wrapperAttributes,
+                self::WIDGET_ID,
+                esc_url(SuggestionsEndpoint::url()),
+                esc_url(rest_url('wp/v2/posts')),
+                $configAttr
+            );
         }
 
         return sprintf(

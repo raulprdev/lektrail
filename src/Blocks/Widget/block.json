@@ -11,7 +11,19 @@
   "textdomain": "completionist",
   "supports": {
     "html": false,
-    "multiple": false
+    "multiple": false,
+    "align": ["wide", "full"],
+    "color": {
+      "background": true,
+      "text": true
+    },
+    "spacing": {
+      "padding": true,
+      "margin": true
+    },
+    "typography": {
+      "fontSize": true
+    }
   },
   "attributes": {
     "maxViewed": { "type": "number" },

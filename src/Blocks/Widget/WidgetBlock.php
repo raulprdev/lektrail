@@ -44,6 +44,7 @@ class WidgetBlock
     public function renderBlock(array $attributes): string
     {
         $overrides = InstanceSettings::fromBlockAttributes($attributes);
-        return $this->renderer->render($overrides);
+        $wrapperAttributes = get_block_wrapper_attributes();
+        return $this->renderer->render($overrides, $wrapperAttributes);
     }
 }

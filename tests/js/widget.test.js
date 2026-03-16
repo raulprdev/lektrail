@@ -661,14 +661,27 @@ describe('Widget: clear data button', () => {
     });
 });
 
-describe('Widget: base class preservation', () => {
-    test('preserves completionist-widget class after rendering', () => {
+describe('Widget: class preservation', () => {
+    test('adds completionist-widget class after rendering', () => {
         const { container, xhrInstances } = setupWidgetTest();
         window.CompletionistStorage = mockStorage();
 
         loadWidget();
         triggerXhrResponses(xhrInstances, { suggestions: [] });
 
+        expect(container.className).toContain('completionist-widget');
+    });
+
+    test('preserves existing WordPress block classes after rendering', () => {
+        const { container, xhrInstances } = setupWidgetTest();
+        container.className = 'wp-block-completionist-widget has-background has-cyan-background-color';
+        window.CompletionistStorage = mockStorage();
+
+        loadWidget();
+        triggerXhrResponses(xhrInstances, { suggestions: [] });
+
+        expect(container.className).toContain('wp-block-completionist-widget');
+        expect(container.className).toContain('has-background');
         expect(container.className).toContain('completionist-widget');
     });
 });
