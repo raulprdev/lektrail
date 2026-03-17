@@ -31,11 +31,11 @@ jobs:
 
       - name: Generate zip
         run: |
-          mkdir -p ../completionist
-          cp -r assets build languages src templates ../completionist/
-          cp completionist.php composer.json package.json README.md readme.txt ../completionist/
-          rm -rf ../completionist/src/blocks
-          cd .. && zip -r completionist.zip completionist
+          mkdir -p ../dist/completionist
+          cp -r assets build languages src templates ../dist/completionist/
+          cp completionist.php composer.json package.json README.md readme.txt ../dist/completionist/
+          rm -rf ../dist/completionist/src/blocks
+          cd ../dist && zip -r completionist.zip completionist
           mv completionist.zip $GITHUB_WORKSPACE/
 
       - name: Upload release asset
