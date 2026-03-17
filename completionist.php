@@ -31,15 +31,16 @@ spl_autoload_register(function ($class) {
 });
 
 add_action('init', function () {
-    $languagesPath = dirname(plugin_basename(__FILE__)) . '/languages';
-    $loaded = load_plugin_textdomain('completionist', false, $languagesPath);
-
     $locale = determine_locale();
-    $isSpanishVariant = strpos($locale, 'es_') === 0 && $locale !== 'es_ES';
+    $localeFile = __DIR__ . '/languages/completionist-' . $locale . '.mo';
+    $fallbackFile = __DIR__ . '/languages/completionist-es_ES.mo';
 
-    if (!$loaded && $isSpanishVariant) {
-        $fallbackFile = __DIR__ . '/languages/completionist-es_ES.mo';
+    if (file_exists($localeFile)) {
+        load_textdomain('completionist', $localeFile);
+    } elseif (strpos($locale, 'es_') === 0 && file_exists($fallbackFile)) {
         load_textdomain('completionist', $fallbackFile);
+    } else {
+        load_plugin_textdomain('completionist', false, dirname(plugin_basename(__FILE__)) . '/languages');
     }
 });
 
