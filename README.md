@@ -1,51 +1,77 @@
 # Completionist
 
-Track reading progress for website visitors using browser localStorage.
+Show visitors what they've read, what they started, and what to read next.
 
-## Features
+## Why Completionist?
 
-- **Automatic Tracking**: Detects when users scroll past a configurable threshold (default 90%)
-- **Three-Section Widget**: Shows "Continue Reading" (started), "Completed" (finished), and "Suggested" posts
-- **Privacy-Friendly**: All data stored in browser localStorage, nothing on server
-- **Optional Consent**: Can require user opt-in before tracking
-- **Configurable Suggestions**: Filter by category, order by random/recent/related
-- **Multilingual**: Supports custom labels, includes Spanish defaults
+Most websites have no memory. Visitors return and see the same content with no recognition of what they've already explored. Completionist changes that.
+
+**For content sites**: Show readers which articles they started but didn't finish, and suggest new content based on their history.
+
+**For e-commerce**: Display recently viewed products so customers can easily return to items they were considering.
+
+**For courses/documentation**: Track progress through lessons or guides, showing what's completed and what's next.
+
+## How It Works
+
+Completionist tracks when visitors scroll through your content:
+- **Viewed**: Posts they started reading
+- **Completed**: Posts they scrolled to the end (configurable threshold)
+- **Suggestions**: Unread posts based on your configuration
+
+The widget displays three sections: "Continue Reading" (started but not finished), "Completed", and "Suggested Reading".
+
+## Two Tracking Modes
+
+### localStorage Mode (Default)
+- Works for all visitors, no login required
+- Data stored in browser, completely private
+- Optional consent banner
+- Data clears if browser storage is cleared
+
+### Server-Side Mode
+- Requires logged-in users (WordPress users or membership plugin)
+- Reading history persists across devices
+- Useful for membership sites, courses, or personalized experiences
+- Anonymous visitors see suggestions only
 
 ## Installation
 
-1. Upload the `completionist` folder to `/wp-content/plugins/`
-2. Activate the plugin in WordPress
-3. Add `[completionist]` shortcode to any page
-4. Configure settings in Settings > Completionist
+1. Upload `completionist` to `/wp-content/plugins/`
+2. Activate the plugin
+3. Add the widget using either method:
+   - **Gutenberg Block**: Search for "Completionist" in the block inserter
+   - **Shortcode**: Add `[completionist]` to any page
+4. Configure in Settings > Completionist
 
-## Usage
+## Configuration
 
-Add the shortcode where you want the widget to appear:
+### Display Options
+- Show/hide excerpts and thumbnails
+- Limit posts per section (viewed, completed, suggestions)
+- Enable/disable sections independently
+- Custom labels for all text
 
-```
-[completionist]
-```
+### Tracking Options
+- Post types to track (posts, pages, products, custom types)
+- Read threshold: scroll percentage to mark as completed (10-100%)
+- Track logged-in users server-side (optional)
 
-The widget displays:
-- **Continue Reading**: Posts the user started but didn't finish
-- **Completed**: Posts the user scrolled to the end
-- **Suggested Reading**: Unread posts based on your configuration
+### Suggestions
+- Order: Random, recent, or related to reading history
+- Category filters: include or exclude specific categories
+- Cache duration for performance
 
-## Settings
-
-- **Post Types**: Choose which post types to track
-- **Read Threshold**: Scroll percentage to mark as completed (10-100%)
-- **Display Options**: Show/hide excerpts and thumbnails
-- **Section Limits**: Max posts per section
-- **Suggestion Order**: Random, recent, or related to reading history
-- **Category Filters**: Include or exclude specific categories
-- **Labels**: Customize all text labels
-- **Consent**: Optionally require user consent before tracking
+### Privacy
+- Optional consent requirement before tracking
+- Built-in consent banner or integrate with cookie plugins
+- localStorage mode keeps all data in the browser
 
 ## Requirements
 
 - WordPress 6.0+
 - PHP 7.4+
+- For server-side tracking: logged-in users (WordPress or membership plugin)
 
 ## License
 

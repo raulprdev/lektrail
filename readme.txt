@@ -1,6 +1,6 @@
 === Completionist ===
 Contributors: raulprdev
-Tags: reading progress, tracking, engagement
+Tags: reading progress, tracking, engagement, recently viewed, suggestions
 Requires at least: 6.0
 Tested up to: 6.7
 Stable tag: 1.0.0
@@ -8,29 +8,96 @@ Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Track reading progress for visitors using browser localStorage.
+Show visitors what they've read, what they started, and what to read next.
 
 == Description ==
 
-Completionist helps visitors track their reading progress. When users scroll through posts, the plugin remembers what they've started and completed.
+Most websites have no memory. Visitors return and see the same content with no recognition of what they've already explored. Completionist changes that.
 
-**Features:**
+**For content sites**: Show readers which articles they started but didn't finish, and suggest new content based on their history.
 
-* Automatic tracking when users scroll past configurable threshold
-* Three-section widget: Continue Reading, Completed, Suggested
-* All data stored in browser localStorage (privacy-friendly)
-* Optional consent requirement
-* Configurable suggestion order and category filters
-* Customizable labels with multilingual support
+**For e-commerce**: Display recently viewed products so customers can easily return to items they were considering.
+
+**For courses and documentation**: Track progress through lessons or guides, showing what's completed and what's next.
+
+= How It Works =
+
+Completionist tracks when visitors scroll through your content:
+
+* **Viewed**: Posts they started reading
+* **Completed**: Posts they scrolled to the end (configurable threshold)
+* **Suggestions**: Unread posts based on your configuration
+
+The widget displays three sections: "Continue Reading", "Completed", and "Suggested Reading".
+
+= Two Tracking Modes =
+
+**localStorage Mode (Default)**
+
+* Works for all visitors, no login required
+* Data stored in browser, completely private
+* Optional consent banner
+* Data clears if browser storage is cleared
+
+**Server-Side Mode**
+
+* Requires logged-in users (WordPress users or membership plugin)
+* Reading history persists across devices
+* Useful for membership sites, courses, or personalized experiences
+* Anonymous visitors see suggestions only
+
+= Features =
+
+* Gutenberg block and shortcode support
+* Works with any post type (posts, pages, products, custom types)
+* Configurable scroll threshold to mark content as "completed"
+* Show/hide excerpts and thumbnails
+* Suggestion order: random, recent, or related
+* Category filters for suggestions
+* Customizable labels (multilingual ready)
+* Optional consent requirement with built-in banner
+* Performance caching for suggestions
 
 == Installation ==
 
-1. Upload the `completionist` folder to `/wp-content/plugins/`
+1. Upload `completionist` to `/wp-content/plugins/`
 2. Activate the plugin
-3. Add `[completionist]` shortcode to any page
+3. Add the widget:
+   * **Gutenberg**: Search for "Completionist" in the block inserter
+   * **Shortcode**: Add `[completionist]` to any page
 4. Configure in Settings > Completionist
+
+== Frequently Asked Questions ==
+
+= Does this work without user registration? =
+
+Yes. By default, Completionist uses localStorage which works for all visitors without requiring login. Data is stored privately in the visitor's browser.
+
+= Can I track reading progress for logged-in users? =
+
+Yes. Enable "Track Logged-in Users" in settings. This stores reading history on the server, allowing it to persist across devices. Requires users to be logged in (WordPress users or via a membership plugin).
+
+= What post types can I track? =
+
+Any post type: posts, pages, WooCommerce products, custom post types. Configure which types to track in the settings.
+
+= How do I customize the widget appearance? =
+
+The widget uses minimal styling. Add your own CSS targeting `.completionist-widget`, `.completionist-continue`, `.completionist-completed`, and `.completionist-suggestions`.
+
+== Screenshots ==
+
+1. Widget showing continue reading, completed, and suggestions
+2. Settings page with display options
+3. Gutenberg block in the editor
 
 == Changelog ==
 
 = 1.0.0 =
 * Initial release
+* localStorage and server-side tracking modes
+* Gutenberg block and shortcode
+* Configurable suggestions (random, recent, related)
+* Category filters
+* Consent management
+* Custom labels
