@@ -755,3 +755,39 @@ describe('Widget: server-side tracking (inline data)', () => {
         expect(container.innerHTML).toContain('Completed (3)');
     });
 });
+
+describe('Widget: re-initialization class toggling', () => {
+    test('removes show-thumbnail class when toggled off', () => {
+        const { container } = setupWidgetTest({ showThumbnail: true });
+        window.CompletionistInlineData = {
+            viewed: [post(1, 'Post 1', { thumbnail: 'http://example.com/img.jpg' })],
+            read: [],
+            suggestions: []
+        };
+
+        loadWidget();
+        expect(container.className).toContain('completionist-show-thumbnail');
+
+        window.CompletionistConfig.showThumbnail = false;
+        window.CompletionistWidget.init(container, window.CompletionistInlineData, window.CompletionistConfig);
+
+        expect(container.className).not.toContain('completionist-show-thumbnail');
+    });
+
+    test('removes show-excerpt class when toggled off', () => {
+        const { container } = setupWidgetTest({ showExcerpt: true });
+        window.CompletionistInlineData = {
+            viewed: [post(1, 'Post 1', { excerpt: 'Some excerpt' })],
+            read: [],
+            suggestions: []
+        };
+
+        loadWidget();
+        expect(container.className).toContain('completionist-show-excerpt');
+
+        window.CompletionistConfig.showExcerpt = false;
+        window.CompletionistWidget.init(container, window.CompletionistInlineData, window.CompletionistConfig);
+
+        expect(container.className).not.toContain('completionist-show-excerpt');
+    });
+});

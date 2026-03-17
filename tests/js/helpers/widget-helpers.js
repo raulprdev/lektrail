@@ -84,6 +84,8 @@ function mockConfig(options = {}) {
         viewedEnabled: options.viewedEnabled !== false,
         completedEnabled: options.completedEnabled !== false,
         showClearButton: options.showClearButton !== false,
+        showThumbnail: options.showThumbnail || false,
+        showExcerpt: options.showExcerpt || false,
         requireConsent: options.requireConsent || false,
         serverSideTracking: options.serverSideTracking || false,
         labels: Object.assign({}, defaultLabels, options.labels || {})

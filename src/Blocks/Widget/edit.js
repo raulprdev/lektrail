@@ -66,7 +66,24 @@ export default function Edit({ attributes, setAttributes }) {
 	const suggestionsCacheHours =
 		attributes.suggestionsCacheHours ?? defaults?.suggestionsCacheHours;
 
-	const config = useMemo(() => buildConfig(attributes), [attributes]);
+	const config = useMemo(
+		() => buildConfig(attributes),
+		[
+			maxViewed,
+			maxRead,
+			maxSuggestions,
+			showExcerpt,
+			showThumbnail,
+			viewedEnabled,
+			completedEnabled,
+			labelContinue,
+			labelCompleted,
+			labelSuggestions,
+			labelEmpty,
+			labelLoading,
+			labelClear,
+		]
+	);
 
 	useEffect(() => {
 		const params = new URLSearchParams({
@@ -84,18 +101,12 @@ export default function Edit({ attributes, setAttributes }) {
 			});
 	}, [maxViewed, maxRead, maxSuggestions]);
 
-	const initWidget = useDebounce(() => {
+	useEffect(() => {
 		if (!containerRef.current || !previewData || !window.CompletionistWidget) {
 			return;
 		}
 		window.CompletionistWidget.init(containerRef.current, previewData, config);
-	}, 300);
-
-	useEffect(() => {
-		if (previewData) {
-			initWidget();
-		}
-	}, [previewData, config, initWidget]);
+	}, [previewData, config]);
 
 	return (
 		<>

@@ -160,12 +160,23 @@
 		if (classes.indexOf('completionist-widget') === -1) {
 			classes.push('completionist-widget');
 		}
-		if (config.showExcerpt && classes.indexOf('completionist-show-excerpt') === -1) {
+
+		var excerptIndex = classes.indexOf('completionist-show-excerpt');
+		var hasExcerptClass = excerptIndex !== -1;
+		if (config.showExcerpt && !hasExcerptClass) {
 			classes.push('completionist-show-excerpt');
+		} else if (!config.showExcerpt && hasExcerptClass) {
+			classes.splice(excerptIndex, 1);
 		}
-		if (config.showThumbnail && classes.indexOf('completionist-show-thumbnail') === -1) {
+
+		var thumbnailIndex = classes.indexOf('completionist-show-thumbnail');
+		var hasThumbnailClass = thumbnailIndex !== -1;
+		if (config.showThumbnail && !hasThumbnailClass) {
 			classes.push('completionist-show-thumbnail');
+		} else if (!config.showThumbnail && hasThumbnailClass) {
+			classes.splice(thumbnailIndex, 1);
 		}
+
 		container.className = classes.join(' ');
 
 		let html = '';
