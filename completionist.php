@@ -31,7 +31,16 @@ spl_autoload_register(function ($class) {
 });
 
 add_action('init', function () {
-    load_plugin_textdomain('completionist', false, dirname(plugin_basename(__FILE__)) . '/languages');
+    $languagesPath = dirname(plugin_basename(__FILE__)) . '/languages';
+    $loaded = load_plugin_textdomain('completionist', false, $languagesPath);
+
+    $locale = determine_locale();
+    $isSpanishVariant = strpos($locale, 'es_') === 0 && $locale !== 'es_ES';
+
+    if (!$loaded && $isSpanishVariant) {
+        $fallbackFile = __DIR__ . '/languages/completionist-es_ES.mo';
+        load_textdomain('completionist', $fallbackFile);
+    }
 });
 
 add_action('plugins_loaded', function () {
