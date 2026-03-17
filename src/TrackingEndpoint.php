@@ -4,6 +4,7 @@ namespace Completionist;
 
 use Completionist\Contracts\Hooks;
 use Completionist\Contracts\JsonResponse;
+use Completionist\Contracts\NonceVerifier;
 
 class TrackingEndpoint
 {
@@ -11,11 +12,16 @@ class TrackingEndpoint
 
     private TrackingService $trackingService;
     private JsonResponse $jsonResponse;
+    private NonceVerifier $nonceVerifier;
 
-    public function __construct(TrackingService $trackingService, JsonResponse $jsonResponse)
-    {
+    public function __construct(
+        TrackingService $trackingService,
+        JsonResponse $jsonResponse,
+        NonceVerifier $nonceVerifier
+    ) {
         $this->trackingService = $trackingService;
         $this->jsonResponse    = $jsonResponse;
+        $this->nonceVerifier   = $nonceVerifier;
     }
 
     public function register(Hooks $hooks): void
@@ -25,6 +31,12 @@ class TrackingEndpoint
 
     public function handle(): void
     {
+        $nonce = $_POST['nonce'] ?? '';
+        if ($nonce === '' || !$this->nonceVerifier->verify($nonce, self::ACTION)) {
+            $this->jsonResponse->error('Invalid nonce', 403);
+            return;
+        }
+
         if (!$this->trackingService->shouldTrackServerSide()) {
             $this->jsonResponse->error('Not logged in', 401);
             return;
@@ -37,7 +49,7 @@ class TrackingEndpoint
         }
 
         $this->trackingService->trackRead($postId);
-        $this->jsonResponse->success([ 'tracked' => true]);
+        $this->jsonResponse->success(['tracked' => true]);
     }
 
     public static function url(): string

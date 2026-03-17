@@ -60,21 +60,23 @@ describe('Notifier: server-side mode', () => {
         delete window.XMLHttpRequest;
     });
 
-    test('trackRead sends POST to endpoint', () => {
+    test('trackRead sends POST to endpoint with nonce', () => {
         const notifier = window.CompletionistNotifier.create({
-            endpoint: '/wp-admin/admin-ajax.php?action=track'
+            endpoint: '/wp-admin/admin-ajax.php?action=track',
+            nonce: 'abc123'
         });
 
         notifier.trackRead(456);
 
         expect(xhrInstances.length).toBe(1);
         expect(xhrInstances[0].open).toHaveBeenCalledWith('POST', '/wp-admin/admin-ajax.php?action=track');
-        expect(xhrInstances[0].send).toHaveBeenCalledWith('post_id=456');
+        expect(xhrInstances[0].send).toHaveBeenCalledWith('post_id=456&nonce=abc123');
     });
 
     test('trackRead sets content-type header', () => {
         const notifier = window.CompletionistNotifier.create({
-            endpoint: '/wp-admin/admin-ajax.php?action=track'
+            endpoint: '/wp-admin/admin-ajax.php?action=track',
+            nonce: 'abc123'
         });
 
         notifier.trackRead(789);
@@ -87,7 +89,8 @@ describe('Notifier: server-side mode', () => {
 
     test('trackViewed does nothing in server-side mode', () => {
         const notifier = window.CompletionistNotifier.create({
-            endpoint: '/wp-admin/admin-ajax.php?action=track'
+            endpoint: '/wp-admin/admin-ajax.php?action=track',
+            nonce: 'abc123'
         });
 
         notifier.trackViewed(123, { id: 123, title: 'Test' });

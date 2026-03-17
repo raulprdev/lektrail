@@ -215,6 +215,7 @@
 		if (config && config.trackingEndpoint && global.CompletionistNotifier) {
 			notifier = global.CompletionistNotifier.create({
 				endpoint: config.trackingEndpoint,
+				nonce: config.trackingNonce,
 			});
 		}
 

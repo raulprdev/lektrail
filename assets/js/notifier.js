@@ -12,7 +12,7 @@
 		};
 	}
 
-	function createServerSideNotifier(endpoint) {
+	function createServerSideNotifier(endpoint, nonce) {
 		return {
 			trackViewed() {
 				// Server-side viewed tracking is done on page load by PHP
@@ -24,7 +24,7 @@
 					'Content-Type',
 					'application/x-www-form-urlencoded'
 				);
-				xhr.send('post_id=' + postId);
+				xhr.send('post_id=' + postId + '&nonce=' + nonce);
 			},
 		};
 	}
@@ -32,7 +32,7 @@
 	window.CompletionistNotifier = {
 		create(options) {
 			if (options.endpoint) {
-				return createServerSideNotifier(options.endpoint);
+				return createServerSideNotifier(options.endpoint, options.nonce);
 			}
 			return createLocalStorageNotifier(options.storage);
 		},

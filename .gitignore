@@ -35,3 +35,6 @@ coverage/
 
 # Distribution
 *.zip
+
+# Claude
+.claude/

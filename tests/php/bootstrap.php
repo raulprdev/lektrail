@@ -43,3 +43,10 @@ if (!function_exists('admin_url')) {
         return 'http://example.com/wp-admin/' . ltrim($path, '/');
     }
 }
+
+if (!function_exists('wp_create_nonce')) {
+    function wp_create_nonce($action = '')
+    {
+        return 'test_nonce_' . $action;
+    }
+}

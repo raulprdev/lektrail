@@ -74,6 +74,7 @@ class Assets
         $config = $pluginConfig->toJsConfig();
         if ($serverSideTracking) {
             $config['trackingEndpoint'] = admin_url('admin-ajax.php?action=' . TrackingEndpoint::ACTION);
+            $config['trackingNonce'] = wp_create_nonce(TrackingEndpoint::ACTION);
         }
 
         $this->scripts->addInlineScript(

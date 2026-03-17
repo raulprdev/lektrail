@@ -57,7 +57,8 @@ add_action('plugins_loaded', function () {
     $widgetRenderer = new Completionist\WidgetRenderer($assets, $trackingService, $suggestionsQuery, $posts, $pluginConfigs);
     $shortcode = new Completionist\Shortcodes\WidgetShortcode($widgetRenderer);
     $adminPage = new Completionist\AdminPage($pluginConfigs);
-    $trackingEndpoint = new Completionist\TrackingEndpoint($trackingService, $response);
+    $nonceVerifier = new Completionist\WordPress\NonceVerifier();
+    $trackingEndpoint = new Completionist\TrackingEndpoint($trackingService, $response, $nonceVerifier);
 
     $widgetBlock = new Completionist\Blocks\Widget\WidgetBlock($widgetRenderer, $assets, $pluginPath);
     $widgetBlock->register($hooks);

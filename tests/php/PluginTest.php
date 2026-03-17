@@ -12,6 +12,7 @@ use Completionist\SuggestionsQuery;
 use Completionist\Tests\Mocks\MockContext;
 use Completionist\Tests\Mocks\MockHooks;
 use Completionist\Tests\Mocks\MockJsonResponse;
+use Completionist\Tests\Mocks\MockNonceVerifier;
 use Completionist\Tests\Mocks\MockPluginConfigRepository;
 use Completionist\Tests\Mocks\MockPostQuery;
 use Completionist\Tests\Mocks\MockScriptLoader;
@@ -58,7 +59,7 @@ class PluginTest extends TestCase
         $renderer = new WidgetRenderer($assets, $trackingService, $query, $posts, $this->pluginConfigs);
         $shortcode = new WidgetShortcode($renderer);
         $adminPage = new AdminPage($this->pluginConfigs);
-        $trackingEndpoint = new TrackingEndpoint($trackingService, new MockJsonResponse());
+        $trackingEndpoint = new TrackingEndpoint($trackingService, new MockJsonResponse(), new MockNonceVerifier());
 
         return new Plugin(
             $assets,

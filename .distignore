@@ -1,0 +1,47 @@
+# Distribution ignore file
+# Files listed here are excluded when building the distribution ZIP
+# Used by: wp dist-archive, GitHub Actions, etc.
+
+# Development dependencies
+node_modules
+vendor
+
+# Source files (use build/ instead)
+src/blocks
+
+# Lock files
+composer.lock
+package-lock.json
+
+# Test files
+tests
+phpunit.xml
+.phpunit.result.cache
+coverage
+
+# Build tools config
+phpstan.neon
+.php-cs-fixer.php
+.php-cs-fixer.cache
+webpack.config.js
+
+# IDE and OS files
+.idea
+.vscode
+.DS_Store
+
+# Git and CI
+.git
+.gitignore
+.github
+
+# Claude docs
+.claude
+
+# Environment files
+.env
+.env.*
+
+# Other dev files
+*.log
+*.map
