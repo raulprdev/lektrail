@@ -4,8 +4,8 @@
   "description": "Track reading progress and suggest unread posts",
   "private": true,
   "scripts": {
-    "build": "wp-scripts build --webpack-src-dir=src/blocks --output-path=build/blocks",
-    "start": "wp-scripts start --webpack-src-dir=src/blocks --output-path=build/blocks",
+    "build": "wp-scripts build --webpack-src-dir=src/Blocks --output-path=build/blocks",
+    "start": "wp-scripts start --webpack-src-dir=src/Blocks --output-path=build/blocks",
     "test": "jest",
     "test:watch": "jest --watch",
     "lint": "eslint assets/js",
