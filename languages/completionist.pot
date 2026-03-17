@@ -1,0 +1,245 @@
+# Copyright (C) 2024 Completionist
+# This file is distributed under the GPL v2 or later.
+msgid ""
+msgstr ""
+"Project-Id-Version: Completionist 1.0.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-01-01 00:00+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+
+#: templates/admin-page.php
+msgid "Completionist Settings"
+msgstr ""
+
+#: templates/admin-page.php
+msgid "General"
+msgstr ""
+
+#: templates/admin-page.php
+msgid "Post Types to Track"
+msgstr ""
+
+#: templates/admin-page.php
+msgid "Track Logged-In Users"
+msgstr ""
+
+#: templates/admin-page.php
+msgid "Store reading history in database for logged-in users"
+msgstr ""
+
+#: templates/admin-page.php
+msgid "Useful for membership sites. Stores reading history in database for WordPress users (admins, members). Most sites without public registration can leave this disabled."
+msgstr ""
+
+#: templates/admin-page.php
+msgid "Display"
+msgstr ""
+
+#: templates/admin-page.php
+msgid "Control what information is shown for each post in the widget."
+msgstr ""
+
+#: templates/admin-page.php
+msgid "Show Excerpt"
+msgstr ""
+
+#: templates/admin-page.php
+msgid "Display post excerpt below the title"
+msgstr ""
+
+#: templates/admin-page.php
+msgid "Show Thumbnail"
+msgstr ""
+
+#: templates/admin-page.php
+msgid "Display post thumbnail image"
+msgstr ""
+
+#: templates/admin-page.php
+msgid "Excerpt Length"
+msgstr ""
+
+#: templates/admin-page.php
+msgid "words"
+msgstr ""
+
+#: templates/admin-page.php
+msgid "Number of words to show in excerpt."
+msgstr ""
+
+#: templates/admin-page.php
+msgid "Consent Settings"
+msgstr ""
+
+#: templates/admin-page.php
+msgid "Require Consent"
+msgstr ""
+
+#: templates/admin-page.php
+msgid "Ask users for consent before tracking"
+msgstr ""
+
+#: templates/admin-page.php
+msgid "If enabled, users must opt-in before their reading progress is tracked."
+msgstr ""
+
+#: templates/admin-page.php
+msgid "Consent Message"
+msgstr ""
+
+#: templates/admin-page.php
+msgid "Message shown to users when asking for consent."
+msgstr ""
+
+#: templates/admin-page.php
+msgid "Checkbox Label"
+msgstr ""
+
+#: templates/admin-page.php
+msgid "Label for the consent checkbox."
+msgstr ""
+
+#: templates/admin-page.php
+msgid "Viewed Section"
+msgstr ""
+
+#: templates/admin-page.php
+msgid "Posts the visitor started but did not scroll to the end."
+msgstr ""
+
+#: templates/admin-page.php
+msgid "Enable"
+msgstr ""
+
+#: templates/admin-page.php
+msgid "Show this section in the widget"
+msgstr ""
+
+#: templates/admin-page.php
+msgid "Max Posts"
+msgstr ""
+
+#: templates/admin-page.php
+msgid "Label"
+msgstr ""
+
+#: templates/admin-page.php
+msgid "Completed Section"
+msgstr ""
+
+#: templates/admin-page.php
+msgid "Posts the visitor scrolled to the end."
+msgstr ""
+
+#: templates/admin-page.php
+msgid "Read Threshold"
+msgstr ""
+
+#: templates/admin-page.php
+msgid "%"
+msgstr ""
+
+#: templates/admin-page.php
+msgid "How far the user must scroll to mark the post as completed. Use lower values (e.g., 10%) for product pages where viewing is enough."
+msgstr ""
+
+#: templates/admin-page.php
+msgid "Suggestions Section"
+msgstr ""
+
+#: templates/admin-page.php
+msgid "Posts the visitor has not seen yet."
+msgstr ""
+
+#: templates/admin-page.php
+msgid "Cache Duration"
+msgstr ""
+
+#: templates/admin-page.php
+msgid "hours"
+msgstr ""
+
+#: templates/admin-page.php
+msgid "How long to cache suggestions before refreshing. Also refreshes when you complete reading a post."
+msgstr ""
+
+#: templates/admin-page.php
+msgid "Order"
+msgstr ""
+
+#: templates/admin-page.php
+msgid "Random"
+msgstr ""
+
+#: templates/admin-page.php
+msgid "Recent (newest first)"
+msgstr ""
+
+#: templates/admin-page.php
+msgid "Related (same categories as read posts)"
+msgstr ""
+
+#: templates/admin-page.php
+msgid "How to order suggested posts."
+msgstr ""
+
+#: templates/admin-page.php
+msgid "Include Categories"
+msgstr ""
+
+#: templates/admin-page.php
+msgid "Only suggest posts from these categories. Leave empty to include all. Ignored when using \"Related\" order."
+msgstr ""
+
+#: templates/admin-page.php
+msgid "Exclude Categories"
+msgstr ""
+
+#: templates/admin-page.php
+msgid "Never suggest posts from these categories. Ignored when using \"Related\" order."
+msgstr ""
+
+#: templates/admin-page.php
+msgid "Other Labels"
+msgstr ""
+
+#: templates/admin-page.php
+msgid "Empty State"
+msgstr ""
+
+#: templates/admin-page.php
+msgid "Shown when there is nothing to display."
+msgstr ""
+
+#: templates/admin-page.php
+msgid "Loading"
+msgstr ""
+
+#: templates/admin-page.php
+msgid "Shown while fetching suggestions."
+msgstr ""
+
+#: templates/admin-page.php
+msgid "Clear Data"
+msgstr ""
+
+#: templates/admin-page.php
+msgid "Allow users to clear their reading history."
+msgstr ""
+
+#: templates/admin-page.php
+msgid "Show Clear Button"
+msgstr ""
+
+#: templates/admin-page.php
+msgid "Display a button to clear reading history (stored in browser)"
+msgstr ""
+
+#: templates/admin-page.php
+msgid "Button Label"
+msgstr ""

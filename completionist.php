@@ -30,6 +30,10 @@ spl_autoload_register(function ($class) {
     }
 });
 
+add_action('init', function () {
+    load_plugin_textdomain('completionist', false, dirname(plugin_basename(__FILE__)) . '/languages');
+});
+
 add_action('plugins_loaded', function () {
     $pluginPath = plugin_dir_path(__FILE__);
     $pluginUrl = plugin_dir_url(__FILE__);

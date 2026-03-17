@@ -1,0 +1,248 @@
+# Spanish translations for Completionist plugin.
+# Copyright (C) 2024 Completionist
+# This file is distributed under the GPL v2 or later.
+msgid ""
+msgstr ""
+"Project-Id-Version: Completionist 1.0.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-01-01 00:00+0000\n"
+"PO-Revision-Date: 2024-01-01 00:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: Spanish\n"
+"Language: es_ES\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: templates/admin-page.php
+msgid "Completionist Settings"
+msgstr "Ajustes de Completionist"
+
+#: templates/admin-page.php
+msgid "General"
+msgstr "General"
+
+#: templates/admin-page.php
+msgid "Post Types to Track"
+msgstr "Tipos de contenido a registrar"
+
+#: templates/admin-page.php
+msgid "Track Logged-In Users"
+msgstr "Registrar usuarios conectados"
+
+#: templates/admin-page.php
+msgid "Store reading history in database for logged-in users"
+msgstr "Guardar historial de lectura en la base de datos para usuarios conectados"
+
+#: templates/admin-page.php
+msgid "Useful for membership sites. Stores reading history in database for WordPress users (admins, members). Most sites without public registration can leave this disabled."
+msgstr "Útil para sitios de membresía. Guarda el historial de lectura en la base de datos para usuarios de WordPress (administradores, miembros). La mayoría de sitios sin registro público pueden dejar esto desactivado."
+
+#: templates/admin-page.php
+msgid "Display"
+msgstr "Visualización"
+
+#: templates/admin-page.php
+msgid "Control what information is shown for each post in the widget."
+msgstr "Controla qué información se muestra para cada entrada en el widget."
+
+#: templates/admin-page.php
+msgid "Show Excerpt"
+msgstr "Mostrar extracto"
+
+#: templates/admin-page.php
+msgid "Display post excerpt below the title"
+msgstr "Mostrar el extracto de la entrada debajo del título"
+
+#: templates/admin-page.php
+msgid "Show Thumbnail"
+msgstr "Mostrar miniatura"
+
+#: templates/admin-page.php
+msgid "Display post thumbnail image"
+msgstr "Mostrar imagen miniatura de la entrada"
+
+#: templates/admin-page.php
+msgid "Excerpt Length"
+msgstr "Longitud del extracto"
+
+#: templates/admin-page.php
+msgid "words"
+msgstr "palabras"
+
+#: templates/admin-page.php
+msgid "Number of words to show in excerpt."
+msgstr "Número de palabras a mostrar en el extracto."
+
+#: templates/admin-page.php
+msgid "Consent Settings"
+msgstr "Ajustes de consentimiento"
+
+#: templates/admin-page.php
+msgid "Require Consent"
+msgstr "Requerir consentimiento"
+
+#: templates/admin-page.php
+msgid "Ask users for consent before tracking"
+msgstr "Pedir consentimiento a los usuarios antes de registrar"
+
+#: templates/admin-page.php
+msgid "If enabled, users must opt-in before their reading progress is tracked."
+msgstr "Si está activado, los usuarios deben aceptar antes de que se registre su progreso de lectura."
+
+#: templates/admin-page.php
+msgid "Consent Message"
+msgstr "Mensaje de consentimiento"
+
+#: templates/admin-page.php
+msgid "Message shown to users when asking for consent."
+msgstr "Mensaje mostrado a los usuarios al pedir consentimiento."
+
+#: templates/admin-page.php
+msgid "Checkbox Label"
+msgstr "Etiqueta del checkbox"
+
+#: templates/admin-page.php
+msgid "Label for the consent checkbox."
+msgstr "Etiqueta para el checkbox de consentimiento."
+
+#: templates/admin-page.php
+msgid "Viewed Section"
+msgstr "Sección de vistos"
+
+#: templates/admin-page.php
+msgid "Posts the visitor started but did not scroll to the end."
+msgstr "Entradas que el visitante comenzó pero no llegó al final."
+
+#: templates/admin-page.php
+msgid "Enable"
+msgstr "Activar"
+
+#: templates/admin-page.php
+msgid "Show this section in the widget"
+msgstr "Mostrar esta sección en el widget"
+
+#: templates/admin-page.php
+msgid "Max Posts"
+msgstr "Máximo de entradas"
+
+#: templates/admin-page.php
+msgid "Label"
+msgstr "Etiqueta"
+
+#: templates/admin-page.php
+msgid "Completed Section"
+msgstr "Sección de completados"
+
+#: templates/admin-page.php
+msgid "Posts the visitor scrolled to the end."
+msgstr "Entradas que el visitante leyó hasta el final."
+
+#: templates/admin-page.php
+msgid "Read Threshold"
+msgstr "Umbral de lectura"
+
+#: templates/admin-page.php
+msgid "%"
+msgstr "%"
+
+#: templates/admin-page.php
+msgid "How far the user must scroll to mark the post as completed. Use lower values (e.g., 10%) for product pages where viewing is enough."
+msgstr "Cuánto debe desplazarse el usuario para marcar la entrada como completada. Usa valores bajos (ej. 10%) para páginas de productos donde ver es suficiente."
+
+#: templates/admin-page.php
+msgid "Suggestions Section"
+msgstr "Sección de sugerencias"
+
+#: templates/admin-page.php
+msgid "Posts the visitor has not seen yet."
+msgstr "Entradas que el visitante aún no ha visto."
+
+#: templates/admin-page.php
+msgid "Cache Duration"
+msgstr "Duración de caché"
+
+#: templates/admin-page.php
+msgid "hours"
+msgstr "horas"
+
+#: templates/admin-page.php
+msgid "How long to cache suggestions before refreshing. Also refreshes when you complete reading a post."
+msgstr "Cuánto tiempo guardar las sugerencias en caché antes de actualizar. También se actualiza cuando completas la lectura de una entrada."
+
+#: templates/admin-page.php
+msgid "Order"
+msgstr "Orden"
+
+#: templates/admin-page.php
+msgid "Random"
+msgstr "Aleatorio"
+
+#: templates/admin-page.php
+msgid "Recent (newest first)"
+msgstr "Recientes (más nuevos primero)"
+
+#: templates/admin-page.php
+msgid "Related (same categories as read posts)"
+msgstr "Relacionados (mismas categorías que las entradas leídas)"
+
+#: templates/admin-page.php
+msgid "How to order suggested posts."
+msgstr "Cómo ordenar las entradas sugeridas."
+
+#: templates/admin-page.php
+msgid "Include Categories"
+msgstr "Incluir categorías"
+
+#: templates/admin-page.php
+msgid "Only suggest posts from these categories. Leave empty to include all. Ignored when using \"Related\" order."
+msgstr "Solo sugerir entradas de estas categorías. Dejar vacío para incluir todas. Se ignora cuando se usa el orden \"Relacionados\"."
+
+#: templates/admin-page.php
+msgid "Exclude Categories"
+msgstr "Excluir categorías"
+
+#: templates/admin-page.php
+msgid "Never suggest posts from these categories. Ignored when using \"Related\" order."
+msgstr "Nunca sugerir entradas de estas categorías. Se ignora cuando se usa el orden \"Relacionados\"."
+
+#: templates/admin-page.php
+msgid "Other Labels"
+msgstr "Otras etiquetas"
+
+#: templates/admin-page.php
+msgid "Empty State"
+msgstr "Estado vacío"
+
+#: templates/admin-page.php
+msgid "Shown when there is nothing to display."
+msgstr "Se muestra cuando no hay nada que mostrar."
+
+#: templates/admin-page.php
+msgid "Loading"
+msgstr "Cargando"
+
+#: templates/admin-page.php
+msgid "Shown while fetching suggestions."
+msgstr "Se muestra mientras se obtienen las sugerencias."
+
+#: templates/admin-page.php
+msgid "Clear Data"
+msgstr "Borrar datos"
+
+#: templates/admin-page.php
+msgid "Allow users to clear their reading history."
+msgstr "Permitir a los usuarios borrar su historial de lectura."
+
+#: templates/admin-page.php
+msgid "Show Clear Button"
+msgstr "Mostrar botón de borrar"
+
+#: templates/admin-page.php
+msgid "Display a button to clear reading history (stored in browser)"
+msgstr "Mostrar un botón para borrar el historial de lectura (almacenado en el navegador)"
+
+#: templates/admin-page.php
+msgid "Button Label"
+msgstr "Etiqueta del botón"
