@@ -30,13 +30,14 @@ jobs:
         run: npm run build
 
       - name: Generate zip
-        uses: 10up/action-wordpress-plugin-build-zip@stable
-        with:
-          retention-days: 5
+        run: |
+          rsync -av --exclude-from='.distignore' . ../completionist/
+          cd .. && zip -r completionist.zip completionist
+          mv completionist.zip $GITHUB_WORKSPACE/
 
       - name: Upload release asset
         uses: softprops/action-gh-release@v2
         with:
-          files: ${{ github.event.repository.name }}.zip
+          files: completionist.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
