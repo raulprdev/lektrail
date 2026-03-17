@@ -42,6 +42,9 @@ webpack.config.js
 .env
 .env.*
 
+# Scripts
+bin
+
 # Other dev files
 *.log
 *.map

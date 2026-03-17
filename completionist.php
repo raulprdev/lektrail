@@ -5,7 +5,7 @@
  * Version:           1.0.0
  * Requires at least: 6.0
  * Requires PHP:      7.4
- * Author:            Completionist
+ * Author:            raulprdev
  * License:           GPL v2 or later
  * Text Domain:       completionist
  */

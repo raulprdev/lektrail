@@ -1,5 +1,5 @@
 === Completionist ===
-Contributors: completionist
+Contributors: raulprdev
 Tags: reading progress, tracking, engagement
 Requires at least: 6.0
 Tested up to: 6.7
