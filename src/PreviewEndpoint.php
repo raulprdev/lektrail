@@ -56,11 +56,11 @@ class PreviewEndpoint
 
     private function getIntParam(string $name, int $default): int
     {
-        $value = $_GET[$name] ?? null;
-        if ($value === null) {
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- REST API with permission_callback
+        $value = isset($_GET[$name]) ? absint(wp_unslash($_GET[$name])) : null;
+        if ($value === null || $value <= 0) {
             return $default;
         }
-        $int = (int) $value;
-        return $int > 0 ? $int : $default;
+        return $value;
     }
 }

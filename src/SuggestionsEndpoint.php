@@ -26,7 +26,9 @@ class SuggestionsEndpoint
 
     public function handle(): void
     {
-        $excludeIds = $this->parseExcludeIds($_GET['exclude'] ?? '');
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Public read-only endpoint
+        $exclude = isset($_GET['exclude']) ? sanitize_text_field(wp_unslash($_GET['exclude'])) : '';
+        $excludeIds = $this->parseExcludeIds($exclude);
         $this->jsonResponse->success($this->suggestionsQuery->get($excludeIds));
     }
 
