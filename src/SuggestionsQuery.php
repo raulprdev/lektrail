@@ -11,6 +11,11 @@ class SuggestionsQuery
     public const ORDER_RECENT = 'recent';
     public const ORDER_RELATED = 'related';
 
+    public static function validOrders(): array
+    {
+        return [self::ORDER_RANDOM, self::ORDER_RECENT, self::ORDER_RELATED];
+    }
+
     private PluginConfigRepository $pluginConfigs;
     private PostQuery $postQuery;
 
