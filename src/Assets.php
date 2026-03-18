@@ -18,6 +18,8 @@ class Assets
     public const HANDLE_CONSENT_MANAGER = 'completionist-consent-manager';
     public const HANDLE_NOTIFIER = 'completionist-notifier';
 
+    private const SCRIPT_ARGS = ['in_footer' => true, 'strategy' => 'defer'];
+
     private ScriptLoader $scripts;
     private string $pluginPath;
     private string $pluginUrl;
@@ -52,7 +54,7 @@ class Assets
             $this->pluginUrl . 'assets/js/detector.js',
             $deps,
             $this->fileVersion('assets/js/detector.js'),
-            true
+            self::SCRIPT_ARGS
         );
 
         $this->scripts->addInlineScript(
@@ -113,7 +115,7 @@ class Assets
             $this->pluginUrl . 'assets/js/widget.js',
             $deps,
             $this->fileVersion('assets/js/widget.js'),
-            true
+            self::SCRIPT_ARGS
         );
 
         $config = array_merge($pluginConfig->toJsConfig(), [
@@ -151,7 +153,7 @@ class Assets
             $this->pluginUrl . 'assets/js/widget.js',
             [self::HANDLE_STORAGE, self::HANDLE_RENDER_ITEM, self::HANDLE_DATA_SOURCE],
             $this->fileVersion('assets/js/widget.js'),
-            true
+            self::SCRIPT_ARGS
         );
 
         $this->scripts->enqueueStyle(
@@ -176,7 +178,7 @@ class Assets
             $this->pluginUrl . 'assets/js/storage.js',
             [],
             $this->fileVersion('assets/js/storage.js'),
-            true
+            self::SCRIPT_ARGS
         );
     }
 
@@ -187,7 +189,7 @@ class Assets
             $this->pluginUrl . 'assets/js/notifier.js',
             [],
             $this->fileVersion('assets/js/notifier.js'),
-            true
+            self::SCRIPT_ARGS
         );
     }
 
@@ -198,7 +200,7 @@ class Assets
             $this->pluginUrl . 'assets/js/render-item.js',
             [],
             $this->fileVersion('assets/js/render-item.js'),
-            true
+            self::SCRIPT_ARGS
         );
     }
 
@@ -209,7 +211,7 @@ class Assets
             $this->pluginUrl . 'assets/js/data-provider.js',
             [self::HANDLE_STORAGE],
             $this->fileVersion('assets/js/data-provider.js'),
-            true
+            self::SCRIPT_ARGS
         );
     }
 
@@ -220,7 +222,7 @@ class Assets
             $this->pluginUrl . 'assets/js/data-source.js',
             [],
             $this->fileVersion('assets/js/data-source.js'),
-            true
+            self::SCRIPT_ARGS
         );
     }
 
@@ -250,7 +252,7 @@ class Assets
             $this->pluginUrl . 'assets/js/consent/builtin-provider.js',
             [],
             $this->fileVersion('assets/js/consent/builtin-provider.js'),
-            true
+            self::SCRIPT_ARGS
         );
 
         $this->scripts->enqueueScript(
@@ -258,7 +260,7 @@ class Assets
             $this->pluginUrl . 'assets/js/consent/consent-manager.js',
             [self::HANDLE_CONSENT_BUILTIN],
             $this->fileVersion('assets/js/consent/consent-manager.js'),
-            true
+            self::SCRIPT_ARGS
         );
     }
 }

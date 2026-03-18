@@ -3,7 +3,7 @@
  * Plugin Name:       Completionist
  * Description:       Track reading progress and suggest unread posts.
  * Version:           1.0.0
- * Requires at least: 6.0
+ * Requires at least: 6.3
  * Requires PHP:      7.4
  * Author:            raulprdev
  * License:           GPL v2 or later

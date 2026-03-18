@@ -1,7 +1,7 @@
 === Completionist ===
 Contributors: raulprdev
 Tags: reading progress, tracking, engagement, recently viewed, suggestions
-Requires at least: 6.0
+Requires at least: 6.3
 Tested up to: 6.9
 Stable tag: 1.0.0
 Requires PHP: 7.4

@@ -11,9 +11,12 @@ class MockScriptLoader implements ScriptLoader
     public array $registeredStyles = [];
     public array $inlineScripts = [];
 
-    public function enqueueScript(string $handle, string $url, array $deps, string $version, bool $inFooter): void
+    /**
+     * @param array|bool $args
+     */
+    public function enqueueScript(string $handle, string $url, array $deps, string $version, $args): void
     {
-        $this->scripts[$handle] = compact('url', 'deps', 'version', 'inFooter');
+        $this->scripts[$handle] = compact('url', 'deps', 'version', 'args');
     }
 
     public function enqueueStyle(string $handle, string $url, array $deps, string $version): void

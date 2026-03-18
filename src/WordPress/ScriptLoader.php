@@ -6,9 +6,12 @@ use Completionist\Contracts\ScriptLoader as ScriptLoaderInterface;
 
 class ScriptLoader implements ScriptLoaderInterface
 {
-    public function enqueueScript(string $handle, string $url, array $deps, string $version, bool $inFooter): void
+    /**
+     * @param array|bool $args
+     */
+    public function enqueueScript(string $handle, string $url, array $deps, string $version, $args): void
     {
-        wp_enqueue_script($handle, $url, $deps, $version, $inFooter);
+        wp_enqueue_script($handle, $url, $deps, $version, $args);
     }
 
     public function enqueueStyle(string $handle, string $url, array $deps, string $version): void
