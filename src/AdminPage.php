@@ -26,8 +26,8 @@ class AdminPage
     public function addMenu(): void
     {
         add_options_page(
-            'Completionist',
-            'Completionist',
+            'Reading Completionist',
+            'Reading Completionist',
             'manage_options',
             self::MENU_SLUG,
             [$this, 'render']

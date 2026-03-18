@@ -1,4 +1,4 @@
-=== Completionist ===
+=== Reading Completionist ===
 Contributors: raulprdev
 Tags: reading progress, tracking, engagement, recently viewed, suggestions
 Requires at least: 6.3

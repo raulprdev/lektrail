@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name:       Completionist
+ * Plugin Name:       Reading Completionist
  * Description:       Track reading progress and suggest unread posts.
  * Version:           1.0.0
  * Requires at least: 6.3
