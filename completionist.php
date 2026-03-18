@@ -7,7 +7,7 @@
  * Requires PHP:      7.4
  * Author:            raulprdev
  * License:           GPL v2 or later
- * Text Domain:       completionist
+ * Text Domain:       reading-completionist
  */
 
 defined('ABSPATH') || exit;
@@ -36,9 +36,9 @@ add_action('init', function () {
     $fallbackFile = __DIR__ . '/languages/completionist-es_ES.mo';
 
     if (file_exists($localeFile)) {
-        load_textdomain('completionist', $localeFile);
+        load_textdomain('reading-completionist', $localeFile);
     } elseif (strpos($locale, 'es_') === 0 && file_exists($fallbackFile)) {
-        load_textdomain('completionist', $fallbackFile);
+        load_textdomain('reading-completionist', $fallbackFile);
     }
 });
 

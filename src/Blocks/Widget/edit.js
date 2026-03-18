@@ -112,11 +112,11 @@ export default function Edit({ attributes, setAttributes }) {
 		<>
 			<InspectorControls>
 				<PanelBody
-					title={__('Display Settings', 'completionist')}
+					title={__('Display Settings', 'reading-completionist')}
 					initialOpen={true}
 				>
 					<RangeControl
-						label={__('Max Viewed Posts', 'completionist')}
+						label={__('Max Viewed Posts', 'reading-completionist')}
 						value={maxViewed}
 						onChange={(value) => setAttributes({ maxViewed: value })}
 						min={1}
@@ -125,7 +125,7 @@ export default function Edit({ attributes, setAttributes }) {
 						resetFallbackValue={undefined}
 					/>
 					<RangeControl
-						label={__('Max Completed Posts', 'completionist')}
+						label={__('Max Completed Posts', 'reading-completionist')}
 						value={maxRead}
 						onChange={(value) => setAttributes({ maxRead: value })}
 						min={1}
@@ -134,7 +134,7 @@ export default function Edit({ attributes, setAttributes }) {
 						resetFallbackValue={undefined}
 					/>
 					<RangeControl
-						label={__('Max Suggestions', 'completionist')}
+						label={__('Max Suggestions', 'reading-completionist')}
 						value={maxSuggestions}
 						onChange={(value) => setAttributes({ maxSuggestions: value })}
 						min={1}
@@ -143,18 +143,18 @@ export default function Edit({ attributes, setAttributes }) {
 						resetFallbackValue={undefined}
 					/>
 					<ToggleControl
-						label={__('Show Excerpts', 'completionist')}
+						label={__('Show Excerpts', 'reading-completionist')}
 						checked={showExcerpt}
 						onChange={(value) => setAttributes({ showExcerpt: value })}
 					/>
 					<ToggleControl
-						label={__('Show Thumbnails', 'completionist')}
+						label={__('Show Thumbnails', 'reading-completionist')}
 						checked={showThumbnail}
 						onChange={(value) => setAttributes({ showThumbnail: value })}
 					/>
 					{showExcerpt && (
 						<RangeControl
-							label={__('Excerpt Length (words)', 'completionist')}
+							label={__('Excerpt Length (words)', 'reading-completionist')}
 							value={excerptLength}
 							onChange={(value) => setAttributes({ excerptLength: value })}
 							min={5}
@@ -166,35 +166,35 @@ export default function Edit({ attributes, setAttributes }) {
 				</PanelBody>
 
 				<PanelBody
-					title={__('Sections', 'completionist')}
+					title={__('Sections', 'reading-completionist')}
 					initialOpen={false}
 				>
 					<ToggleControl
-						label={__('Show Continue Reading', 'completionist')}
+						label={__('Show Continue Reading', 'reading-completionist')}
 						checked={viewedEnabled}
 						onChange={(value) => setAttributes({ viewedEnabled: value })}
 					/>
 					<ToggleControl
-						label={__('Show Completed', 'completionist')}
+						label={__('Show Completed', 'reading-completionist')}
 						checked={completedEnabled}
 						onChange={(value) => setAttributes({ completedEnabled: value })}
 					/>
 					<ToggleControl
-						label={__('Show Clear Button', 'completionist')}
+						label={__('Show Clear Button', 'reading-completionist')}
 						checked={showClearButton}
 						onChange={(value) => setAttributes({ showClearButton: value })}
 					/>
 					<SelectControl
-						label={__('Suggestion Order', 'completionist')}
+						label={__('Suggestion Order', 'reading-completionist')}
 						value={suggestionOrder}
 						options={[
 							{
-								label: __('Default (use global)', 'completionist'),
+								label: __('Default (use global)', 'reading-completionist'),
 								value: '',
 							},
-							{ label: __('Random', 'completionist'), value: 'random' },
-							{ label: __('Recent', 'completionist'), value: 'recent' },
-							{ label: __('Related', 'completionist'), value: 'related' },
+							{ label: __('Random', 'reading-completionist'), value: 'random' },
+							{ label: __('Recent', 'reading-completionist'), value: 'recent' },
+							{ label: __('Related', 'reading-completionist'), value: 'related' },
 						]}
 						onChange={(value) =>
 							setAttributes({ suggestionOrder: value || undefined })
@@ -203,68 +203,68 @@ export default function Edit({ attributes, setAttributes }) {
 				</PanelBody>
 
 				<PanelBody
-					title={__('Labels', 'completionist')}
+					title={__('Labels', 'reading-completionist')}
 					initialOpen={false}
 				>
 					<TextControl
-						label={__('Continue Reading Label', 'completionist')}
+						label={__('Continue Reading Label', 'reading-completionist')}
 						value={labelContinue || ''}
 						onChange={(value) =>
 							setAttributes({ labelContinue: value || undefined })
 						}
-						placeholder={__('Continue reading', 'completionist')}
+						placeholder={__('Continue reading', 'reading-completionist')}
 					/>
 					<TextControl
-						label={__('Completed Label', 'completionist')}
+						label={__('Completed Label', 'reading-completionist')}
 						value={labelCompleted || ''}
 						onChange={(value) =>
 							setAttributes({ labelCompleted: value || undefined })
 						}
-						placeholder={__('Completed', 'completionist')}
+						placeholder={__('Completed', 'reading-completionist')}
 					/>
 					<TextControl
-						label={__('Suggestions Label', 'completionist')}
+						label={__('Suggestions Label', 'reading-completionist')}
 						value={labelSuggestions || ''}
 						onChange={(value) =>
 							setAttributes({ labelSuggestions: value || undefined })
 						}
-						placeholder={__('Suggested reading', 'completionist')}
+						placeholder={__('Suggested reading', 'reading-completionist')}
 					/>
 					<TextControl
-						label={__('Empty State Label', 'completionist')}
+						label={__('Empty State Label', 'reading-completionist')}
 						value={labelEmpty || ''}
 						onChange={(value) =>
 							setAttributes({ labelEmpty: value || undefined })
 						}
 						placeholder={__(
 							'Start reading to track your progress!',
-							'completionist'
+							'reading-completionist'
 						)}
 					/>
 					<TextControl
-						label={__('Loading Label', 'completionist')}
+						label={__('Loading Label', 'reading-completionist')}
 						value={labelLoading || ''}
 						onChange={(value) =>
 							setAttributes({ labelLoading: value || undefined })
 						}
-						placeholder={__('Loading suggestions...', 'completionist')}
+						placeholder={__('Loading suggestions...', 'reading-completionist')}
 					/>
 					<TextControl
-						label={__('Clear Button Label', 'completionist')}
+						label={__('Clear Button Label', 'reading-completionist')}
 						value={labelClear || ''}
 						onChange={(value) =>
 							setAttributes({ labelClear: value || undefined })
 						}
-						placeholder={__('Clear history', 'completionist')}
+						placeholder={__('Clear history', 'reading-completionist')}
 					/>
 				</PanelBody>
 
 				<PanelBody
-					title={__('Performance', 'completionist')}
+					title={__('Performance', 'reading-completionist')}
 					initialOpen={false}
 				>
 					<RangeControl
-						label={__('Suggestions Cache (hours)', 'completionist')}
+						label={__('Suggestions Cache (hours)', 'reading-completionist')}
 						value={suggestionsCacheHours}
 						onChange={(value) =>
 							setAttributes({ suggestionsCacheHours: value })

@@ -13,7 +13,7 @@
     "tracker",
     "suggestions"
   ],
-  "textdomain": "completionist",
+  "textdomain": "reading-completionist",
   "supports": {
     "html": false,
     "multiple": false,
