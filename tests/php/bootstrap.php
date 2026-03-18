@@ -50,3 +50,24 @@ if (!function_exists('wp_create_nonce')) {
         return 'test_nonce_' . $action;
     }
 }
+
+if (!function_exists('sanitize_text_field')) {
+    function sanitize_text_field($str)
+    {
+        return trim(strip_tags($str));
+    }
+}
+
+if (!function_exists('wp_unslash')) {
+    function wp_unslash($value)
+    {
+        return is_string($value) ? stripslashes($value) : $value;
+    }
+}
+
+if (!function_exists('absint')) {
+    function absint($value)
+    {
+        return abs((int) $value);
+    }
+}

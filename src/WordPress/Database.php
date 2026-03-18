@@ -6,21 +6,26 @@ use Completionist\Contracts\Database as DatabaseContract;
 
 class Database implements DatabaseContract
 {
-    public function query(string $sql): bool
+    public function query(string $sql, ...$args): bool
     {
         global $wpdb;
-        return $wpdb->query($sql) !== false;
+        $prepared = empty($args) ? $sql : $wpdb->prepare($sql, ...$args);
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Custom table
+        return $wpdb->query($prepared) !== false;
     }
 
-    public function getResults(string $query): array
+    public function getResults(string $query, ...$args): array
     {
         global $wpdb;
-        return $wpdb->get_results($query, ARRAY_A) ?: [];
+        $prepared = empty($args) ? $query : $wpdb->prepare($query, ...$args);
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Custom table
+        return $wpdb->get_results($prepared, ARRAY_A) ?: [];
     }
 
     public function delete(string $table, array $where): bool
     {
         global $wpdb;
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Custom table
         return $wpdb->delete($table, $where) !== false;
     }
 

@@ -22,7 +22,7 @@ class TableInstallerTest extends TestCase
     {
         $this->tableInstaller->createTable();
 
-        $sql = $this->db->queries[0];
+        $sql = $this->db->queries[0]['sql'];
         $this->assertStringContainsString('CREATE TABLE', $sql);
         $this->assertStringContainsString('wp_completionist_history', $sql);
         $this->assertStringContainsString('user_id', $sql);
@@ -37,7 +37,7 @@ class TableInstallerTest extends TestCase
     {
         $this->tableInstaller->dropTable();
 
-        $sql = $this->db->queries[0];
+        $sql = $this->db->queries[0]['sql'];
         $this->assertStringContainsString('DROP TABLE IF EXISTS', $sql);
         $this->assertStringContainsString('wp_completionist_history', $sql);
     }
@@ -49,7 +49,7 @@ class TableInstallerTest extends TestCase
 
         $installer->createTable();
 
-        $sql = $this->db->queries[0];
+        $sql = $this->db->queries[0]['sql'];
         $this->assertStringContainsString('custom_completionist_history', $sql);
     }
 }

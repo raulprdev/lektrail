@@ -11,15 +11,15 @@ class MockDatabase implements Database
     public array $deletes = [];
     public string $prefix = 'wp_';
 
-    public function query(string $sql): bool
+    public function query(string $sql, ...$args): bool
     {
-        $this->queries[] = $sql;
+        $this->queries[] = ['sql' => $sql, 'args' => $args];
         return true;
     }
 
-    public function getResults(string $query): array
+    public function getResults(string $query, ...$args): array
     {
-        $this->queries[] = $query;
+        $this->queries[] = ['sql' => $query, 'args' => $args];
         return array_shift($this->results) ?? [];
     }
 

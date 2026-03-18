@@ -18,16 +18,14 @@ class TrackingRepository implements TrackingRepositoryContract
 
     public function track(int $userId, int $postId, string $status): void
     {
-        $sql = sprintf(
-            "INSERT INTO %s (user_id, post_id, status, created_at) VALUES (%d, %d, '%s', NOW())
-             ON DUPLICATE KEY UPDATE status = '%s', created_at = NOW()",
-            $this->table,
+        $this->db->query(
+            "INSERT INTO {$this->table} (user_id, post_id, status, created_at) VALUES (%d, %d, %s, NOW())
+             ON DUPLICATE KEY UPDATE status = %s, created_at = NOW()",
             $userId,
             $postId,
-            esc_sql($status),
-            esc_sql($status)
+            $status,
+            $status
         );
-        $this->db->query($sql);
     }
 
     public function getViewedIds(int $userId): array
@@ -57,25 +55,21 @@ class TrackingRepository implements TrackingRepositoryContract
 
     private function getIdsByStatus(int $userId, string $status): array
     {
-        $sql = sprintf(
-            "SELECT post_id FROM %s WHERE user_id = %d AND status = '%s' ORDER BY created_at DESC",
-            $this->table,
+        $results = $this->db->getResults(
+            "SELECT post_id FROM {$this->table} WHERE user_id = %d AND status = %s ORDER BY created_at DESC",
             $userId,
-            esc_sql($status)
+            $status
         );
-        $results = $this->db->getResults($sql);
         return array_column($results, 'post_id');
     }
 
     private function getPostsByStatus(int $userId, string $status, int $limit): array
     {
-        $sql = sprintf(
-            "SELECT post_id as id FROM %s WHERE user_id = %d AND status = '%s' ORDER BY created_at DESC LIMIT %d",
-            $this->table,
+        return $this->db->getResults(
+            "SELECT post_id as id FROM {$this->table} WHERE user_id = %d AND status = %s ORDER BY created_at DESC LIMIT %d",
             $userId,
-            esc_sql($status),
+            $status,
             $limit
         );
-        return $this->db->getResults($sql);
     }
 }

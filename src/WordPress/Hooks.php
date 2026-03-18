@@ -1,8 +1,8 @@
 <?php
 
-defined('ABSPATH') || exit;
-
 namespace Completionist\WordPress;
+
+defined('ABSPATH') || exit;
 
 use Completionist\Contracts\Hooks as HooksInterface;
 
