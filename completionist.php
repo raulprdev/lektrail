@@ -39,8 +39,6 @@ add_action('init', function () {
         load_textdomain('completionist', $localeFile);
     } elseif (strpos($locale, 'es_') === 0 && file_exists($fallbackFile)) {
         load_textdomain('completionist', $fallbackFile);
-    } else {
-        load_plugin_textdomain('completionist', false, dirname(plugin_basename(__FILE__)) . '/languages');
     }
 });
 

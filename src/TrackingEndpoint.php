@@ -31,6 +31,7 @@ class TrackingEndpoint
 
     public function handle(): void
     {
+        // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce is verified via NonceVerifier interface below
         $nonce = isset($_POST['nonce']) ? sanitize_text_field(wp_unslash($_POST['nonce'])) : '';
         if ($nonce === '' || !$this->nonceVerifier->verify($nonce, self::ACTION)) {
             $this->jsonResponse->error('Invalid nonce', 403);
@@ -42,6 +43,7 @@ class TrackingEndpoint
             return;
         }
 
+        // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified above
         $postId = isset($_POST['post_id']) ? absint(wp_unslash($_POST['post_id'])) : 0;
         if (!$postId) {
             $this->jsonResponse->error('Missing post_id', 400);
