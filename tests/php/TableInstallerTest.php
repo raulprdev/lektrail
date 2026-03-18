@@ -22,7 +22,7 @@ class TableInstallerTest extends TestCase
     {
         $this->tableInstaller->createTable();
 
-        $sql = $this->db->queries[0]['sql'];
+        $sql = $this->db->tables[0];
         $this->assertStringContainsString('CREATE TABLE', $sql);
         $this->assertStringContainsString('wp_completionist_history', $sql);
         $this->assertStringContainsString('user_id', $sql);
@@ -33,13 +33,12 @@ class TableInstallerTest extends TestCase
         $this->assertStringContainsString('UNIQUE KEY', $sql);
     }
 
-    public function testDropTableGeneratesCorrectSql(): void
+    public function testDropTablePassesCorrectTableName(): void
     {
         $this->tableInstaller->dropTable();
 
-        $sql = $this->db->queries[0]['sql'];
-        $this->assertStringContainsString('DROP TABLE IF EXISTS', $sql);
-        $this->assertStringContainsString('wp_completionist_history', $sql);
+        $tableName = $this->db->droppedTables[0];
+        $this->assertEquals('wp_completionist_history', $tableName);
     }
 
     public function testUsesCorrectPrefix(): void
@@ -49,7 +48,7 @@ class TableInstallerTest extends TestCase
 
         $installer->createTable();
 
-        $sql = $this->db->queries[0]['sql'];
+        $sql = $this->db->tables[0];
         $this->assertStringContainsString('custom_completionist_history', $sql);
     }
 }

@@ -9,6 +9,8 @@ class MockDatabase implements Database
     public array $queries = [];
     public array $results = [];
     public array $deletes = [];
+    public array $tables = [];
+    public array $droppedTables = [];
     public string $prefix = 'wp_';
 
     public function query(string $sql, ...$args): bool
@@ -32,5 +34,20 @@ class MockDatabase implements Database
     public function getPrefix(): string
     {
         return $this->prefix;
+    }
+
+    public function getCharsetCollate(): string
+    {
+        return 'utf8mb4_unicode_ci';
+    }
+
+    public function createTable(string $sql): void
+    {
+        $this->tables[] = $sql;
+    }
+
+    public function dropTable(string $tableName): void
+    {
+        $this->droppedTables[] = $tableName;
     }
 }

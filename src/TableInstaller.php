@@ -6,6 +6,8 @@ use Completionist\Contracts\Database;
 
 class TableInstaller
 {
+    private const TABLE_NAME = 'completionist_history';
+
     private Database $db;
 
     public function __construct(Database $db)
@@ -13,10 +15,16 @@ class TableInstaller
         $this->db = $db;
     }
 
+    public function getTableName(): string
+    {
+        return $this->db->getPrefix() . self::TABLE_NAME;
+    }
+
     public function createTable(): void
     {
-        $table = $this->db->getPrefix() . 'completionist_history';
-        $sql = "CREATE TABLE IF NOT EXISTS {$table} (
+        $table = $this->getTableName();
+        $charset = $this->db->getCharsetCollate();
+        $sql = "CREATE TABLE {$table} (
             id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
             user_id BIGINT(20) UNSIGNED NOT NULL,
             post_id BIGINT(20) UNSIGNED NOT NULL,
@@ -25,13 +33,12 @@ class TableInstaller
             PRIMARY KEY (id),
             UNIQUE KEY user_post (user_id, post_id),
             KEY user_id (user_id)
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;";
-        $this->db->query($sql);
+        ) {$charset};";
+        $this->db->createTable($sql);
     }
 
     public function dropTable(): void
     {
-        $table = $this->db->getPrefix() . 'completionist_history';
-        $this->db->query("DROP TABLE IF EXISTS {$table}");
+        $this->db->dropTable($this->getTableName());
     }
 }
