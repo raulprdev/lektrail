@@ -163,10 +163,19 @@ class Assets
             $this->fileVersion('assets/css/widget.css')
         );
 
-        $config = $this->pluginConfigs->load();
+        $config = $this->pluginConfigs->load()->toJsConfig();
+        $config['widgetId'] = WidgetRenderer::WIDGET_ID;
+        $config['isEditor'] = true;
+
+        $this->scripts->addInlineScript(
+            self::HANDLE_WIDGET,
+            'window.CompletionistConfig = ' . json_encode($config) . ';',
+            'before'
+        );
+
         $this->scripts->addInlineScript(
             'wp-blocks',
-            'window.completionistDefaults = ' . json_encode($config->toJsConfig()) . ';',
+            'window.completionistDefaults = ' . json_encode($config) . ';',
             'before'
         );
     }

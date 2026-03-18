@@ -208,4 +208,14 @@ class AssetsTest extends TestCase
         $this->assertStringContainsString('"requireConsent":false', $inline['code']);
         $this->assertStringContainsString('"serverSideTracking":true', $inline['code']);
     }
+
+    public function testEnqueueWidgetForEditorInjectsCompletionistConfig(): void
+    {
+        $assets = $this->createAssets();
+
+        $assets->enqueueWidgetForEditor();
+
+        $inline = $this->loader->inlineScripts[Assets::HANDLE_WIDGET];
+        $this->assertStringContainsString('CompletionistConfig', $inline['code']);
+    }
 }
