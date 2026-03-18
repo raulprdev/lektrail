@@ -23,6 +23,8 @@ coverage
 phpstan.neon
 .php-cs-fixer.php
 .php-cs-fixer.cache
+.eslintrc.json
+.nvmrc
 webpack.config.js
 
 # IDE and OS files
@@ -33,6 +35,7 @@ webpack.config.js
 # Git and CI
 .git
 .gitignore
+.distignore
 .github
 
 # Claude docs
