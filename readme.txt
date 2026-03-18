@@ -85,12 +85,6 @@ Any post type: posts, pages, WooCommerce products, custom post types. Configure 
 
 The widget uses minimal styling. Add your own CSS targeting `.completionist-widget`, `.completionist-continue`, `.completionist-completed`, and `.completionist-suggestions`.
 
-== Screenshots ==
-
-1. Widget showing continue reading, completed, and suggestions
-2. Settings page with display options
-3. Gutenberg block in the editor
-
 == Changelog ==
 
 = 1.0.0 =
