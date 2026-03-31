@@ -4,6 +4,7 @@ node_modules/
 composer.lock
 
 # Build artifacts
+build/
 *.log
 *.cache
 
