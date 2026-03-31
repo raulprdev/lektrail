@@ -5,7 +5,7 @@ parameters:
     level: 5
     paths:
         - src
-        - completionist.php
+        - lektrail.php
     excludePaths:
         - vendor
     bootstrapFiles:

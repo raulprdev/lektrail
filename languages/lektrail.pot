@@ -1,8 +1,8 @@
-# Copyright (C) 2024 Completionist
+# Copyright (C) 2024 LekTrail Reading Tracker
 # This file is distributed under the GPL v2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Completionist 1.0.0\n"
+"Project-Id-Version: LekTrail Reading Tracker 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-01 00:00+0000\n"
 "MIME-Version: 1.0\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Language-Team: \n"
 
 #: templates/admin-page.php
-msgid "Completionist Settings"
+msgid "LekTrail Reading Tracker Settings"
 msgstr ""
 
 #: templates/admin-page.php
