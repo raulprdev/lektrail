@@ -59,7 +59,7 @@ class Assets
 
         $this->scripts->addInlineScript(
             self::HANDLE_DETECTOR,
-            sprintf('document.body.dataset.lektrailPost = %d;', $postId),
+            sprintf('document.body.dataset.lektrailPost = %d;', intval($postId)),
             'before'
         );
 
@@ -69,7 +69,7 @@ class Assets
         }
         $this->scripts->addInlineScript(
             self::HANDLE_DETECTOR,
-            sprintf('window.LekTrailPostData = %s;', json_encode($postData)),
+            sprintf('window.LekTrailPostData = %s;', wp_json_encode($postData)),
             'before'
         );
 
@@ -81,7 +81,7 @@ class Assets
 
         $this->scripts->addInlineScript(
             self::HANDLE_DETECTOR,
-            sprintf('window.LekTrailConfig = %s;', json_encode($config)),
+            sprintf('window.LekTrailConfig = %s;', wp_json_encode($config)),
             'before'
         );
     }
@@ -127,12 +127,12 @@ class Assets
             $config['serverSideTracking'] = true;
             $this->scripts->addInlineScript(
                 self::HANDLE_WIDGET,
-                'window.LekTrailInlineData = ' . json_encode($inlineData) . ';',
+                'window.LekTrailInlineData = ' . wp_json_encode($inlineData) . ';',
                 'before'
             );
         }
 
-        $this->scripts->addInlineScript(self::HANDLE_WIDGET, 'window.LekTrailConfig = ' . json_encode($config) . ';', 'before');
+        $this->scripts->addInlineScript(self::HANDLE_WIDGET, 'window.LekTrailConfig = ' . wp_json_encode($config) . ';', 'before');
 
         $this->scripts->enqueueStyle(
             self::HANDLE_WIDGET,
@@ -169,13 +169,13 @@ class Assets
 
         $this->scripts->addInlineScript(
             self::HANDLE_WIDGET,
-            'window.LekTrailConfig = ' . json_encode($config) . ';',
+            'window.LekTrailConfig = ' . wp_json_encode($config) . ';',
             'before'
         );
 
         $this->scripts->addInlineScript(
             'wp-blocks',
-            'window.lektrailDefaults = ' . json_encode($config) . ';',
+            'window.lektrailDefaults = ' . wp_json_encode($config) . ';',
             'before'
         );
     }

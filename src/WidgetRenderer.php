@@ -52,14 +52,14 @@ class WidgetRenderer
         if (!empty($overrides)) {
             $globalConfig = $this->pluginConfigs->load();
             $mergedConfig = InstanceSettings::merge($globalConfig, $overrides);
-            $configAttr = sprintf(' data-config="%s"', esc_attr(json_encode($mergedConfig->toJsConfig())));
+            $configAttr = sprintf(' data-config="%s"', esc_attr(wp_json_encode($mergedConfig->toJsConfig())));
         }
 
         if ($wrapperAttributes) {
             return sprintf(
                 '<div %s id="%s" data-endpoint="%s" data-posts-endpoint="%s"%s></div>',
                 $wrapperAttributes,
-                self::WIDGET_ID,
+                esc_attr(self::WIDGET_ID),
                 esc_url(SuggestionsEndpoint::url()),
                 esc_url(rest_url('wp/v2/posts')),
                 $configAttr
@@ -68,8 +68,8 @@ class WidgetRenderer
 
         return sprintf(
             '<div id="%s" class="%s" data-endpoint="%s" data-posts-endpoint="%s"%s></div>',
-            self::WIDGET_ID,
-            self::WIDGET_ID,
+            esc_attr(self::WIDGET_ID),
+            esc_attr(self::WIDGET_ID),
             esc_url(SuggestionsEndpoint::url()),
             esc_url(rest_url('wp/v2/posts')),
             $configAttr

@@ -9,6 +9,20 @@ if (!function_exists('esc_url')) {
     }
 }
 
+if (!function_exists('esc_attr')) {
+    function esc_attr($text)
+    {
+        return htmlspecialchars($text, ENT_QUOTES, 'UTF-8');
+    }
+}
+
+if (!function_exists('esc_html')) {
+    function esc_html($text)
+    {
+        return htmlspecialchars($text, ENT_QUOTES, 'UTF-8');
+    }
+}
+
 if (!function_exists('rest_url')) {
     function rest_url($path = '')
     {
@@ -69,5 +83,12 @@ if (!function_exists('absint')) {
     function absint($value)
     {
         return abs((int) $value);
+    }
+}
+
+if (!function_exists('wp_json_encode')) {
+    function wp_json_encode($data, $options = 0, $depth = 512)
+    {
+        return json_encode($data, $options, $depth);
     }
 }
