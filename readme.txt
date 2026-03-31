@@ -60,7 +60,7 @@ The widget displays three sections: "Continue Reading", "Completed", and "Sugges
 
 = Development =
 
-Source code and build tools are available on [GitHub](https://github.com/raulprdev/completionist).
+Source code and build tools are available on [GitHub](https://github.com/raulprdev/lektrail).
 
 == Installation ==
 
