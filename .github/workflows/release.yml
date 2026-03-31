@@ -34,7 +34,7 @@ jobs:
           mkdir -p ../dist/lektrail
           cp -r assets build languages src templates ../dist/lektrail/
           cp lektrail.php composer.json package.json README.md readme.txt ../dist/lektrail/
-          rm -rf ../dist/lektrail/src/blocks
+          rm -f ../dist/lektrail/src/Blocks/Widget/block.json ../dist/lektrail/src/Blocks/Widget/edit.js ../dist/lektrail/src/Blocks/Widget/index.js ../dist/lektrail/src/Blocks/Widget/editor.scss
           cd ../dist && zip -r lektrail.zip lektrail
           mv lektrail.zip $GITHUB_WORKSPACE/
 
