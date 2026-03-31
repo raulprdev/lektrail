@@ -1,8 +1,8 @@
 <?php
 
-namespace Completionist\WordPress;
+namespace LekTrail\WordPress;
 
-use Completionist\Contracts\JsonResponse as JsonResponseInterface;
+use LekTrail\Contracts\JsonResponse as JsonResponseInterface;
 
 class JsonResponse implements JsonResponseInterface
 {

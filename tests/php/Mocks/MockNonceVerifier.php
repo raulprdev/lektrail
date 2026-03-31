@@ -1,8 +1,8 @@
 <?php
 
-namespace Completionist\Tests\Mocks;
+namespace LekTrail\Tests\Mocks;
 
-use Completionist\Contracts\NonceVerifier;
+use LekTrail\Contracts\NonceVerifier;
 
 class MockNonceVerifier implements NonceVerifier
 {

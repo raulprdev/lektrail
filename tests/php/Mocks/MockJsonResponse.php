@@ -1,8 +1,8 @@
 <?php
 
-namespace Completionist\Tests\Mocks;
+namespace LekTrail\Tests\Mocks;
 
-use Completionist\Contracts\JsonResponse;
+use LekTrail\Contracts\JsonResponse;
 
 class MockJsonResponse implements JsonResponse
 {

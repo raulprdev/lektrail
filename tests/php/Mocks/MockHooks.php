@@ -1,8 +1,8 @@
 <?php
 
-namespace Completionist\Tests\Mocks;
+namespace LekTrail\Tests\Mocks;
 
-use Completionist\Contracts\Hooks;
+use LekTrail\Contracts\Hooks;
 
 class MockHooks implements Hooks
 {

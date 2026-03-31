@@ -1,13 +1,13 @@
 <?php
 
-namespace Completionist;
+namespace LekTrail;
 
-use Completionist\Contracts\PluginConfigRepository;
-use Completionist\Contracts\PostQuery;
+use LekTrail\Contracts\PluginConfigRepository;
+use LekTrail\Contracts\PostQuery;
 
 class WidgetRenderer
 {
-    public const WIDGET_ID = 'completionist-widget';
+    public const WIDGET_ID = 'lektrail-widget';
 
     private Assets $assets;
     private TrackingService $trackingService;

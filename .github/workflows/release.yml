@@ -31,16 +31,16 @@ jobs:
 
       - name: Generate zip
         run: |
-          mkdir -p ../dist/completionist
-          cp -r assets build languages src templates ../dist/completionist/
-          cp completionist.php composer.json package.json README.md readme.txt ../dist/completionist/
-          rm -rf ../dist/completionist/src/blocks
-          cd ../dist && zip -r completionist.zip completionist
-          mv completionist.zip $GITHUB_WORKSPACE/
+          mkdir -p ../dist/lektrail
+          cp -r assets build languages src templates ../dist/lektrail/
+          cp lektrail.php composer.json package.json README.md readme.txt ../dist/lektrail/
+          rm -rf ../dist/lektrail/src/blocks
+          cd ../dist && zip -r lektrail.zip lektrail
+          mv lektrail.zip $GITHUB_WORKSPACE/
 
       - name: Upload release asset
         uses: softprops/action-gh-release@v2
         with:
-          files: completionist.zip
+          files: lektrail.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

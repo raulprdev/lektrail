@@ -11,19 +11,19 @@ describe('renderItem', () => {
 
     beforeEach(() => {
         eval(renderItemCode);
-        renderItem = window.CompletionistRenderItem;
+        renderItem = window.LekTrailRenderItem;
     });
 
     afterEach(() => {
-        delete window.CompletionistRenderItem;
+        delete window.LekTrailRenderItem;
     });
 
     test('renders title and link', () => {
         const post = { title: 'My Post', url: '/my-post/' };
         const html = renderItem(post);
 
-        expect(html).toContain('completionist-item');
-        expect(html).toContain('completionist-title');
+        expect(html).toContain('lektrail-item');
+        expect(html).toContain('lektrail-title');
         expect(html).toContain('My Post');
         expect(html).toContain('href="/my-post/"');
     });
@@ -32,7 +32,7 @@ describe('renderItem', () => {
         const post = { title: 'Post', url: '/', thumbnail: 'https://example.com/image.jpg' };
         const html = renderItem(post);
 
-        expect(html).toContain('completionist-thumbnail');
+        expect(html).toContain('lektrail-thumbnail');
         expect(html).toContain('src="https://example.com/image.jpg"');
     });
 
@@ -40,14 +40,14 @@ describe('renderItem', () => {
         const post = { title: 'Post', url: '/' };
         const html = renderItem(post);
 
-        expect(html).not.toContain('completionist-thumbnail');
+        expect(html).not.toContain('lektrail-thumbnail');
     });
 
     test('renders excerpt when present', () => {
         const post = { title: 'Post', url: '/', excerpt: 'This is the excerpt.' };
         const html = renderItem(post);
 
-        expect(html).toContain('completionist-excerpt');
+        expect(html).toContain('lektrail-excerpt');
         expect(html).toContain('This is the excerpt.');
     });
 
@@ -55,13 +55,13 @@ describe('renderItem', () => {
         const post = { title: 'Post', url: '/' };
         const html = renderItem(post);
 
-        expect(html).not.toContain('completionist-excerpt');
+        expect(html).not.toContain('lektrail-excerpt');
     });
 
-    test('wraps content in completionist-content div', () => {
+    test('wraps content in lektrail-content div', () => {
         const post = { title: 'Post', url: '/' };
         const html = renderItem(post);
 
-        expect(html).toContain('completionist-content');
+        expect(html).toContain('lektrail-content');
     });
 });

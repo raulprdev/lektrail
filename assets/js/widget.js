@@ -1,13 +1,13 @@
 (function () {
 	'use strict';
 
-	const CONSENT_CHECKBOX_ID = 'completionist-consent-checkbox';
+	const CONSENT_CHECKBOX_ID = 'lektrail-consent-checkbox';
 
 	function getConfig(container) {
-		if (!window.CompletionistConfig) {
-			throw new Error('CompletionistConfig not found');
+		if (!window.LekTrailConfig) {
+			throw new Error('LekTrailConfig not found');
 		}
-		let config = window.CompletionistConfig;
+		let config = window.LekTrailConfig;
 		if (container && container.dataset.config) {
 			try {
 				const instanceConfig = JSON.parse(container.dataset.config);
@@ -28,7 +28,7 @@
 
 	function getStorage() {
 		return (
-			window.CompletionistStorage || {
+			window.LekTrailStorage || {
 				getViewedCount() {
 					return 0;
 				},
@@ -49,8 +49,8 @@
 	}
 
 	function getDataProvider(endpoint) {
-		if (window.CompletionistDataProvider) {
-			return window.CompletionistDataProvider.create({
+		if (window.LekTrailDataProvider) {
+			return window.LekTrailDataProvider.create({
 				dataMode: 'async',
 				endpoint,
 			});
@@ -66,7 +66,7 @@
 
 	function getRenderItem() {
 		return (
-			window.CompletionistRenderItem ||
+			window.LekTrailRenderItem ||
 			function (post) {
 				return (
 					'<li><a href="' + post.url + '">' + post.title + '</a></li>'
@@ -77,7 +77,7 @@
 
 	function renderLoading(container, config) {
 		container.innerHTML =
-			'<div class="completionist-loading">' +
+			'<div class="lektrail-loading">' +
 			config.labels.loading +
 			'</div>';
 	}
@@ -92,7 +92,7 @@
 			count !== undefined ? title + ' (' + count + ')' : title;
 		let html = '<div class="' + className + '">';
 		html += '<h3>' + titleWithCount + '</h3>';
-		html += '<ul class="completionist-list">';
+		html += '<ul class="lektrail-list">';
 		posts.forEach(function (post) {
 			html += renderItem(post);
 		});
@@ -103,15 +103,15 @@
 
 	function renderEmptyState(config) {
 		return (
-			'<div class="completionist-empty">' + config.labels.empty + '</div>'
+			'<div class="lektrail-empty">' + config.labels.empty + '</div>'
 		);
 	}
 
 	function renderClearButton(config) {
 		const label = config.labels.clear || 'Clear my data';
 		return (
-			'<div class="completionist-clear">' +
-			'<button type="button" class="completionist-clear-btn">' +
+			'<div class="lektrail-clear">' +
+			'<button type="button" class="lektrail-clear-btn">' +
 			label +
 			'</button>' +
 			'</div>'
@@ -119,7 +119,7 @@
 	}
 
 	function renderConsentBanner(container, config, onConsent) {
-		let html = '<div class="completionist-consent">';
+		let html = '<div class="lektrail-consent">';
 		html += '<p>' + config.labels.consentMessage + '</p>';
 		html += '<label>';
 		html += '<input type="checkbox" id="' + CONSENT_CHECKBOX_ID + '">';
@@ -157,22 +157,22 @@
 		);
 
 		var classes = container.className ? container.className.split(' ') : [];
-		if (classes.indexOf('completionist-widget') === -1) {
-			classes.push('completionist-widget');
+		if (classes.indexOf('lektrail-widget') === -1) {
+			classes.push('lektrail-widget');
 		}
 
-		var excerptIndex = classes.indexOf('completionist-show-excerpt');
+		var excerptIndex = classes.indexOf('lektrail-show-excerpt');
 		var hasExcerptClass = excerptIndex !== -1;
 		if (config.showExcerpt && !hasExcerptClass) {
-			classes.push('completionist-show-excerpt');
+			classes.push('lektrail-show-excerpt');
 		} else if (!config.showExcerpt && hasExcerptClass) {
 			classes.splice(excerptIndex, 1);
 		}
 
-		var thumbnailIndex = classes.indexOf('completionist-show-thumbnail');
+		var thumbnailIndex = classes.indexOf('lektrail-show-thumbnail');
 		var hasThumbnailClass = thumbnailIndex !== -1;
 		if (config.showThumbnail && !hasThumbnailClass) {
-			classes.push('completionist-show-thumbnail');
+			classes.push('lektrail-show-thumbnail');
 		} else if (!config.showThumbnail && hasThumbnailClass) {
 			classes.splice(thumbnailIndex, 1);
 		}
@@ -191,7 +191,7 @@
 			html += renderSection(
 				config.labels.continue,
 				viewedSlice,
-				'completionist-continue',
+				'lektrail-continue',
 				viewedCount
 			);
 		}
@@ -199,14 +199,14 @@
 			html += renderSection(
 				config.labels.completed,
 				readSlice,
-				'completionist-completed',
+				'lektrail-completed',
 				readCount
 			);
 		}
 		html += renderSection(
 			config.labels.suggestions,
 			suggestionsSlice,
-			'completionist-suggestions'
+			'lektrail-suggestions'
 		);
 
 		const hasContent =
@@ -217,11 +217,11 @@
 
 		container.innerHTML = html;
 
-		const clearBtn = container.querySelector('.completionist-clear-btn');
+		const clearBtn = container.querySelector('.lektrail-clear-btn');
 		if (clearBtn) {
 			clearBtn.addEventListener('click', function () {
 				storage.clearHistory();
-				const emptySource = window.CompletionistDataSource.create({
+				const emptySource = window.LekTrailDataSource.create({
 					inlineData: {},
 				});
 				renderWidget(container, emptySource, suggestions, config);
@@ -230,8 +230,8 @@
 	}
 
 	function getConsentManager() {
-		if (window.CompletionistConsentManager) {
-			return window.CompletionistConsentManager.create();
+		if (window.LekTrailConsentManager) {
+			return window.LekTrailConsentManager.create();
 		}
 		return null;
 	}
@@ -298,9 +298,9 @@
 	}
 
 	function createDataSource(config, container) {
-		if (window.CompletionistInlineData) {
-			return window.CompletionistDataSource.create({
-				inlineData: window.CompletionistInlineData,
+		if (window.LekTrailInlineData) {
+			return window.LekTrailDataSource.create({
+				inlineData: window.LekTrailInlineData,
 			});
 		}
 
@@ -308,7 +308,7 @@
 		const provider = getDataProvider(container.dataset.endpoint);
 		const cacheHours = config.suggestionsCacheHours || 24;
 
-		return window.CompletionistDataSource.create({
+		return window.LekTrailDataSource.create({
 			storage: {
 				getViewedPosts() {
 					return provider ? provider.getViewed() : [];
@@ -361,10 +361,10 @@
 		init();
 	}
 
-	window.CompletionistWidget = {
+	window.LekTrailWidget = {
 		init(container, previewData, config) {
-			window.CompletionistInlineData = previewData;
-			window.CompletionistConfig = config;
+			window.LekTrailInlineData = previewData;
+			window.LekTrailConfig = config;
 			initWidget(container, config);
 		},
 	};

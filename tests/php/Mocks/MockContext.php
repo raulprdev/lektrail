@@ -1,8 +1,8 @@
 <?php
 
-namespace Completionist\Tests\Mocks;
+namespace LekTrail\Tests\Mocks;
 
-use Completionist\Contracts\Context;
+use LekTrail\Contracts\Context;
 
 class MockContext implements Context
 {

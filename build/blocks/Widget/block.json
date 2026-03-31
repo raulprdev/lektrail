@@ -1,9 +1,9 @@
 {
   "$schema": "https://schemas.wp.org/trunk/block.json",
   "apiVersion": 3,
-  "name": "completionist/widget",
+  "name": "lektrail/widget",
   "version": "1.0.0",
-  "title": "Reading Completionist",
+  "title": "LekTrail Reading Tracker",
   "category": "widgets",
   "icon": "book-alt",
   "description": "Display reading progress and suggestions for your visitors.",
@@ -13,7 +13,7 @@
     "tracker",
     "suggestions"
   ],
-  "textdomain": "reading-completionist",
+  "textdomain": "lektrail",
   "supports": {
     "html": false,
     "multiple": false,
@@ -93,5 +93,5 @@
   },
   "editorScript": "file:./index.js",
   "editorStyle": "file:./index.css",
-  "style": "completionist-widget"
+  "style": "lektrail-widget"
 }

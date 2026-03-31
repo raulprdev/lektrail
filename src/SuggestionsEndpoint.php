@@ -1,13 +1,13 @@
 <?php
 
-namespace Completionist;
+namespace LekTrail;
 
-use Completionist\Contracts\Hooks;
-use Completionist\Contracts\JsonResponse;
+use LekTrail\Contracts\Hooks;
+use LekTrail\Contracts\JsonResponse;
 
 class SuggestionsEndpoint
 {
-    public const ACTION = 'completionist_suggestions';
+    public const ACTION = 'lektrail_suggestions';
 
     private SuggestionsQuery $suggestionsQuery;
     private JsonResponse $jsonResponse;

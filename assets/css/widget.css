@@ -1,18 +1,18 @@
 /* Minimal styles - themes control colors, fonts, and container appearance */
 
-.completionist-continue,
-.completionist-completed,
-.completionist-suggestions {
+.lektrail-continue,
+.lektrail-completed,
+.lektrail-suggestions {
     margin-bottom: 1.5em;
 }
 
-.completionist-continue:last-child,
-.completionist-completed:last-child,
-.completionist-suggestions:last-child {
+.lektrail-continue:last-child,
+.lektrail-completed:last-child,
+.lektrail-suggestions:last-child {
     margin-bottom: 0;
 }
 
-.completionist-widget h3 {
+.lektrail-widget h3 {
     margin: 0 0 0.5em;
     font-size: 0.9em;
     text-transform: uppercase;
@@ -20,39 +20,39 @@
 }
 
 /* Reset list styles - higher specificity to override theme defaults */
-.completionist-widget ul.completionist-list {
+.lektrail-widget ul.lektrail-list {
     margin: 0;
     padding: 0;
     list-style: none;
 }
 
-.completionist-widget ul.completionist-list li.completionist-item {
+.lektrail-widget ul.lektrail-list li.lektrail-item {
     display: block;
     margin: 0 0 0.5em 0;
     padding: 0;
     list-style: none;
 }
 
-.completionist-widget ul.completionist-list li.completionist-item::before {
+.lektrail-widget ul.lektrail-list li.lektrail-item::before {
     content: none;
     display: none;
 }
 
-.completionist-widget ul.completionist-list li.completionist-item:last-child {
+.lektrail-widget ul.lektrail-list li.lektrail-item:last-child {
     margin-bottom: 0;
 }
 
-.completionist-content {
+.lektrail-content {
     display: block;
 }
 
 /* Hidden by default, shown via modifier classes */
-.completionist-thumbnail,
-.completionist-excerpt {
+.lektrail-thumbnail,
+.lektrail-excerpt {
     display: none;
 }
 
-.completionist-show-excerpt .completionist-excerpt {
+.lektrail-show-excerpt .lektrail-excerpt {
     display: -webkit-box;
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
@@ -62,61 +62,61 @@
     opacity: 0.8;
 }
 
-.completionist-widget.completionist-show-thumbnail ul.completionist-list li.completionist-item {
+.lektrail-widget.lektrail-show-thumbnail ul.lektrail-list li.lektrail-item {
     display: flex;
     align-items: flex-start;
     gap: 0.75em;
 }
 
-.completionist-show-thumbnail .completionist-thumbnail {
+.lektrail-show-thumbnail .lektrail-thumbnail {
     display: block;
     flex-shrink: 0;
     width: 80px;
 }
 
-.completionist-show-thumbnail .completionist-thumbnail img {
+.lektrail-show-thumbnail .lektrail-thumbnail img {
     width: 100%;
     height: auto;
     margin: 0;
 }
 
-.completionist-show-thumbnail .completionist-content {
+.lektrail-show-thumbnail .lektrail-content {
     flex: 1;
     min-width: 0;
 }
 
-.completionist-title {
+.lektrail-title {
     text-decoration: none;
 }
 
-.completionist-title:hover {
+.lektrail-title:hover {
     text-decoration: underline;
 }
 
-.completionist-loading,
-.completionist-empty {
+.lektrail-loading,
+.lektrail-empty {
     font-style: italic;
     opacity: 0.7;
 }
 
-.completionist-consent {
+.lektrail-consent {
     text-align: center;
 }
 
-.completionist-consent p {
+.lektrail-consent p {
     margin: 0 0 0.75em;
 }
 
-.completionist-consent label {
+.lektrail-consent label {
     cursor: pointer;
 }
 
-.completionist-clear {
+.lektrail-clear {
     text-align: right;
     margin-bottom: 0.5em;
 }
 
-.completionist-clear-btn {
+.lektrail-clear-btn {
     background: none;
     border: none;
     padding: 0;
@@ -126,7 +126,7 @@
     opacity: 0.6;
 }
 
-.completionist-clear-btn:hover {
+.lektrail-clear-btn:hover {
     opacity: 1;
     text-decoration: underline;
 }

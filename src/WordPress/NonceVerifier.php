@@ -1,8 +1,8 @@
 <?php
 
-namespace Completionist\WordPress;
+namespace LekTrail\WordPress;
 
-use Completionist\Contracts\NonceVerifier as NonceVerifierContract;
+use LekTrail\Contracts\NonceVerifier as NonceVerifierContract;
 
 class NonceVerifier implements NonceVerifierContract
 {

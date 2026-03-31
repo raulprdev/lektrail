@@ -1,9 +1,9 @@
 <?php
 
-namespace Completionist\Tests;
+namespace LekTrail\Tests;
 
-use Completionist\PreviewEndpoint;
-use Completionist\Tests\Mocks\MockPostQuery;
+use LekTrail\PreviewEndpoint;
+use LekTrail\Tests\Mocks\MockPostQuery;
 use PHPUnit\Framework\TestCase;
 
 class PreviewEndpointTest extends TestCase

@@ -1,15 +1,15 @@
 <?php
 
-namespace Completionist\WordPress;
+namespace LekTrail\WordPress;
 
-use Completionist\Contracts\Locale as LocaleInterface;
-use Completionist\Contracts\Options as OptionsInterface;
-use Completionist\Contracts\PluginConfigRepository as SettingsRepositoryInterface;
-use Completionist\PluginConfig;
+use LekTrail\Contracts\Locale as LocaleInterface;
+use LekTrail\Contracts\Options as OptionsInterface;
+use LekTrail\Contracts\PluginConfigRepository as SettingsRepositoryInterface;
+use LekTrail\PluginConfig;
 
 class PluginConfigRepository implements SettingsRepositoryInterface
 {
-    public const OPTION_KEY = 'completionist_settings';
+    public const OPTION_KEY = 'lektrail_settings';
 
     private const LABELS_ES = [
         'label_continue' => 'Seguir leyendo',

@@ -1,10 +1,10 @@
 <?php
 
-namespace Completionist\WordPress;
+namespace LekTrail\WordPress;
 
 defined('ABSPATH') || exit;
 
-use Completionist\Contracts\Hooks as HooksInterface;
+use LekTrail\Contracts\Hooks as HooksInterface;
 
 class Hooks implements HooksInterface
 {

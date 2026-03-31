@@ -1,11 +1,11 @@
 <?php
 
-namespace Completionist\Blocks\Widget;
+namespace LekTrail\Blocks\Widget;
 
-use Completionist\Assets;
-use Completionist\Contracts\Hooks;
-use Completionist\InstanceSettings;
-use Completionist\WidgetRenderer;
+use LekTrail\Assets;
+use LekTrail\Contracts\Hooks;
+use LekTrail\InstanceSettings;
+use LekTrail\WidgetRenderer;
 
 class WidgetBlock
 {

@@ -1,9 +1,9 @@
 <?php
 
-namespace Completionist;
+namespace LekTrail;
 
-use Completionist\Contracts\PluginConfigRepository;
-use Completionist\Contracts\PostQuery;
+use LekTrail\Contracts\PluginConfigRepository;
+use LekTrail\Contracts\PostQuery;
 
 class SuggestionsQuery
 {

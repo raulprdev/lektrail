@@ -11,14 +11,14 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-    delete window.CompletionistNotifier;
+    delete window.LekTrailNotifier;
 });
 
 describe('Notifier: localStorage mode', () => {
     test('trackViewed calls storage.addViewed', () => {
         const addViewed = jest.fn();
         const storage = { addViewed, addRead: jest.fn() };
-        const notifier = window.CompletionistNotifier.create({ storage });
+        const notifier = window.LekTrailNotifier.create({ storage });
         const postData = { id: 123, title: 'Test' };
 
         notifier.trackViewed(123, postData);
@@ -29,7 +29,7 @@ describe('Notifier: localStorage mode', () => {
     test('trackRead calls storage.addRead', () => {
         const addRead = jest.fn();
         const storage = { addViewed: jest.fn(), addRead };
-        const notifier = window.CompletionistNotifier.create({ storage });
+        const notifier = window.LekTrailNotifier.create({ storage });
 
         notifier.trackRead(123);
 
@@ -61,7 +61,7 @@ describe('Notifier: server-side mode', () => {
     });
 
     test('trackRead sends POST to endpoint with nonce', () => {
-        const notifier = window.CompletionistNotifier.create({
+        const notifier = window.LekTrailNotifier.create({
             endpoint: '/wp-admin/admin-ajax.php?action=track',
             nonce: 'abc123'
         });
@@ -74,7 +74,7 @@ describe('Notifier: server-side mode', () => {
     });
 
     test('trackRead sets content-type header', () => {
-        const notifier = window.CompletionistNotifier.create({
+        const notifier = window.LekTrailNotifier.create({
             endpoint: '/wp-admin/admin-ajax.php?action=track',
             nonce: 'abc123'
         });
@@ -88,7 +88,7 @@ describe('Notifier: server-side mode', () => {
     });
 
     test('trackViewed does nothing in server-side mode', () => {
-        const notifier = window.CompletionistNotifier.create({
+        const notifier = window.LekTrailNotifier.create({
             endpoint: '/wp-admin/admin-ajax.php?action=track',
             nonce: 'abc123'
         });

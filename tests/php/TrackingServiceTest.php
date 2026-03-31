@@ -1,11 +1,11 @@
 <?php
 
-namespace Completionist\Tests;
+namespace LekTrail\Tests;
 
-use Completionist\Tests\Mocks\MockPluginConfigRepository;
-use Completionist\Tests\Mocks\MockTrackingRepository;
-use Completionist\Tests\Mocks\MockUserProvider;
-use Completionist\TrackingService;
+use LekTrail\Tests\Mocks\MockPluginConfigRepository;
+use LekTrail\Tests\Mocks\MockTrackingRepository;
+use LekTrail\Tests\Mocks\MockUserProvider;
+use LekTrail\TrackingService;
 use PHPUnit\Framework\TestCase;
 
 class TrackingServiceTest extends TestCase

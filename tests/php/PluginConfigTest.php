@@ -1,8 +1,8 @@
 <?php
 
-namespace Completionist\Tests;
+namespace LekTrail\Tests;
 
-use Completionist\PluginConfig;
+use LekTrail\PluginConfig;
 use PHPUnit\Framework\TestCase;
 
 class PluginConfigTest extends TestCase

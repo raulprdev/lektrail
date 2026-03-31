@@ -1,8 +1,8 @@
 <?php
 
-namespace Completionist\Tests\Mocks;
+namespace LekTrail\Tests\Mocks;
 
-use Completionist\Contracts\Locale;
+use LekTrail\Contracts\Locale;
 
 class MockLocale implements Locale
 {

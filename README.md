@@ -1,10 +1,10 @@
-# Completionist
+# LekTrail
 
 Show visitors what they've read, what they started, and what to read next.
 
-## Why Completionist?
+## Why LekTrail?
 
-Most websites have no memory. Visitors return and see the same content with no recognition of what they've already explored. Completionist changes that.
+Most websites have no memory. Visitors return and see the same content with no recognition of what they've already explored. LekTrail changes that.
 
 **For content sites**: Show readers which articles they started but didn't finish, and suggest new content based on their history.
 
@@ -14,7 +14,7 @@ Most websites have no memory. Visitors return and see the same content with no r
 
 ## How It Works
 
-Completionist tracks when visitors scroll through your content:
+LekTrail tracks when visitors scroll through your content:
 - **Viewed**: Posts they started reading
 - **Completed**: Posts they scrolled to the end (configurable threshold)
 - **Suggestions**: Unread posts based on your configuration
@@ -37,12 +37,12 @@ The widget displays three sections: "Continue Reading" (started but not finished
 
 ## Installation
 
-1. Upload `completionist` to `/wp-content/plugins/`
+1. Upload `lektrail` to `/wp-content/plugins/`
 2. Activate the plugin
 3. Add the widget using either method:
-   - **Gutenberg Block**: Search for "Completionist" in the block inserter
-   - **Shortcode**: Add `[completionist]` to any page
-4. Configure in Settings > Completionist
+   - **Gutenberg Block**: Search for "LekTrail" in the block inserter
+   - **Shortcode**: Add `[lektrail]` to any page
+4. Configure in Settings > LekTrail
 
 ## Configuration
 

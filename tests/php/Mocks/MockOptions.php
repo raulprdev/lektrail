@@ -1,8 +1,8 @@
 <?php
 
-namespace Completionist\Tests\Mocks;
+namespace LekTrail\Tests\Mocks;
 
-use Completionist\Contracts\Options;
+use LekTrail\Contracts\Options;
 
 class MockOptions implements Options
 {

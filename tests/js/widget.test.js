@@ -30,16 +30,16 @@ function loadWidget() {
 }
 
 afterEach(() => {
-    delete window.CompletionistStorage;
-    delete window.CompletionistConfig;
-    delete window.CompletionistInlineData;
-    delete window.CompletionistDataSource;
+    delete window.LekTrailStorage;
+    delete window.LekTrailConfig;
+    delete window.LekTrailInlineData;
+    delete window.LekTrailDataSource;
 });
 
 describe('Widget: loading and empty states', () => {
     test('shows loading state while fetching', () => {
         const { container } = setupWidgetTest();
-        window.CompletionistStorage = mockStorage();
+        window.LekTrailStorage = mockStorage();
 
         loadWidget();
 
@@ -48,7 +48,7 @@ describe('Widget: loading and empty states', () => {
 
     test('shows empty state message when no posts to display', () => {
         const { container, xhrInstances } = setupWidgetTest();
-        window.CompletionistStorage = mockStorage();
+        window.LekTrailStorage = mockStorage();
 
         loadWidget();
         triggerXhrResponses(xhrInstances, { suggestions: [] });
@@ -60,7 +60,7 @@ describe('Widget: loading and empty states', () => {
 describe('Widget: section counts in titles', () => {
     test('shows viewed count in section title', () => {
         const { container, xhrInstances } = setupWidgetTest();
-        window.CompletionistStorage = mockStorage({
+        window.LekTrailStorage = mockStorage({
             viewedPosts: [post(1, 'Post 1'), post(2, 'Post 2'), post(3, 'Post 3')]
         });
 
@@ -72,7 +72,7 @@ describe('Widget: section counts in titles', () => {
 
     test('shows read count in section title', () => {
         const { container, xhrInstances } = setupWidgetTest();
-        window.CompletionistStorage = mockStorage({
+        window.LekTrailStorage = mockStorage({
             readPosts: [1, 2, 3, 4, 5].map(i => post(i, `Post ${i}`))
         });
 
@@ -84,7 +84,7 @@ describe('Widget: section counts in titles', () => {
 
     test('shows total count even when display is limited', () => {
         const { container, xhrInstances } = setupWidgetTest();
-        window.CompletionistStorage = mockStorage({
+        window.LekTrailStorage = mockStorage({
             readPosts: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(i => post(i, `Post ${i}`))
         });
 
@@ -96,7 +96,7 @@ describe('Widget: section counts in titles', () => {
 
     test('suggestions section does not show count', () => {
         const { container, xhrInstances } = setupWidgetTest();
-        window.CompletionistStorage = mockStorage();
+        window.LekTrailStorage = mockStorage();
 
         loadWidget();
         triggerXhrResponses(xhrInstances, {
@@ -111,7 +111,7 @@ describe('Widget: section counts in titles', () => {
 describe('Widget: continue reading section', () => {
     test('displays viewed posts from storage', () => {
         const { container, xhrInstances } = setupWidgetTest();
-        window.CompletionistStorage = mockStorage({
+        window.LekTrailStorage = mockStorage({
             viewedPosts: [post(1, 'Viewed Post')]
         });
 
@@ -124,7 +124,7 @@ describe('Widget: continue reading section', () => {
 
     test('does not show read posts in this section', () => {
         const { container, xhrInstances } = setupWidgetTest();
-        window.CompletionistStorage = mockStorage({
+        window.LekTrailStorage = mockStorage({
             viewedPosts: [post(1, 'Viewed Post')],
             readPosts: [post(2, 'Read Post')]
         });
@@ -139,7 +139,7 @@ describe('Widget: continue reading section', () => {
 
     test('limits to 3 posts', () => {
         const { container, xhrInstances } = setupWidgetTest();
-        window.CompletionistStorage = mockStorage({
+        window.LekTrailStorage = mockStorage({
             viewedPosts: [1, 2, 3, 4, 5].map(i => post(i, `Post ${i}`))
         });
 
@@ -154,7 +154,7 @@ describe('Widget: continue reading section', () => {
 
     test('hides section when no viewed posts', () => {
         const { container, xhrInstances } = setupWidgetTest();
-        window.CompletionistStorage = mockStorage({
+        window.LekTrailStorage = mockStorage({
             readPosts: [post(1, 'Read Post')]
         });
 
@@ -168,7 +168,7 @@ describe('Widget: continue reading section', () => {
 describe('Widget: completed section', () => {
     test('displays read posts from storage', () => {
         const { container, xhrInstances } = setupWidgetTest();
-        window.CompletionistStorage = mockStorage({
+        window.LekTrailStorage = mockStorage({
             readPosts: [post(1, 'Read Post')]
         });
 
@@ -181,7 +181,7 @@ describe('Widget: completed section', () => {
 
     test('limits to 5 posts', () => {
         const { container, xhrInstances } = setupWidgetTest();
-        window.CompletionistStorage = mockStorage({
+        window.LekTrailStorage = mockStorage({
             readPosts: [1, 2, 3, 4, 5, 6, 7].map(i => post(i, `Post ${i}`))
         });
 
@@ -195,7 +195,7 @@ describe('Widget: completed section', () => {
 
     test('hides section when no read posts', () => {
         const { container, xhrInstances } = setupWidgetTest();
-        window.CompletionistStorage = mockStorage({
+        window.LekTrailStorage = mockStorage({
             viewedPosts: [post(1, 'Viewed Post')]
         });
 
@@ -209,7 +209,7 @@ describe('Widget: completed section', () => {
 describe('Widget: suggested reading section', () => {
     test('displays untracked posts', () => {
         const { container, xhrInstances } = setupWidgetTest();
-        window.CompletionistStorage = mockStorage();
+        window.LekTrailStorage = mockStorage();
 
         loadWidget();
         triggerXhrResponses(xhrInstances, {
@@ -222,7 +222,7 @@ describe('Widget: suggested reading section', () => {
 
     test('sends viewed post IDs in exclude param', () => {
         const { xhrInstances } = setupWidgetTest();
-        window.CompletionistStorage = mockStorage({
+        window.LekTrailStorage = mockStorage({
             viewedPosts: [post(1, 'Viewed'), post(2, 'Also Viewed')]
         });
 
@@ -236,7 +236,7 @@ describe('Widget: suggested reading section', () => {
 
     test('sends read post IDs in exclude param', () => {
         const { xhrInstances } = setupWidgetTest();
-        window.CompletionistStorage = mockStorage({
+        window.LekTrailStorage = mockStorage({
             readPosts: [post(3, 'Read'), post(4, 'Also Read')]
         });
 
@@ -250,7 +250,7 @@ describe('Widget: suggested reading section', () => {
 
     test('limits to 5 posts', () => {
         const { container, xhrInstances } = setupWidgetTest();
-        window.CompletionistStorage = mockStorage();
+        window.LekTrailStorage = mockStorage();
 
         loadWidget();
         triggerXhrResponses(xhrInstances, {
@@ -263,7 +263,7 @@ describe('Widget: suggested reading section', () => {
 
     test('hides section when API returns empty suggestions', () => {
         const { container, xhrInstances } = setupWidgetTest();
-        window.CompletionistStorage = mockStorage({
+        window.LekTrailStorage = mockStorage({
             viewedPosts: [post(1, 'Viewed')],
             readPosts: [post(2, 'Read')]
         });
@@ -280,7 +280,7 @@ describe('Widget: suggested reading section', () => {
 describe('Widget: all sections together', () => {
     test('displays all three sections correctly', () => {
         const { container, xhrInstances } = setupWidgetTest();
-        window.CompletionistStorage = mockStorage({
+        window.LekTrailStorage = mockStorage({
             viewedPosts: [post(1, 'Viewed Post')],
             readPosts: [post(2, 'Read Post')]
         });
@@ -302,7 +302,7 @@ describe('Widget: all sections together', () => {
 describe('Widget: section enable/disable', () => {
     test('hides viewed section when disabled', () => {
         const { container, xhrInstances } = setupWidgetTest({ viewedEnabled: false });
-        window.CompletionistStorage = mockStorage({
+        window.LekTrailStorage = mockStorage({
             viewedPosts: [post(1, 'Viewed Post')],
             readPosts: [post(2, 'Read Post')]
         });
@@ -320,7 +320,7 @@ describe('Widget: section enable/disable', () => {
 
     test('hides completed section when disabled', () => {
         const { container, xhrInstances } = setupWidgetTest({ completedEnabled: false });
-        window.CompletionistStorage = mockStorage({
+        window.LekTrailStorage = mockStorage({
             viewedPosts: [post(1, 'Viewed Post')],
             readPosts: [post(2, 'Read Post')]
         });
@@ -341,7 +341,7 @@ describe('Widget: section enable/disable', () => {
             viewedEnabled: false,
             completedEnabled: false
         });
-        window.CompletionistStorage = mockStorage({
+        window.LekTrailStorage = mockStorage({
             viewedPosts: [post(1, 'Viewed Post')],
             readPosts: [post(2, 'Read Post')]
         });
@@ -361,12 +361,12 @@ describe('Widget: section enable/disable', () => {
 describe('Widget: configurable labels', () => {
     test('uses custom labels from config', () => {
         const { container, xhrInstances } = setupWidgetTest();
-        window.CompletionistStorage = mockStorage({
+        window.LekTrailStorage = mockStorage({
             viewedPosts: [post(1, 'Post 1')],
             readPosts: [post(2, 'Post 2')]
         });
-        window.CompletionistConfig = {
-            widgetId: 'completionist-widget',
+        window.LekTrailConfig = {
+            widgetId: 'lektrail-widget',
             maxViewed: 3,
             maxRead: 5,
             maxSuggestions: 5,
@@ -393,9 +393,9 @@ describe('Widget: configurable labels', () => {
 
     test('uses custom loading label from config', () => {
         const { container } = setupWidgetTest();
-        window.CompletionistStorage = mockStorage();
-        window.CompletionistConfig = {
-            widgetId: 'completionist-widget',
+        window.LekTrailStorage = mockStorage();
+        window.LekTrailConfig = {
+            widgetId: 'lektrail-widget',
             viewedEnabled: true,
             completedEnabled: true,
             labels: { loading: 'Cargando...' }
@@ -408,9 +408,9 @@ describe('Widget: configurable labels', () => {
 
     test('uses custom empty state label from config', () => {
         const { container, xhrInstances } = setupWidgetTest();
-        window.CompletionistStorage = mockStorage();
-        window.CompletionistConfig = {
-            widgetId: 'completionist-widget',
+        window.LekTrailStorage = mockStorage();
+        window.LekTrailConfig = {
+            widgetId: 'lektrail-widget',
             viewedEnabled: true,
             completedEnabled: true,
             labels: { empty: 'Empieza a leer' }
@@ -426,8 +426,8 @@ describe('Widget: configurable labels', () => {
 describe('Widget: consent banner', () => {
     test('shows consent banner when requireConsent is true and no consent', () => {
         const { container } = setupWidgetTest({ requireConsent: true });
-        window.CompletionistStorage = mockStorage();
-        window.CompletionistConsentManager = {
+        window.LekTrailStorage = mockStorage();
+        window.LekTrailConsentManager = {
             create: function() {
                 return mockConsentManager({ consent: null, isBuiltIn: true });
             }
@@ -435,13 +435,13 @@ describe('Widget: consent banner', () => {
 
         loadWidget();
 
-        expect(container.innerHTML).toContain('completionist-consent');
+        expect(container.innerHTML).toContain('lektrail-consent');
     });
 
     test('shows widget normally when requireConsent is true and consent granted', () => {
         const { container, xhrInstances } = setupWidgetTest({ requireConsent: true });
-        window.CompletionistStorage = mockStorage();
-        window.CompletionistConsentManager = {
+        window.LekTrailStorage = mockStorage();
+        window.LekTrailConsentManager = {
             create: function() {
                 return mockConsentManager({ consent: true });
             }
@@ -450,17 +450,17 @@ describe('Widget: consent banner', () => {
         loadWidget();
         triggerXhrResponses(xhrInstances, { suggestions: [] });
 
-        expect(container.innerHTML).not.toContain('completionist-consent');
+        expect(container.innerHTML).not.toContain('lektrail-consent');
     });
 
     test('shows widget normally when requireConsent is false', () => {
         const { container, xhrInstances } = setupWidgetTest({ requireConsent: false });
-        window.CompletionistStorage = mockStorage();
+        window.LekTrailStorage = mockStorage();
 
         loadWidget();
         triggerXhrResponses(xhrInstances, { suggestions: [] });
 
-        expect(container.innerHTML).not.toContain('completionist-consent');
+        expect(container.innerHTML).not.toContain('lektrail-consent');
     });
 
     test('skips consent when serverSideTracking is enabled even if requireConsent is true', () => {
@@ -468,12 +468,12 @@ describe('Widget: consent banner', () => {
             requireConsent: true,
             serverSideTracking: true
         });
-        window.CompletionistInlineData = {
+        window.LekTrailInlineData = {
             viewed: [],
             read: [],
             suggestions: []
         };
-        window.CompletionistConsentManager = {
+        window.LekTrailConsentManager = {
             create: function() {
                 return mockConsentManager({ consent: null, isBuiltIn: true });
             }
@@ -481,14 +481,14 @@ describe('Widget: consent banner', () => {
 
         loadWidget();
 
-        expect(container.innerHTML).not.toContain('completionist-consent');
+        expect(container.innerHTML).not.toContain('lektrail-consent');
     });
 });
 
 describe('Widget: caching', () => {
     test('renders viewed posts from cache without API call', () => {
         const { container, xhrInstances } = setupWidgetTest();
-        window.CompletionistStorage = {
+        window.LekTrailStorage = {
             ...mockStorage(),
             getViewedPosts: () => [{ id: 1, title: 'Cached Post', url: '/cached' }],
             getReadPosts: () => [],
@@ -504,7 +504,7 @@ describe('Widget: caching', () => {
 
     test('renders read posts from cache without API call', () => {
         const { container, xhrInstances } = setupWidgetTest();
-        window.CompletionistStorage = {
+        window.LekTrailStorage = {
             ...mockStorage(),
             getViewedPosts: () => [],
             getReadPosts: () => [{ id: 1, title: 'Read Post', url: '/read' }],
@@ -520,7 +520,7 @@ describe('Widget: caching', () => {
 
     test('uses cached suggestions when cache is valid', () => {
         const { container, xhrInstances } = setupWidgetTest();
-        window.CompletionistStorage = {
+        window.LekTrailStorage = {
             ...mockStorage(),
             getViewedPosts: () => [],
             getReadPosts: () => [],
@@ -537,7 +537,7 @@ describe('Widget: caching', () => {
     test('fetches suggestions when cache is expired', () => {
         const { container, xhrInstances } = setupWidgetTest();
         const setSuggestions = jest.fn();
-        window.CompletionistStorage = {
+        window.LekTrailStorage = {
             ...mockStorage(),
             getViewedPosts: () => [],
             getReadPosts: () => [],
@@ -557,40 +557,40 @@ describe('Widget: caching', () => {
 describe('Widget: display options', () => {
     test('renders excerpt when showExcerpt is enabled and data has excerpt', () => {
         const { container, xhrInstances } = setupWidgetTest({ showExcerpt: true });
-        window.CompletionistStorage = mockStorage();
+        window.LekTrailStorage = mockStorage();
 
         loadWidget();
         triggerXhrResponses(xhrInstances, {
             suggestions: [{ id: 1, title: 'Post Title', excerpt: 'This is the excerpt.' }]
         });
 
-        expect(container.innerHTML).toContain('completionist-excerpt');
+        expect(container.innerHTML).toContain('lektrail-excerpt');
         expect(container.innerHTML).toContain('This is the excerpt.');
     });
 
     test('renders excerpt from storage for viewed posts', () => {
         const { container, xhrInstances } = setupWidgetTest({ showExcerpt: true });
-        window.CompletionistStorage = mockStorage({
+        window.LekTrailStorage = mockStorage({
             viewedPosts: [post(1, 'Post Title', { excerpt: 'Stored excerpt text.' })]
         });
 
         loadWidget();
         triggerXhrResponses(xhrInstances, { suggestions: [] });
 
-        expect(container.innerHTML).toContain('completionist-excerpt');
+        expect(container.innerHTML).toContain('lektrail-excerpt');
         expect(container.innerHTML).toContain('Stored excerpt text.');
     });
 
     test('renders thumbnail from storage for viewed posts', () => {
         const { container, xhrInstances } = setupWidgetTest({ showThumbnail: true });
-        window.CompletionistStorage = mockStorage({
+        window.LekTrailStorage = mockStorage({
             viewedPosts: [post(1, 'Post Title', { thumbnail: 'http://example.com/image.jpg' })]
         });
 
         loadWidget();
         triggerXhrResponses(xhrInstances, { suggestions: [] });
 
-        expect(container.innerHTML).toContain('completionist-thumbnail');
+        expect(container.innerHTML).toContain('lektrail-thumbnail');
         expect(container.innerHTML).toContain('http://example.com/image.jpg');
     });
 });
@@ -598,42 +598,42 @@ describe('Widget: display options', () => {
 describe('Widget: clear data button', () => {
     test('shows clear button when enabled', () => {
         const { container, xhrInstances } = setupWidgetTest({ showClearButton: true });
-        window.CompletionistStorage = mockStorage({
+        window.LekTrailStorage = mockStorage({
             viewedPosts: [post(1, 'Post 1')]
         });
 
         loadWidget();
         triggerXhrResponses(xhrInstances, { suggestions: [] });
 
-        expect(container.innerHTML).toContain('completionist-clear');
+        expect(container.innerHTML).toContain('lektrail-clear');
     });
 
     test('hides clear button when disabled', () => {
         const { container, xhrInstances } = setupWidgetTest({ showClearButton: false });
-        window.CompletionistStorage = mockStorage({
+        window.LekTrailStorage = mockStorage({
             viewedPosts: [post(1, 'Post 1')]
         });
 
         loadWidget();
         triggerXhrResponses(xhrInstances, { suggestions: [] });
 
-        expect(container.innerHTML).not.toContain('completionist-clear');
+        expect(container.innerHTML).not.toContain('lektrail-clear');
     });
 
     test('hides clear button when no data to clear', () => {
         const { container, xhrInstances } = setupWidgetTest({ showClearButton: true });
-        window.CompletionistStorage = mockStorage();
+        window.LekTrailStorage = mockStorage();
 
         loadWidget();
         triggerXhrResponses(xhrInstances, { suggestions: [] });
 
-        expect(container.innerHTML).not.toContain('completionist-clear');
+        expect(container.innerHTML).not.toContain('lektrail-clear');
     });
 
     test('clicking clear button calls storage.clearHistory()', () => {
         const { container, xhrInstances } = setupWidgetTest({ showClearButton: true });
         const clearHistoryFn = jest.fn();
-        window.CompletionistStorage = {
+        window.LekTrailStorage = {
             ...mockStorage({ viewedPosts: [post(1, 'Post 1')] }),
             clearHistory: clearHistoryFn
         };
@@ -641,7 +641,7 @@ describe('Widget: clear data button', () => {
         loadWidget();
         triggerXhrResponses(xhrInstances, { suggestions: [] });
 
-        const button = container.querySelector('.completionist-clear-btn');
+        const button = container.querySelector('.lektrail-clear-btn');
         button.click();
 
         expect(clearHistoryFn).toHaveBeenCalled();
@@ -649,10 +649,10 @@ describe('Widget: clear data button', () => {
 
     test('uses custom clear label from config', () => {
         const { container, xhrInstances } = setupWidgetTest({ showClearButton: true });
-        window.CompletionistStorage = mockStorage({
+        window.LekTrailStorage = mockStorage({
             viewedPosts: [post(1, 'Post 1')]
         });
-        window.CompletionistConfig.labels = { clear: 'Borrar datos' };
+        window.LekTrailConfig.labels = { clear: 'Borrar datos' };
 
         loadWidget();
         triggerXhrResponses(xhrInstances, { suggestions: [] });
@@ -662,34 +662,34 @@ describe('Widget: clear data button', () => {
 });
 
 describe('Widget: class preservation', () => {
-    test('adds completionist-widget class after rendering', () => {
+    test('adds lektrail-widget class after rendering', () => {
         const { container, xhrInstances } = setupWidgetTest();
-        window.CompletionistStorage = mockStorage();
+        window.LekTrailStorage = mockStorage();
 
         loadWidget();
         triggerXhrResponses(xhrInstances, { suggestions: [] });
 
-        expect(container.className).toContain('completionist-widget');
+        expect(container.className).toContain('lektrail-widget');
     });
 
     test('preserves existing WordPress block classes after rendering', () => {
         const { container, xhrInstances } = setupWidgetTest();
-        container.className = 'wp-block-completionist-widget has-background has-cyan-background-color';
-        window.CompletionistStorage = mockStorage();
+        container.className = 'wp-block-lektrail-widget has-background has-cyan-background-color';
+        window.LekTrailStorage = mockStorage();
 
         loadWidget();
         triggerXhrResponses(xhrInstances, { suggestions: [] });
 
-        expect(container.className).toContain('wp-block-completionist-widget');
+        expect(container.className).toContain('wp-block-lektrail-widget');
         expect(container.className).toContain('has-background');
-        expect(container.className).toContain('completionist-widget');
+        expect(container.className).toContain('lektrail-widget');
     });
 });
 
 describe('Widget: server-side tracking (inline data)', () => {
     test('hides clear button when server-side tracking is enabled', () => {
         const { container } = setupWidgetTest({ showClearButton: true, serverSideTracking: true });
-        window.CompletionistInlineData = {
+        window.LekTrailInlineData = {
             viewed: [post(1, 'Post 1')],
             read: [],
             suggestions: []
@@ -697,12 +697,12 @@ describe('Widget: server-side tracking (inline data)', () => {
 
         loadWidget();
 
-        expect(container.innerHTML).not.toContain('completionist-clear');
+        expect(container.innerHTML).not.toContain('lektrail-clear');
     });
 
-    test('uses inline data when CompletionistInlineData is present', () => {
+    test('uses inline data when LekTrailInlineData is present', () => {
         const { container } = setupWidgetTest();
-        window.CompletionistInlineData = {
+        window.LekTrailInlineData = {
             viewed: [post(1, 'Viewed Post')],
             read: [post(2, 'Read Post')],
             suggestions: [post(3, 'Suggestion')]
@@ -717,7 +717,7 @@ describe('Widget: server-side tracking (inline data)', () => {
 
     test('does not fetch from API when inline data exists', () => {
         const { container, xhrInstances } = setupWidgetTest();
-        window.CompletionistInlineData = {
+        window.LekTrailInlineData = {
             viewed: [],
             read: [],
             suggestions: [post(1, 'Inline Suggestion')]
@@ -731,7 +731,7 @@ describe('Widget: server-side tracking (inline data)', () => {
 
     test('shows correct count from inline data for viewed section', () => {
         const { container } = setupWidgetTest();
-        window.CompletionistInlineData = {
+        window.LekTrailInlineData = {
             viewed: [post(1, 'Post 1'), post(2, 'Post 2')],
             read: [],
             suggestions: []
@@ -744,7 +744,7 @@ describe('Widget: server-side tracking (inline data)', () => {
 
     test('shows correct count from inline data for read section', () => {
         const { container } = setupWidgetTest();
-        window.CompletionistInlineData = {
+        window.LekTrailInlineData = {
             viewed: [],
             read: [post(1, 'Post 1'), post(2, 'Post 2'), post(3, 'Post 3')],
             suggestions: []
@@ -759,35 +759,35 @@ describe('Widget: server-side tracking (inline data)', () => {
 describe('Widget: re-initialization class toggling', () => {
     test('removes show-thumbnail class when toggled off', () => {
         const { container } = setupWidgetTest({ showThumbnail: true });
-        window.CompletionistInlineData = {
+        window.LekTrailInlineData = {
             viewed: [post(1, 'Post 1', { thumbnail: 'http://example.com/img.jpg' })],
             read: [],
             suggestions: []
         };
 
         loadWidget();
-        expect(container.className).toContain('completionist-show-thumbnail');
+        expect(container.className).toContain('lektrail-show-thumbnail');
 
-        window.CompletionistConfig.showThumbnail = false;
-        window.CompletionistWidget.init(container, window.CompletionistInlineData, window.CompletionistConfig);
+        window.LekTrailConfig.showThumbnail = false;
+        window.LekTrailWidget.init(container, window.LekTrailInlineData, window.LekTrailConfig);
 
-        expect(container.className).not.toContain('completionist-show-thumbnail');
+        expect(container.className).not.toContain('lektrail-show-thumbnail');
     });
 
     test('removes show-excerpt class when toggled off', () => {
         const { container } = setupWidgetTest({ showExcerpt: true });
-        window.CompletionistInlineData = {
+        window.LekTrailInlineData = {
             viewed: [post(1, 'Post 1', { excerpt: 'Some excerpt' })],
             read: [],
             suggestions: []
         };
 
         loadWidget();
-        expect(container.className).toContain('completionist-show-excerpt');
+        expect(container.className).toContain('lektrail-show-excerpt');
 
-        window.CompletionistConfig.showExcerpt = false;
-        window.CompletionistWidget.init(container, window.CompletionistInlineData, window.CompletionistConfig);
+        window.LekTrailConfig.showExcerpt = false;
+        window.LekTrailWidget.init(container, window.LekTrailInlineData, window.LekTrailConfig);
 
-        expect(container.className).not.toContain('completionist-show-excerpt');
+        expect(container.className).not.toContain('lektrail-show-excerpt');
     });
 });

@@ -19,8 +19,8 @@ function mockXhr() {
 }
 
 beforeEach(() => {
-    delete window.CompletionistDataProvider;
-    delete window.CompletionistStorage;
+    delete window.LekTrailDataProvider;
+    delete window.LekTrailStorage;
 });
 
 describe('DataProvider async mode: getViewed', () => {
@@ -29,10 +29,10 @@ describe('DataProvider async mode: getViewed', () => {
             { id: 1, title: 'Post 1', url: '/post-1' },
             { id: 2, title: 'Post 2', url: '/post-2' }
         ];
-        window.CompletionistStorage = mockStorage({ viewedPosts });
+        window.LekTrailStorage = mockStorage({ viewedPosts });
 
         eval(dataProviderCode);
-        const provider = window.CompletionistDataProvider.create({
+        const provider = window.LekTrailDataProvider.create({
             dataMode: 'async',
             endpoint: '/api'
         });
@@ -44,10 +44,10 @@ describe('DataProvider async mode: getViewed', () => {
 describe('DataProvider async mode: getRead', () => {
     test('returns storage read posts', () => {
         const readPosts = [{ id: 3, title: 'Post 3', url: '/post-3' }];
-        window.CompletionistStorage = mockStorage({ readPosts });
+        window.LekTrailStorage = mockStorage({ readPosts });
 
         eval(dataProviderCode);
-        const provider = window.CompletionistDataProvider.create({
+        const provider = window.LekTrailDataProvider.create({
             dataMode: 'async',
             endpoint: '/api'
         });
@@ -64,13 +64,13 @@ describe('DataProvider async mode: getSuggestions', () => {
             xhrInstances.push(xhr);
             return xhr;
         });
-        window.CompletionistStorage = mockStorage({
+        window.LekTrailStorage = mockStorage({
             viewedPosts: [{ id: 1, title: 'V1', url: '/1' }],
             readPosts: [{ id: 2, title: 'R1', url: '/2' }]
         });
 
         eval(dataProviderCode);
-        const provider = window.CompletionistDataProvider.create({
+        const provider = window.LekTrailDataProvider.create({
             dataMode: 'async',
             endpoint: '/api?action=test'
         });
@@ -89,7 +89,7 @@ describe('DataProvider async mode: getSuggestions', () => {
             xhrInstances.push(xhr);
             return xhr;
         });
-        window.CompletionistStorage = mockStorage({
+        window.LekTrailStorage = mockStorage({
             viewedPosts: [
                 { id: 10, title: 'V1', url: '/10' },
                 { id: 20, title: 'V2', url: '/20' }
@@ -98,7 +98,7 @@ describe('DataProvider async mode: getSuggestions', () => {
         });
 
         eval(dataProviderCode);
-        const provider = window.CompletionistDataProvider.create({
+        const provider = window.LekTrailDataProvider.create({
             dataMode: 'async',
             endpoint: '/api?action=test'
         });
@@ -117,10 +117,10 @@ describe('DataProvider async mode: getSuggestions', () => {
             xhrInstances.push(xhr);
             return xhr;
         });
-        window.CompletionistStorage = mockStorage();
+        window.LekTrailStorage = mockStorage();
 
         eval(dataProviderCode);
-        const provider = window.CompletionistDataProvider.create({
+        const provider = window.LekTrailDataProvider.create({
             dataMode: 'async',
             endpoint: '/api?action=test'
         });
@@ -139,10 +139,10 @@ describe('DataProvider async mode: getSuggestions', () => {
             xhrInstances.push(xhr);
             return xhr;
         });
-        window.CompletionistStorage = mockStorage();
+        window.LekTrailStorage = mockStorage();
 
         eval(dataProviderCode);
-        const provider = window.CompletionistDataProvider.create({
+        const provider = window.LekTrailDataProvider.create({
             dataMode: 'async',
             endpoint: '/api'
         });
@@ -165,7 +165,7 @@ describe('DataProvider async mode: getSuggestions', () => {
 describe('DataProvider inline mode: getViewed', () => {
     test('returns inline data', () => {
         eval(dataProviderCode);
-        const provider = window.CompletionistDataProvider.create({
+        const provider = window.LekTrailDataProvider.create({
             dataMode: 'inline',
             inlineData: {
                 viewed: [{ id: 1, title: 'Inline V', url: '/v1' }],
@@ -183,7 +183,7 @@ describe('DataProvider inline mode: getViewed', () => {
 describe('DataProvider inline mode: getRead', () => {
     test('returns inline data', () => {
         eval(dataProviderCode);
-        const provider = window.CompletionistDataProvider.create({
+        const provider = window.LekTrailDataProvider.create({
             dataMode: 'inline',
             inlineData: {
                 viewed: [],
@@ -201,7 +201,7 @@ describe('DataProvider inline mode: getRead', () => {
 describe('DataProvider inline mode: getSuggestions', () => {
     test('calls callback immediately with inline data', () => {
         eval(dataProviderCode);
-        const provider = window.CompletionistDataProvider.create({
+        const provider = window.LekTrailDataProvider.create({
             dataMode: 'inline',
             inlineData: {
                 viewed: [],
@@ -220,7 +220,7 @@ describe('DataProvider inline mode: getSuggestions', () => {
 
     test('handles missing suggestions gracefully', () => {
         eval(dataProviderCode);
-        const provider = window.CompletionistDataProvider.create({
+        const provider = window.LekTrailDataProvider.create({
             dataMode: 'inline',
             inlineData: {}
         });
@@ -240,10 +240,10 @@ describe('DataProvider: default mode', () => {
             xhrInstances.push(xhr);
             return xhr;
         });
-        window.CompletionistStorage = mockStorage();
+        window.LekTrailStorage = mockStorage();
 
         eval(dataProviderCode);
-        const provider = window.CompletionistDataProvider.create({
+        const provider = window.LekTrailDataProvider.create({
             endpoint: '/api?action=test'
         });
 

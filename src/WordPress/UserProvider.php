@@ -1,8 +1,8 @@
 <?php
 
-namespace Completionist\WordPress;
+namespace LekTrail\WordPress;
 
-use Completionist\Contracts\UserProvider as UserProviderContract;
+use LekTrail\Contracts\UserProvider as UserProviderContract;
 
 class UserProvider implements UserProviderContract
 {

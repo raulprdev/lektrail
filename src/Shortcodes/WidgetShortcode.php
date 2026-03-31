@@ -1,14 +1,14 @@
 <?php
 
-namespace Completionist\Shortcodes;
+namespace LekTrail\Shortcodes;
 
-use Completionist\Contracts\Hooks;
-use Completionist\InstanceSettings;
-use Completionist\WidgetRenderer;
+use LekTrail\Contracts\Hooks;
+use LekTrail\InstanceSettings;
+use LekTrail\WidgetRenderer;
 
 class WidgetShortcode
 {
-    public const TAG = 'completionist';
+    public const TAG = 'lektrail';
 
     private WidgetRenderer $renderer;
 

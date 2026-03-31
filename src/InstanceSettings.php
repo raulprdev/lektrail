@@ -1,6 +1,6 @@
 <?php
 
-namespace Completionist;
+namespace LekTrail;
 
 class InstanceSettings
 {

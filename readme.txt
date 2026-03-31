@@ -1,4 +1,4 @@
-=== Reading Completionist ===
+=== LekTrail Reading Tracker ===
 Contributors: raulprdev
 Tags: reading progress, tracking, engagement, recently viewed, suggestions
 Requires at least: 6.3
@@ -12,7 +12,7 @@ Show visitors what they've read, what they started, and what to read next.
 
 == Description ==
 
-Most websites have no memory. Visitors return and see the same content with no recognition of what they've already explored. Completionist changes that.
+Most websites have no memory. Visitors return and see the same content with no recognition of what they've already explored. LekTrail changes that.
 
 **For content sites**: Show readers which articles they started but didn't finish, and suggest new content based on their history.
 
@@ -22,7 +22,7 @@ Most websites have no memory. Visitors return and see the same content with no r
 
 = How It Works =
 
-Completionist tracks when visitors scroll through your content:
+LekTrail tracks when visitors scroll through your content:
 
 * **Viewed**: Posts they started reading
 * **Completed**: Posts they scrolled to the end (configurable threshold)
@@ -60,18 +60,18 @@ The widget displays three sections: "Continue Reading", "Completed", and "Sugges
 
 == Installation ==
 
-1. Upload `completionist` to `/wp-content/plugins/`
+1. Upload `lektrail` to `/wp-content/plugins/`
 2. Activate the plugin
 3. Add the widget:
-   * **Gutenberg**: Search for "Completionist" in the block inserter
-   * **Shortcode**: Add `[completionist]` to any page
-4. Configure in Settings > Completionist
+   * **Gutenberg**: Search for "LekTrail" in the block inserter
+   * **Shortcode**: Add `[lektrail]` to any page
+4. Configure in Settings > LekTrail
 
 == Frequently Asked Questions ==
 
 = Does this work without user registration? =
 
-Yes. By default, Completionist uses localStorage which works for all visitors without requiring login. Data is stored privately in the visitor's browser.
+Yes. By default, LekTrail uses localStorage which works for all visitors without requiring login. Data is stored privately in the visitor's browser.
 
 = Can I track reading progress for logged-in users? =
 
@@ -83,7 +83,7 @@ Any post type: posts, pages, WooCommerce products, custom post types. Configure 
 
 = How do I customize the widget appearance? =
 
-The widget uses minimal styling. Add your own CSS targeting `.completionist-widget`, `.completionist-continue`, `.completionist-completed`, and `.completionist-suggestions`.
+The widget uses minimal styling. Add your own CSS targeting `.lektrail-widget`, `.lektrail-continue`, `.lektrail-completed`, and `.lektrail-suggestions`.
 
 == Changelog ==
 

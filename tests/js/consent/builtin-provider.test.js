@@ -8,59 +8,59 @@ const builtinCode = fs.readFileSync(
 
 beforeEach(() => {
     localStorage.clear();
-    delete global.CompletionistBuiltInProvider;
+    delete global.LekTrailBuiltInProvider;
     const script = new Function(builtinCode);
     script();
 });
 
 describe('BuiltInProvider: isAvailable', () => {
     test('returns true always', () => {
-        expect(CompletionistBuiltInProvider.isAvailable()).toBe(true);
+        expect(LekTrailBuiltInProvider.isAvailable()).toBe(true);
     });
 });
 
 describe('BuiltInProvider: hasConsent', () => {
     test('returns null when no consent stored', () => {
-        expect(CompletionistBuiltInProvider.hasConsent()).toBe(null);
+        expect(LekTrailBuiltInProvider.hasConsent()).toBe(null);
     });
 
     test('returns true when consent is granted', () => {
-        localStorage.setItem('completionist_consent', 'granted');
+        localStorage.setItem('lektrail_consent', 'granted');
 
         const script = new Function(builtinCode);
         script();
 
-        expect(CompletionistBuiltInProvider.hasConsent()).toBe(true);
+        expect(LekTrailBuiltInProvider.hasConsent()).toBe(true);
     });
 
     test('returns false when consent is denied', () => {
-        localStorage.setItem('completionist_consent', 'denied');
+        localStorage.setItem('lektrail_consent', 'denied');
 
         const script = new Function(builtinCode);
         script();
 
-        expect(CompletionistBuiltInProvider.hasConsent()).toBe(false);
+        expect(LekTrailBuiltInProvider.hasConsent()).toBe(false);
     });
 });
 
 describe('BuiltInProvider: setConsent', () => {
     test('setConsent(true) stores granted', () => {
-        CompletionistBuiltInProvider.setConsent(true);
+        LekTrailBuiltInProvider.setConsent(true);
 
-        expect(localStorage.getItem('completionist_consent')).toBe('granted');
+        expect(localStorage.getItem('lektrail_consent')).toBe('granted');
     });
 
     test('setConsent(false) stores denied', () => {
-        CompletionistBuiltInProvider.setConsent(false);
+        LekTrailBuiltInProvider.setConsent(false);
 
-        expect(localStorage.getItem('completionist_consent')).toBe('denied');
+        expect(localStorage.getItem('lektrail_consent')).toBe('denied');
     });
 
     test('setConsent triggers registered callbacks', () => {
         const callback = jest.fn();
-        CompletionistBuiltInProvider.onConsentChange(callback);
+        LekTrailBuiltInProvider.onConsentChange(callback);
 
-        CompletionistBuiltInProvider.setConsent(true);
+        LekTrailBuiltInProvider.setConsent(true);
 
         expect(callback).toHaveBeenCalledWith(true);
     });
@@ -70,10 +70,10 @@ describe('BuiltInProvider: onConsentChange', () => {
     test('registers multiple callbacks', () => {
         const cb1 = jest.fn();
         const cb2 = jest.fn();
-        CompletionistBuiltInProvider.onConsentChange(cb1);
-        CompletionistBuiltInProvider.onConsentChange(cb2);
+        LekTrailBuiltInProvider.onConsentChange(cb1);
+        LekTrailBuiltInProvider.onConsentChange(cb2);
 
-        CompletionistBuiltInProvider.setConsent(true);
+        LekTrailBuiltInProvider.setConsent(true);
 
         expect(cb1).toHaveBeenCalledWith(true);
         expect(cb2).toHaveBeenCalledWith(true);
@@ -82,11 +82,11 @@ describe('BuiltInProvider: onConsentChange', () => {
 
 describe('BuiltInProvider: clearConsent', () => {
     test('removes consent from localStorage', () => {
-        CompletionistBuiltInProvider.setConsent(true);
-        expect(localStorage.getItem('completionist_consent')).toBe('granted');
+        LekTrailBuiltInProvider.setConsent(true);
+        expect(localStorage.getItem('lektrail_consent')).toBe('granted');
 
-        CompletionistBuiltInProvider.clearConsent();
+        LekTrailBuiltInProvider.clearConsent();
 
-        expect(localStorage.getItem('completionist_consent')).toBe(null);
+        expect(localStorage.getItem('lektrail_consent')).toBe(null);
     });
 });

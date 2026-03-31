@@ -23,10 +23,10 @@ function mockProvider(options) {
 
 beforeEach(() => {
     localStorage.clear();
-    delete global.CompletionistBuiltInProvider;
-    delete global.CompletionistConsentManager;
-    delete global.CompletionistCookieYesProvider;
-    delete global.CompletionistComplianzProvider;
+    delete global.LekTrailBuiltInProvider;
+    delete global.LekTrailConsentManager;
+    delete global.LekTrailCookieYesProvider;
+    delete global.LekTrailComplianzProvider;
 
     const script1 = new Function(builtinCode);
     script1();
@@ -39,7 +39,7 @@ describe('ConsentManager: provider detection', () => {
         var provider1 = mockProvider({ available: true, consent: true });
         var provider2 = mockProvider({ available: true, consent: false });
 
-        var manager = CompletionistConsentManager.create({
+        var manager = LekTrailConsentManager.create({
             providers: [provider1, provider2]
         });
 
@@ -52,7 +52,7 @@ describe('ConsentManager: provider detection', () => {
         var provider1 = mockProvider({ available: false });
         var provider2 = mockProvider({ available: true, consent: true });
 
-        var manager = CompletionistConsentManager.create({
+        var manager = LekTrailConsentManager.create({
             providers: [provider1, provider2]
         });
 
@@ -61,7 +61,7 @@ describe('ConsentManager: provider detection', () => {
     });
 
     test('falls back to BuiltInProvider when no providers given', () => {
-        var manager = CompletionistConsentManager.create();
+        var manager = LekTrailConsentManager.create();
 
         expect(manager.hasConsent()).toBe(null);
         expect(manager.isBuiltInProvider()).toBe(true);
@@ -72,7 +72,7 @@ describe('ConsentManager: hasConsent', () => {
     test('delegates to active provider', () => {
         var provider = mockProvider({ consent: true });
 
-        var manager = CompletionistConsentManager.create({
+        var manager = LekTrailConsentManager.create({
             providers: [provider]
         });
 
@@ -82,7 +82,7 @@ describe('ConsentManager: hasConsent', () => {
     test('returns null when provider returns null', () => {
         var provider = mockProvider({ consent: null });
 
-        var manager = CompletionistConsentManager.create({
+        var manager = LekTrailConsentManager.create({
             providers: [provider]
         });
 
@@ -92,7 +92,7 @@ describe('ConsentManager: hasConsent', () => {
     test('returns false when provider returns false', () => {
         var provider = mockProvider({ consent: false });
 
-        var manager = CompletionistConsentManager.create({
+        var manager = LekTrailConsentManager.create({
             providers: [provider]
         });
 
@@ -102,8 +102,8 @@ describe('ConsentManager: hasConsent', () => {
 
 describe('ConsentManager: isBuiltInProvider', () => {
     test('returns true when using BuiltInProvider', () => {
-        var manager = CompletionistConsentManager.create({
-            providers: [CompletionistBuiltInProvider]
+        var manager = LekTrailConsentManager.create({
+            providers: [LekTrailBuiltInProvider]
         });
 
         expect(manager.isBuiltInProvider()).toBe(true);
@@ -112,7 +112,7 @@ describe('ConsentManager: isBuiltInProvider', () => {
     test('returns false when using external provider', () => {
         var externalProvider = mockProvider({ consent: true });
 
-        var manager = CompletionistConsentManager.create({
+        var manager = LekTrailConsentManager.create({
             providers: [externalProvider]
         });
 
@@ -122,19 +122,19 @@ describe('ConsentManager: isBuiltInProvider', () => {
 
 describe('ConsentManager: grantConsent', () => {
     test('calls setConsent on BuiltInProvider', () => {
-        var manager = CompletionistConsentManager.create({
-            providers: [CompletionistBuiltInProvider]
+        var manager = LekTrailConsentManager.create({
+            providers: [LekTrailBuiltInProvider]
         });
 
         manager.grantConsent();
 
-        expect(CompletionistBuiltInProvider.hasConsent()).toBe(true);
+        expect(LekTrailBuiltInProvider.hasConsent()).toBe(true);
     });
 
     test('does nothing when using external provider', () => {
         var externalProvider = mockProvider({ consent: null });
 
-        var manager = CompletionistConsentManager.create({
+        var manager = LekTrailConsentManager.create({
             providers: [externalProvider]
         });
 
@@ -148,7 +148,7 @@ describe('ConsentManager: onConsentChange', () => {
     test('registers callback with active provider', () => {
         var provider = mockProvider({ consent: null });
 
-        var manager = CompletionistConsentManager.create({
+        var manager = LekTrailConsentManager.create({
             providers: [provider]
         });
 
@@ -159,14 +159,14 @@ describe('ConsentManager: onConsentChange', () => {
     });
 
     test('callback is triggered when consent changes', () => {
-        var manager = CompletionistConsentManager.create({
-            providers: [CompletionistBuiltInProvider]
+        var manager = LekTrailConsentManager.create({
+            providers: [LekTrailBuiltInProvider]
         });
 
         var callback = jest.fn();
         manager.onConsentChange(callback);
 
-        CompletionistBuiltInProvider.setConsent(true);
+        LekTrailBuiltInProvider.setConsent(true);
 
         expect(callback).toHaveBeenCalledWith(true);
     });

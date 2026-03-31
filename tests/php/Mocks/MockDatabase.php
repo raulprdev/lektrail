@@ -1,8 +1,8 @@
 <?php
 
-namespace Completionist\Tests\Mocks;
+namespace LekTrail\Tests\Mocks;
 
-use Completionist\Contracts\Database;
+use LekTrail\Contracts\Database;
 
 class MockDatabase implements Database
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace Completionist\Tests\Mocks;
+namespace LekTrail\Tests\Mocks;
 
-use Completionist\Contracts\PostQuery;
+use LekTrail\Contracts\PostQuery;
 
 class MockPostQuery implements PostQuery
 {

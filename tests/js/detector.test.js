@@ -16,21 +16,21 @@ const detectorCode = fs.readFileSync(
 let D;
 
 beforeEach(() => {
-    delete window.CompletionistDetector;
-    delete window.CompletionistNotifier;
-    delete window.CompletionistPostData;
+    delete window.LekTrailDetector;
+    delete window.LekTrailNotifier;
+    delete window.LekTrailPostData;
     eval(notifierCode);
     eval(detectorCode);
-    D = window.CompletionistDetector;
+    D = window.LekTrailDetector;
 });
 
 afterEach(() => {
-    delete window.CompletionistPostData;
-    delete window.CompletionistNotifier;
+    delete window.LekTrailPostData;
+    delete window.LekTrailNotifier;
 });
 
 function setPostData(postId) {
-    window.CompletionistPostData = {
+    window.LekTrailPostData = {
         id: postId,
         title: 'Test Post',
         url: '/test-post',
@@ -109,7 +109,7 @@ describe('Detector: on page load', () => {
         expect(storage.addViewed).not.toHaveBeenCalled();
     });
 
-    test('skips tracking when CompletionistPostData is missing', () => {
+    test('skips tracking when LekTrailPostData is missing', () => {
         const storage = mockStorage();
         const detector = D.createDetector({
             dom: mockDom({ postId: 123, article: true }),
@@ -198,7 +198,7 @@ describe('detector.init', () => {
         expect(detector.init().success).toBe(false);
     });
 
-    test('succeeds with article, postId and CompletionistPostData', () => {
+    test('succeeds with article, postId and LekTrailPostData', () => {
         setPostData(123);
         const storage = mockStorage();
         const detector = D.createDetector({
@@ -300,7 +300,7 @@ describe('Detector: consent', () => {
 });
 
 describe('auto-init', () => {
-    test('creates sentinel when article, postId and CompletionistPostData exist', () => {
+    test('creates sentinel when article, postId and LekTrailPostData exist', () => {
         const mockArticle = {
             style: {},
             appendChild: jest.fn(),
@@ -313,16 +313,16 @@ describe('auto-init', () => {
 
         document.querySelector = jest.fn(selector => {
             if (selector === 'article') return mockArticle;
-            if (selector === '[data-completionist-post]') {
-                return { dataset: { completionistPost: '123' } };
+            if (selector === '[data-lektrail-post]') {
+                return { dataset: { lektrailPost: '123' } };
             }
             if (selector === 'main') return null;
             return null;
         });
         document.createElement = jest.fn(() => ({ style: {} }));
         window.getComputedStyle = jest.fn(() => ({ position: 'static' }));
-        window.CompletionistStorage = mockStorage();
-        window.CompletionistPostData = {
+        window.LekTrailStorage = mockStorage();
+        window.LekTrailPostData = {
             id: 123,
             title: 'Test Post',
             url: '/test-post'
@@ -332,7 +332,7 @@ describe('auto-init', () => {
             disconnect: jest.fn()
         }));
 
-        delete window.CompletionistDetector;
+        delete window.LekTrailDetector;
         eval(detectorCode);
 
         document.querySelector = originalQuerySelector;
@@ -345,17 +345,17 @@ describe('auto-init', () => {
 
 describe('Detector: read threshold', () => {
     test('uses default threshold of 90 when no config', () => {
-        delete window.CompletionistConfig;
+        delete window.LekTrailConfig;
         expect(D.getReadThreshold()).toBe(90);
     });
 
-    test('uses threshold from CompletionistConfig', () => {
-        window.CompletionistConfig = { readThreshold: 50 };
+    test('uses threshold from LekTrailConfig', () => {
+        window.LekTrailConfig = { readThreshold: 50 };
         expect(D.getReadThreshold()).toBe(50);
     });
 
     test('uses default when config has no readThreshold', () => {
-        window.CompletionistConfig = { maxViewed: 5 };
+        window.LekTrailConfig = { maxViewed: 5 };
         expect(D.getReadThreshold()).toBe(90);
     });
 

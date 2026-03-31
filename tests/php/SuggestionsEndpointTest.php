@@ -1,12 +1,12 @@
 <?php
 
-namespace Completionist\Tests;
+namespace LekTrail\Tests;
 
-use Completionist\SuggestionsEndpoint;
-use Completionist\SuggestionsQuery;
-use Completionist\Tests\Mocks\MockJsonResponse;
-use Completionist\Tests\Mocks\MockPluginConfigRepository;
-use Completionist\Tests\Mocks\MockPostQuery;
+use LekTrail\SuggestionsEndpoint;
+use LekTrail\SuggestionsQuery;
+use LekTrail\Tests\Mocks\MockJsonResponse;
+use LekTrail\Tests\Mocks\MockPluginConfigRepository;
+use LekTrail\Tests\Mocks\MockPostQuery;
 use PHPUnit\Framework\TestCase;
 
 class SuggestionsEndpointTest extends TestCase

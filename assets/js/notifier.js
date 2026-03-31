@@ -29,7 +29,7 @@
 		};
 	}
 
-	window.CompletionistNotifier = {
+	window.LekTrailNotifier = {
 		create(options) {
 			if (options.endpoint) {
 				return createServerSideNotifier(options.endpoint, options.nonce);

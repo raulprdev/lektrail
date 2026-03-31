@@ -1,17 +1,17 @@
 <?php
 
-namespace Completionist\Tests;
+namespace LekTrail\Tests;
 
-use Completionist\Assets;
-use Completionist\Shortcodes\WidgetShortcode;
-use Completionist\SuggestionsQuery;
-use Completionist\Tests\Mocks\MockPluginConfigRepository;
-use Completionist\Tests\Mocks\MockPostQuery;
-use Completionist\Tests\Mocks\MockScriptLoader;
-use Completionist\Tests\Mocks\MockTrackingRepository;
-use Completionist\Tests\Mocks\MockUserProvider;
-use Completionist\TrackingService;
-use Completionist\WidgetRenderer;
+use LekTrail\Assets;
+use LekTrail\Shortcodes\WidgetShortcode;
+use LekTrail\SuggestionsQuery;
+use LekTrail\Tests\Mocks\MockPluginConfigRepository;
+use LekTrail\Tests\Mocks\MockPostQuery;
+use LekTrail\Tests\Mocks\MockScriptLoader;
+use LekTrail\Tests\Mocks\MockTrackingRepository;
+use LekTrail\Tests\Mocks\MockUserProvider;
+use LekTrail\TrackingService;
+use LekTrail\WidgetRenderer;
 use PHPUnit\Framework\TestCase;
 
 class WidgetShortcodeTest extends TestCase
@@ -57,7 +57,7 @@ class WidgetShortcodeTest extends TestCase
         $shortcode->render([]);
 
         $inlineCode = $this->scripts->inlineScripts[Assets::HANDLE_WIDGET]['code'];
-        $this->assertStringContainsString('CompletionistInlineData', $inlineCode);
+        $this->assertStringContainsString('LekTrailInlineData', $inlineCode);
     }
 
     public function testDoesNotInjectInlineDataWhenServerSideDisabled(): void
@@ -68,7 +68,7 @@ class WidgetShortcodeTest extends TestCase
         $shortcode->render([]);
 
         $inlineCode = $this->scripts->inlineScripts[Assets::HANDLE_WIDGET]['code'];
-        $this->assertStringNotContainsString('CompletionistInlineData', $inlineCode);
+        $this->assertStringNotContainsString('LekTrailInlineData', $inlineCode);
     }
 
     public function testInlineDataContainsFullPostData(): void

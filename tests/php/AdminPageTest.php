@@ -1,10 +1,10 @@
 <?php
 
-namespace Completionist\Tests;
+namespace LekTrail\Tests;
 
-use Completionist\AdminPage;
-use Completionist\Tests\Mocks\MockHooks;
-use Completionist\Tests\Mocks\MockPluginConfigRepository;
+use LekTrail\AdminPage;
+use LekTrail\Tests\Mocks\MockHooks;
+use LekTrail\Tests\Mocks\MockPluginConfigRepository;
 use PHPUnit\Framework\TestCase;
 
 class AdminPageTest extends TestCase

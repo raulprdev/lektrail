@@ -1,8 +1,8 @@
 <?php
 
-namespace Completionist\WordPress;
+namespace LekTrail\WordPress;
 
-use Completionist\Contracts\Context as ContextInterface;
+use LekTrail\Contracts\Context as ContextInterface;
 
 class Context implements ContextInterface
 {

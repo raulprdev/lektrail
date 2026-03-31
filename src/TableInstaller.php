@@ -1,12 +1,12 @@
 <?php
 
-namespace Completionist;
+namespace LekTrail;
 
-use Completionist\Contracts\Database;
+use LekTrail\Contracts\Database;
 
 class TableInstaller
 {
-    private const TABLE_NAME = 'completionist_history';
+    private const TABLE_NAME = 'lektrail_history';
 
     private Database $db;
 

@@ -1,14 +1,14 @@
 <?php
 
-namespace Completionist\Tests;
+namespace LekTrail\Tests;
 
-use Completionist\Tests\Mocks\MockJsonResponse;
-use Completionist\Tests\Mocks\MockNonceVerifier;
-use Completionist\Tests\Mocks\MockPluginConfigRepository;
-use Completionist\Tests\Mocks\MockTrackingRepository;
-use Completionist\Tests\Mocks\MockUserProvider;
-use Completionist\TrackingEndpoint;
-use Completionist\TrackingService;
+use LekTrail\Tests\Mocks\MockJsonResponse;
+use LekTrail\Tests\Mocks\MockNonceVerifier;
+use LekTrail\Tests\Mocks\MockPluginConfigRepository;
+use LekTrail\Tests\Mocks\MockTrackingRepository;
+use LekTrail\Tests\Mocks\MockUserProvider;
+use LekTrail\TrackingEndpoint;
+use LekTrail\TrackingService;
 use PHPUnit\Framework\TestCase;
 
 class TrackingEndpointTest extends TestCase

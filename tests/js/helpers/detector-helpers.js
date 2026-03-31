@@ -2,8 +2,8 @@ function mockDom(options = {}) {
     const elements = {};
 
     if (options.postId !== undefined) {
-        elements['[data-completionist-post]'] = {
-            dataset: { completionistPost: String(options.postId) }
+        elements['[data-lektrail-post]'] = {
+            dataset: { lektrailPost: String(options.postId) }
         };
     }
 

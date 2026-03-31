@@ -1,16 +1,16 @@
 <?php
 
-namespace Completionist\Tests;
+namespace LekTrail\Tests;
 
-use Completionist\Assets;
-use Completionist\SuggestionsQuery;
-use Completionist\Tests\Mocks\MockPluginConfigRepository;
-use Completionist\Tests\Mocks\MockPostQuery;
-use Completionist\Tests\Mocks\MockScriptLoader;
-use Completionist\Tests\Mocks\MockTrackingRepository;
-use Completionist\Tests\Mocks\MockUserProvider;
-use Completionist\TrackingService;
-use Completionist\WidgetRenderer;
+use LekTrail\Assets;
+use LekTrail\SuggestionsQuery;
+use LekTrail\Tests\Mocks\MockPluginConfigRepository;
+use LekTrail\Tests\Mocks\MockPostQuery;
+use LekTrail\Tests\Mocks\MockScriptLoader;
+use LekTrail\Tests\Mocks\MockTrackingRepository;
+use LekTrail\Tests\Mocks\MockUserProvider;
+use LekTrail\TrackingService;
+use LekTrail\WidgetRenderer;
 use PHPUnit\Framework\TestCase;
 
 class WidgetRendererTest extends TestCase
@@ -51,7 +51,7 @@ class WidgetRendererTest extends TestCase
         $renderer = $this->createRenderer();
         $html = $renderer->render();
 
-        $this->assertStringContainsString('id="completionist-widget"', $html);
+        $this->assertStringContainsString('id="lektrail-widget"', $html);
     }
 
     public function testRendersContainerWithDataEndpoints(): void
@@ -81,7 +81,7 @@ class WidgetRendererTest extends TestCase
         $renderer->render();
 
         $inlineCode = $this->scripts->inlineScripts[Assets::HANDLE_WIDGET]['code'];
-        $this->assertStringContainsString('CompletionistInlineData', $inlineCode);
+        $this->assertStringContainsString('LekTrailInlineData', $inlineCode);
     }
 
     public function testDoesNotInjectInlineDataWhenClientSide(): void
@@ -92,7 +92,7 @@ class WidgetRendererTest extends TestCase
         $renderer->render();
 
         $inlineCode = $this->scripts->inlineScripts[Assets::HANDLE_WIDGET]['code'];
-        $this->assertStringNotContainsString('CompletionistInlineData', $inlineCode);
+        $this->assertStringNotContainsString('LekTrailInlineData', $inlineCode);
     }
 
     public function testInlineDataContainsEnrichedPostData(): void
@@ -118,10 +118,10 @@ class WidgetRendererTest extends TestCase
     public function testIncludesWrapperAttributesWhenProvided(): void
     {
         $renderer = $this->createRenderer();
-        $html = $renderer->render([], 'class="wp-block-completionist-widget has-background"');
+        $html = $renderer->render([], 'class="wp-block-lektrail-widget has-background"');
 
-        $this->assertStringContainsString('class="wp-block-completionist-widget has-background"', $html);
-        $this->assertStringContainsString('id="completionist-widget"', $html);
+        $this->assertStringContainsString('class="wp-block-lektrail-widget has-background"', $html);
+        $this->assertStringContainsString('id="lektrail-widget"', $html);
     }
 
     public function testUsesDefaultClassWhenNoWrapperAttributes(): void
@@ -129,6 +129,6 @@ class WidgetRendererTest extends TestCase
         $renderer = $this->createRenderer();
         $html = $renderer->render();
 
-        $this->assertStringContainsString('class="completionist-widget"', $html);
+        $this->assertStringContainsString('class="lektrail-widget"', $html);
     }
 }

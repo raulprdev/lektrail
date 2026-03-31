@@ -1,5 +1,5 @@
 {
-    "name": "completionist/completionist",
+    "name": "lektrail/lektrail",
     "description": "Track reading progress and suggest unread posts",
     "type": "wordpress-plugin",
     "license": "GPL-2.0-or-later",
@@ -14,13 +14,13 @@
     },
     "autoload": {
         "psr-4": {
-            "Completionist\\": "src/"
+            "LekTrail\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Completionist\\Tests\\": "tests/php/",
-            "Completionist\\Tests\\Mocks\\": "tests/php/Mocks/"
+            "LekTrail\\Tests\\": "tests/php/",
+            "LekTrail\\Tests\\Mocks\\": "tests/php/Mocks/"
         }
     },
     "scripts": {

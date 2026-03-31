@@ -1,11 +1,11 @@
 <?php
 
-namespace Completionist\Tests;
+namespace LekTrail\Tests;
 
-use Completionist\Assets;
-use Completionist\Tests\Mocks\MockPluginConfigRepository;
-use Completionist\Tests\Mocks\MockPostQuery;
-use Completionist\Tests\Mocks\MockScriptLoader;
+use LekTrail\Assets;
+use LekTrail\Tests\Mocks\MockPluginConfigRepository;
+use LekTrail\Tests\Mocks\MockPostQuery;
+use LekTrail\Tests\Mocks\MockScriptLoader;
 use PHPUnit\Framework\TestCase;
 
 class AssetsTest extends TestCase
@@ -18,7 +18,7 @@ class AssetsTest extends TestCase
     protected function setUp(): void
     {
         $this->pluginPath = dirname(__DIR__, 2) . '/';
-        $this->pluginUrl = 'http://example.com/wp-content/plugins/completionist/';
+        $this->pluginUrl = 'http://example.com/wp-content/plugins/lektrail/';
         $this->loader = new MockScriptLoader();
         $this->postQuery = new MockPostQuery();
     }
@@ -173,7 +173,7 @@ class AssetsTest extends TestCase
         $assets->enqueueDetector(123);
 
         $inlineScripts = $this->loader->inlineScripts[Assets::HANDLE_DETECTOR];
-        $this->assertStringContainsString('CompletionistPostData', $inlineScripts['code']);
+        $this->assertStringContainsString('LekTrailPostData', $inlineScripts['code']);
         $this->assertStringContainsString('"title":"Test Post"', $inlineScripts['code']);
         $this->assertStringContainsString('"excerpt":"This is the excerpt."', $inlineScripts['code']);
         $this->assertStringContainsString('image.jpg', $inlineScripts['code']);
@@ -209,13 +209,13 @@ class AssetsTest extends TestCase
         $this->assertStringContainsString('"serverSideTracking":true', $inline['code']);
     }
 
-    public function testEnqueueWidgetForEditorInjectsCompletionistConfig(): void
+    public function testEnqueueWidgetForEditorInjectsLekTrailConfig(): void
     {
         $assets = $this->createAssets();
 
         $assets->enqueueWidgetForEditor();
 
         $inline = $this->loader->inlineScripts[Assets::HANDLE_WIDGET];
-        $this->assertStringContainsString('CompletionistConfig', $inline['code']);
+        $this->assertStringContainsString('LekTrailConfig', $inline['code']);
     }
 }

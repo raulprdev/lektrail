@@ -1,8 +1,8 @@
 <?php
 
-namespace Completionist\WordPress;
+namespace LekTrail\WordPress;
 
-use Completionist\Contracts\Options as OptionsInterface;
+use LekTrail\Contracts\Options as OptionsInterface;
 
 class Options implements OptionsInterface
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace Completionist\WordPress;
+namespace LekTrail\WordPress;
 
-use Completionist\Contracts\Database as DatabaseContract;
+use LekTrail\Contracts\Database as DatabaseContract;
 
 class Database implements DatabaseContract
 {

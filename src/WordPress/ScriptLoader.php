@@ -1,8 +1,8 @@
 <?php
 
-namespace Completionist\WordPress;
+namespace LekTrail\WordPress;
 
-use Completionist\Contracts\ScriptLoader as ScriptLoaderInterface;
+use LekTrail\Contracts\ScriptLoader as ScriptLoaderInterface;
 
 class ScriptLoader implements ScriptLoaderInterface
 {

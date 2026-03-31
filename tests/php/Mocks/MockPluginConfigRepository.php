@@ -1,9 +1,9 @@
 <?php
 
-namespace Completionist\Tests\Mocks;
+namespace LekTrail\Tests\Mocks;
 
-use Completionist\Contracts\PluginConfigRepository;
-use Completionist\PluginConfig;
+use LekTrail\Contracts\PluginConfigRepository;
+use LekTrail\PluginConfig;
 
 class MockPluginConfigRepository implements PluginConfigRepository
 {

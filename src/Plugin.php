@@ -1,11 +1,11 @@
 <?php
 
-namespace Completionist;
+namespace LekTrail;
 
-use Completionist\Contracts\Context;
-use Completionist\Contracts\Hooks;
-use Completionist\Contracts\PluginConfigRepository;
-use Completionist\Shortcodes\WidgetShortcode;
+use LekTrail\Contracts\Context;
+use LekTrail\Contracts\Hooks;
+use LekTrail\Contracts\PluginConfigRepository;
+use LekTrail\Shortcodes\WidgetShortcode;
 
 class Plugin
 {

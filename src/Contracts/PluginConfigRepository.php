@@ -1,8 +1,8 @@
 <?php
 
-namespace Completionist\Contracts;
+namespace LekTrail\Contracts;
 
-use Completionist\PluginConfig;
+use LekTrail\PluginConfig;
 
 interface PluginConfigRepository
 {

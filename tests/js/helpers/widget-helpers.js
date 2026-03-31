@@ -40,13 +40,13 @@ function createWidgetContainer(options = {}) {
             postsEndpoint: options.postsEndpoint || '/wp-json/wp/v2/posts'
         },
         querySelector: function(selector) {
-            if (selector === '#completionist-consent-checkbox') {
+            if (selector === '#lektrail-consent-checkbox') {
                 return {
                     addEventListener: jest.fn()
                 };
             }
-            if (selector === '.completionist-clear-btn') {
-                if (container.innerHTML.indexOf('completionist-clear-btn') !== -1) {
+            if (selector === '.lektrail-clear-btn') {
+                if (container.innerHTML.indexOf('lektrail-clear-btn') !== -1) {
                     return {
                         addEventListener: function(event, handler) {
                             clickHandlers[selector] = handler;
@@ -77,7 +77,7 @@ function mockConfig(options = {}) {
         clear: 'Clear history'
     };
     return {
-        widgetId: options.widgetId || 'completionist-widget',
+        widgetId: options.widgetId || 'lektrail-widget',
         maxViewed: options.maxViewed || 3,
         maxRead: options.maxRead || 5,
         maxSuggestions: options.maxSuggestions || 5,
@@ -107,10 +107,10 @@ function setupWidgetTest(configOptions = {}) {
 
     loadRenderItem();
     loadDataProvider();
-    window.CompletionistConfig = mockConfig(configOptions);
+    window.LekTrailConfig = mockConfig(configOptions);
 
     document.getElementById = jest.fn(id => {
-        if (id === 'completionist-widget') return container;
+        if (id === 'lektrail-widget') return container;
         return null;
     });
     document.readyState = 'complete';

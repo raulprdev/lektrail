@@ -1,8 +1,8 @@
 <?php
 
-namespace Completionist\WordPress;
+namespace LekTrail\WordPress;
 
-use Completionist\Contracts\PostQuery as PostQueryInterface;
+use LekTrail\Contracts\PostQuery as PostQueryInterface;
 
 class PostQuery implements PostQueryInterface
 {

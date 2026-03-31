@@ -1,8 +1,8 @@
 <?php
 
-namespace Completionist\Tests\Mocks;
+namespace LekTrail\Tests\Mocks;
 
-use Completionist\Contracts\ScriptLoader;
+use LekTrail\Contracts\ScriptLoader;
 
 class MockScriptLoader implements ScriptLoader
 {

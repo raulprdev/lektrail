@@ -1,7 +1,7 @@
 (function (global) {
 	'use strict';
 
-	const STORAGE_KEY = 'completionist_consent';
+	const STORAGE_KEY = 'lektrail_consent';
 	const callbacks = [];
 
 	function isAvailable() {
@@ -46,7 +46,7 @@
 		}
 	}
 
-	global.CompletionistBuiltInProvider = {
+	global.LekTrailBuiltInProvider = {
 		isAvailable,
 		hasConsent,
 		setConsent,

@@ -1,6 +1,6 @@
 <?php
 
-namespace Completionist\Contracts;
+namespace LekTrail\Contracts;
 
 interface Locale
 {

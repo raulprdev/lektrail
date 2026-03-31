@@ -1,14 +1,14 @@
 <?php
 
-namespace Completionist;
+namespace LekTrail;
 
-use Completionist\Contracts\Hooks;
-use Completionist\Contracts\PluginConfigRepository;
-use Completionist\WordPress\PluginConfigRepository as WordPressSettingsRepository;
+use LekTrail\Contracts\Hooks;
+use LekTrail\Contracts\PluginConfigRepository;
+use LekTrail\WordPress\PluginConfigRepository as WordPressSettingsRepository;
 
 class AdminPage
 {
-    public const MENU_SLUG = 'completionist';
+    public const MENU_SLUG = 'lektrail';
 
     private PluginConfigRepository $pluginConfigs;
 
@@ -26,8 +26,8 @@ class AdminPage
     public function addMenu(): void
     {
         add_options_page(
-            'Reading Completionist',
-            'Reading Completionist',
+            'LekTrail Reading Tracker',
+            'LekTrail Reading Tracker',
             'manage_options',
             self::MENU_SLUG,
             [$this, 'render']

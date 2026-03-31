@@ -1,8 +1,8 @@
 <?php
 
-namespace Completionist\Tests\Mocks;
+namespace LekTrail\Tests\Mocks;
 
-use Completionist\Contracts\UserProvider;
+use LekTrail\Contracts\UserProvider;
 
 class MockUserProvider implements UserProvider
 {

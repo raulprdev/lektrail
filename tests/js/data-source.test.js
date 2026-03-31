@@ -15,7 +15,7 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-    delete window.CompletionistDataSource;
+    delete window.LekTrailDataSource;
 });
 
 describe('DataSource: server-side mode', () => {
@@ -26,7 +26,7 @@ describe('DataSource: server-side mode', () => {
             suggestions: [post(3, 'Post 3')]
         };
 
-        const source = window.CompletionistDataSource.create({ inlineData });
+        const source = window.LekTrailDataSource.create({ inlineData });
 
         expect(source.getViewed()).toEqual(inlineData.viewed);
         expect(source.getRead()).toEqual(inlineData.read);
@@ -39,7 +39,7 @@ describe('DataSource: server-side mode', () => {
             suggestions: []
         };
 
-        const source = window.CompletionistDataSource.create({ inlineData });
+        const source = window.LekTrailDataSource.create({ inlineData });
 
         expect(source.getViewedCount()).toBe(3);
     });
@@ -51,7 +51,7 @@ describe('DataSource: server-side mode', () => {
             suggestions: []
         };
 
-        const source = window.CompletionistDataSource.create({ inlineData });
+        const source = window.LekTrailDataSource.create({ inlineData });
 
         expect(source.getReadCount()).toBe(2);
     });
@@ -63,7 +63,7 @@ describe('DataSource: server-side mode', () => {
             suggestions: [post(1, 'Suggestion')]
         };
 
-        const source = window.CompletionistDataSource.create({ inlineData });
+        const source = window.LekTrailDataSource.create({ inlineData });
 
         source.getSuggestions((suggestions) => {
             expect(suggestions).toEqual(inlineData.suggestions);
@@ -72,7 +72,7 @@ describe('DataSource: server-side mode', () => {
     });
 
     test('handles empty inline data gracefully', () => {
-        const source = window.CompletionistDataSource.create({ inlineData: {} });
+        const source = window.LekTrailDataSource.create({ inlineData: {} });
 
         expect(source.getViewed()).toEqual([]);
         expect(source.getRead()).toEqual([]);
@@ -105,7 +105,7 @@ describe('DataSource: localStorage mode', () => {
             viewedPosts: [post(1, 'Viewed')]
         });
 
-        const source = window.CompletionistDataSource.create({ storage });
+        const source = window.LekTrailDataSource.create({ storage });
 
         expect(source.getViewed()).toEqual([post(1, 'Viewed')]);
     });
@@ -115,7 +115,7 @@ describe('DataSource: localStorage mode', () => {
             readPosts: [post(1, 'Read')]
         });
 
-        const source = window.CompletionistDataSource.create({ storage });
+        const source = window.LekTrailDataSource.create({ storage });
 
         expect(source.getRead()).toEqual([post(1, 'Read')]);
     });
@@ -125,7 +125,7 @@ describe('DataSource: localStorage mode', () => {
             viewedPosts: [post(1, 'A'), post(2, 'B')]
         });
 
-        const source = window.CompletionistDataSource.create({ storage });
+        const source = window.LekTrailDataSource.create({ storage });
 
         expect(source.getViewedCount()).toBe(2);
     });
@@ -137,7 +137,7 @@ describe('DataSource: localStorage mode', () => {
         });
         const fetcher = mockFetcher([post(2, 'Fetched')]);
 
-        const source = window.CompletionistDataSource.create({ storage, fetcher });
+        const source = window.LekTrailDataSource.create({ storage, fetcher });
 
         source.getSuggestions((suggestions) => {
             expect(suggestions).toEqual([post(1, 'Cached')]);
@@ -149,7 +149,7 @@ describe('DataSource: localStorage mode', () => {
         const storage = mockStorage({ cacheValid: false });
         const fetcher = mockFetcher([post(1, 'Fetched')]);
 
-        const source = window.CompletionistDataSource.create({ storage, fetcher });
+        const source = window.LekTrailDataSource.create({ storage, fetcher });
 
         source.getSuggestions((suggestions) => {
             expect(suggestions).toEqual([post(1, 'Fetched')]);
@@ -161,7 +161,7 @@ describe('DataSource: localStorage mode', () => {
         const storage = mockStorage({ cacheValid: false });
         const fetcher = mockFetcher([post(1, 'Fetched')]);
 
-        const source = window.CompletionistDataSource.create({ storage, fetcher });
+        const source = window.LekTrailDataSource.create({ storage, fetcher });
 
         source.getSuggestions(() => {
             expect(storage.setSuggestions).toHaveBeenCalledWith([post(1, 'Fetched')]);

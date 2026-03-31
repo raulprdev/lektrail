@@ -1,25 +1,25 @@
 <?php
 /**
- * Plugin Name:       Reading Completionist
+ * Plugin Name:       LekTrail Reading Tracker
  * Description:       Track reading progress and suggest unread posts.
  * Version:           1.0.0
  * Requires at least: 6.3
  * Requires PHP:      7.4
  * Author:            raulprdev
  * License:           GPL v2 or later
- * Text Domain:       reading-completionist
+ * Text Domain:       lektrail
  */
 
 defined('ABSPATH') || exit;
 
 register_activation_hook(__FILE__, function () {
-    $db = new Completionist\WordPress\Database();
-    $installer = new Completionist\TableInstaller($db);
+    $db = new LekTrail\WordPress\Database();
+    $installer = new LekTrail\TableInstaller($db);
     $installer->createTable();
 });
 
 spl_autoload_register(function ($class) {
-    $prefix = 'Completionist\\';
+    $prefix = 'LekTrail\\';
     if (strpos($class, $prefix) !== 0) {
         return;
     }
@@ -32,13 +32,13 @@ spl_autoload_register(function ($class) {
 
 add_action('init', function () {
     $locale = determine_locale();
-    $localeFile = __DIR__ . '/languages/completionist-' . $locale . '.mo';
-    $fallbackFile = __DIR__ . '/languages/completionist-es_ES.mo';
+    $localeFile = __DIR__ . '/languages/lektrail-' . $locale . '.mo';
+    $fallbackFile = __DIR__ . '/languages/lektrail-es_ES.mo';
 
     if (file_exists($localeFile)) {
-        load_textdomain('reading-completionist', $localeFile);
+        load_textdomain('lektrail', $localeFile);
     } elseif (strpos($locale, 'es_') === 0 && file_exists($fallbackFile)) {
-        load_textdomain('reading-completionist', $fallbackFile);
+        load_textdomain('lektrail', $fallbackFile);
     }
 });
 
@@ -47,34 +47,34 @@ add_action('plugins_loaded', function () {
     $pluginUrl = plugin_dir_url(__FILE__);
     $version = '1.0.0';
 
-    $scripts = new Completionist\WordPress\ScriptLoader();
-    $options = new Completionist\WordPress\Options();
-    $hooks = new Completionist\WordPress\Hooks();
-    $context = new Completionist\WordPress\Context();
-    $locale = new Completionist\WordPress\Locale();
+    $scripts = new LekTrail\WordPress\ScriptLoader();
+    $options = new LekTrail\WordPress\Options();
+    $hooks = new LekTrail\WordPress\Hooks();
+    $context = new LekTrail\WordPress\Context();
+    $locale = new LekTrail\WordPress\Locale();
 
-    $pluginConfigs = new Completionist\WordPress\PluginConfigRepository($options, $locale);
-    $posts = new Completionist\WordPress\PostQuery();
-    $assets = new Completionist\Assets($scripts, $pluginPath, $pluginUrl, $version, $pluginConfigs, $posts);
-    $response = new Completionist\WordPress\JsonResponse();
+    $pluginConfigs = new LekTrail\WordPress\PluginConfigRepository($options, $locale);
+    $posts = new LekTrail\WordPress\PostQuery();
+    $assets = new LekTrail\Assets($scripts, $pluginPath, $pluginUrl, $version, $pluginConfigs, $posts);
+    $response = new LekTrail\WordPress\JsonResponse();
 
-    $db = new Completionist\WordPress\Database();
-    $users = new Completionist\WordPress\UserProvider();
-    $trackings = new Completionist\WordPress\TrackingRepository($db);
-    $trackingService = new Completionist\TrackingService($users, $trackings, $pluginConfigs);
+    $db = new LekTrail\WordPress\Database();
+    $users = new LekTrail\WordPress\UserProvider();
+    $trackings = new LekTrail\WordPress\TrackingRepository($db);
+    $trackingService = new LekTrail\TrackingService($users, $trackings, $pluginConfigs);
 
-    $suggestionsQuery = new Completionist\SuggestionsQuery($pluginConfigs, $posts);
-    $suggestions = new Completionist\SuggestionsEndpoint($suggestionsQuery, $response);
-    $previewEndpoint = new Completionist\PreviewEndpoint($posts);
-    $widgetRenderer = new Completionist\WidgetRenderer($assets, $trackingService, $suggestionsQuery, $posts, $pluginConfigs);
-    $shortcode = new Completionist\Shortcodes\WidgetShortcode($widgetRenderer);
-    $adminPage = new Completionist\AdminPage($pluginConfigs);
-    $nonceVerifier = new Completionist\WordPress\NonceVerifier();
-    $trackingEndpoint = new Completionist\TrackingEndpoint($trackingService, $response, $nonceVerifier);
+    $suggestionsQuery = new LekTrail\SuggestionsQuery($pluginConfigs, $posts);
+    $suggestions = new LekTrail\SuggestionsEndpoint($suggestionsQuery, $response);
+    $previewEndpoint = new LekTrail\PreviewEndpoint($posts);
+    $widgetRenderer = new LekTrail\WidgetRenderer($assets, $trackingService, $suggestionsQuery, $posts, $pluginConfigs);
+    $shortcode = new LekTrail\Shortcodes\WidgetShortcode($widgetRenderer);
+    $adminPage = new LekTrail\AdminPage($pluginConfigs);
+    $nonceVerifier = new LekTrail\WordPress\NonceVerifier();
+    $trackingEndpoint = new LekTrail\TrackingEndpoint($trackingService, $response, $nonceVerifier);
 
-    $widgetBlock = new Completionist\Blocks\Widget\WidgetBlock($widgetRenderer, $assets, $pluginPath);
+    $widgetBlock = new LekTrail\Blocks\Widget\WidgetBlock($widgetRenderer, $assets, $pluginPath);
     $widgetBlock->register($hooks);
 
-    $plugin = new Completionist\Plugin($assets, $pluginConfigs, $context, $suggestions, $previewEndpoint, $shortcode, $adminPage, $hooks, $trackingService, $trackingEndpoint);
+    $plugin = new LekTrail\Plugin($assets, $pluginConfigs, $context, $suggestions, $previewEndpoint, $shortcode, $adminPage, $hooks, $trackingService, $trackingEndpoint);
     $plugin->run();
 });

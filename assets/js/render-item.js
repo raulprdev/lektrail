@@ -2,24 +2,24 @@
 	'use strict';
 
 	function renderItem(post) {
-		let html = '<li class="completionist-item">';
+		let html = '<li class="lektrail-item">';
 
 		if (post.thumbnail) {
-			html += '<div class="completionist-thumbnail">';
+			html += '<div class="lektrail-thumbnail">';
 			html += '<img src="' + post.thumbnail + '" alt="">';
 			html += '</div>';
 		}
 
-		html += '<div class="completionist-content">';
+		html += '<div class="lektrail-content">';
 		html +=
-			'<a class="completionist-title" href="' +
+			'<a class="lektrail-title" href="' +
 			post.url +
 			'">' +
 			post.title +
 			'</a>';
 
 		if (post.excerpt) {
-			html += '<p class="completionist-excerpt">' + post.excerpt + '</p>';
+			html += '<p class="lektrail-excerpt">' + post.excerpt + '</p>';
 		}
 
 		html += '</div>';
@@ -28,5 +28,5 @@
 		return html;
 	}
 
-	window.CompletionistRenderItem = renderItem;
+	window.LekTrailRenderItem = renderItem;
 })();

@@ -1,8 +1,8 @@
 <?php
 
-namespace Completionist\Tests\Mocks;
+namespace LekTrail\Tests\Mocks;
 
-use Completionist\Contracts\TrackingRepository;
+use LekTrail\Contracts\TrackingRepository;
 
 class MockTrackingRepository implements TrackingRepository
 {

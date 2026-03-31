@@ -1,10 +1,10 @@
 <?php
 
-namespace Completionist\Tests;
+namespace LekTrail\Tests;
 
-use Completionist\SuggestionsQuery;
-use Completionist\Tests\Mocks\MockPluginConfigRepository;
-use Completionist\Tests\Mocks\MockPostQuery;
+use LekTrail\SuggestionsQuery;
+use LekTrail\Tests\Mocks\MockPluginConfigRepository;
+use LekTrail\Tests\Mocks\MockPostQuery;
 use PHPUnit\Framework\TestCase;
 
 class SuggestionsQueryTest extends TestCase

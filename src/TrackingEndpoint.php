@@ -1,14 +1,14 @@
 <?php
 
-namespace Completionist;
+namespace LekTrail;
 
-use Completionist\Contracts\Hooks;
-use Completionist\Contracts\JsonResponse;
-use Completionist\Contracts\NonceVerifier;
+use LekTrail\Contracts\Hooks;
+use LekTrail\Contracts\JsonResponse;
+use LekTrail\Contracts\NonceVerifier;
 
 class TrackingEndpoint
 {
-    public const ACTION = 'completionist_track_read';
+    public const ACTION = 'lektrail_track_read';
 
     private TrackingService $trackingService;
     private JsonResponse $jsonResponse;

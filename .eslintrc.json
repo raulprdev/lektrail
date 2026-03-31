@@ -4,11 +4,11 @@
 		"browser": true
 	},
 	"globals": {
-		"CompletionistStorage": "readonly",
-		"CompletionistConfig": "readonly",
-		"CompletionistPostData": "readonly",
-		"CompletionistRenderItem": "readonly",
-		"CompletionistConsentManager": "readonly",
-		"CompletionistDetector": "readonly"
+		"LekTrailStorage": "readonly",
+		"LekTrailConfig": "readonly",
+		"LekTrailPostData": "readonly",
+		"LekTrailRenderItem": "readonly",
+		"LekTrailConsentManager": "readonly",
+		"LekTrailDetector": "readonly"
 	}
 }

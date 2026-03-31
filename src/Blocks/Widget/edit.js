@@ -12,7 +12,7 @@ import { useEffect, useRef, useState, useMemo } from '@wordpress/element';
 import { useDebounce } from '@wordpress/compose';
 import apiFetch from '@wordpress/api-fetch';
 
-const defaults = window.completionistDefaults;
+const defaults = window.lektrailDefaults;
 
 /**
  * Build widget config for editor preview.
@@ -20,7 +20,7 @@ const defaults = window.completionistDefaults;
  */
 function buildConfig(attributes) {
 	return {
-		widgetId: 'completionist-editor-preview',
+		widgetId: 'lektrail-editor-preview',
 		maxViewed: attributes.maxViewed ?? defaults?.maxViewed ?? 3,
 		maxRead: attributes.maxRead ?? defaults?.maxRead ?? 3,
 		maxSuggestions: attributes.maxSuggestions ?? defaults?.maxSuggestions ?? 3,
@@ -91,7 +91,7 @@ export default function Edit({ attributes, setAttributes }) {
 			maxRead: maxRead ?? 3,
 			maxSuggestions: maxSuggestions ?? 3,
 		});
-		apiFetch({ path: `/completionist/v1/preview?${params}` })
+		apiFetch({ path: `/lektrail/v1/preview?${params}` })
 			.then((data) => {
 				setPreviewData(data);
 				setIsLoading(false);
@@ -102,21 +102,21 @@ export default function Edit({ attributes, setAttributes }) {
 	}, [maxViewed, maxRead, maxSuggestions]);
 
 	useEffect(() => {
-		if (!containerRef.current || !previewData || !window.CompletionistWidget) {
+		if (!containerRef.current || !previewData || !window.LekTrailWidget) {
 			return;
 		}
-		window.CompletionistWidget.init(containerRef.current, previewData, config);
+		window.LekTrailWidget.init(containerRef.current, previewData, config);
 	}, [previewData, config]);
 
 	return (
 		<>
 			<InspectorControls>
 				<PanelBody
-					title={__('Display Settings', 'reading-completionist')}
+					title={__('Display Settings', 'lektrail')}
 					initialOpen={true}
 				>
 					<RangeControl
-						label={__('Max Viewed Posts', 'reading-completionist')}
+						label={__('Max Viewed Posts', 'lektrail')}
 						value={maxViewed}
 						onChange={(value) => setAttributes({ maxViewed: value })}
 						min={1}
@@ -125,7 +125,7 @@ export default function Edit({ attributes, setAttributes }) {
 						resetFallbackValue={undefined}
 					/>
 					<RangeControl
-						label={__('Max Completed Posts', 'reading-completionist')}
+						label={__('Max Completed Posts', 'lektrail')}
 						value={maxRead}
 						onChange={(value) => setAttributes({ maxRead: value })}
 						min={1}
@@ -134,7 +134,7 @@ export default function Edit({ attributes, setAttributes }) {
 						resetFallbackValue={undefined}
 					/>
 					<RangeControl
-						label={__('Max Suggestions', 'reading-completionist')}
+						label={__('Max Suggestions', 'lektrail')}
 						value={maxSuggestions}
 						onChange={(value) => setAttributes({ maxSuggestions: value })}
 						min={1}
@@ -143,18 +143,18 @@ export default function Edit({ attributes, setAttributes }) {
 						resetFallbackValue={undefined}
 					/>
 					<ToggleControl
-						label={__('Show Excerpts', 'reading-completionist')}
+						label={__('Show Excerpts', 'lektrail')}
 						checked={showExcerpt}
 						onChange={(value) => setAttributes({ showExcerpt: value })}
 					/>
 					<ToggleControl
-						label={__('Show Thumbnails', 'reading-completionist')}
+						label={__('Show Thumbnails', 'lektrail')}
 						checked={showThumbnail}
 						onChange={(value) => setAttributes({ showThumbnail: value })}
 					/>
 					{showExcerpt && (
 						<RangeControl
-							label={__('Excerpt Length (words)', 'reading-completionist')}
+							label={__('Excerpt Length (words)', 'lektrail')}
 							value={excerptLength}
 							onChange={(value) => setAttributes({ excerptLength: value })}
 							min={5}
@@ -166,35 +166,35 @@ export default function Edit({ attributes, setAttributes }) {
 				</PanelBody>
 
 				<PanelBody
-					title={__('Sections', 'reading-completionist')}
+					title={__('Sections', 'lektrail')}
 					initialOpen={false}
 				>
 					<ToggleControl
-						label={__('Show Continue Reading', 'reading-completionist')}
+						label={__('Show Continue Reading', 'lektrail')}
 						checked={viewedEnabled}
 						onChange={(value) => setAttributes({ viewedEnabled: value })}
 					/>
 					<ToggleControl
-						label={__('Show Completed', 'reading-completionist')}
+						label={__('Show Completed', 'lektrail')}
 						checked={completedEnabled}
 						onChange={(value) => setAttributes({ completedEnabled: value })}
 					/>
 					<ToggleControl
-						label={__('Show Clear Button', 'reading-completionist')}
+						label={__('Show Clear Button', 'lektrail')}
 						checked={showClearButton}
 						onChange={(value) => setAttributes({ showClearButton: value })}
 					/>
 					<SelectControl
-						label={__('Suggestion Order', 'reading-completionist')}
+						label={__('Suggestion Order', 'lektrail')}
 						value={suggestionOrder}
 						options={[
 							{
-								label: __('Default (use global)', 'reading-completionist'),
+								label: __('Default (use global)', 'lektrail'),
 								value: '',
 							},
-							{ label: __('Random', 'reading-completionist'), value: 'random' },
-							{ label: __('Recent', 'reading-completionist'), value: 'recent' },
-							{ label: __('Related', 'reading-completionist'), value: 'related' },
+							{ label: __('Random', 'lektrail'), value: 'random' },
+							{ label: __('Recent', 'lektrail'), value: 'recent' },
+							{ label: __('Related', 'lektrail'), value: 'related' },
 						]}
 						onChange={(value) =>
 							setAttributes({ suggestionOrder: value || undefined })
@@ -203,68 +203,68 @@ export default function Edit({ attributes, setAttributes }) {
 				</PanelBody>
 
 				<PanelBody
-					title={__('Labels', 'reading-completionist')}
+					title={__('Labels', 'lektrail')}
 					initialOpen={false}
 				>
 					<TextControl
-						label={__('Continue Reading Label', 'reading-completionist')}
+						label={__('Continue Reading Label', 'lektrail')}
 						value={labelContinue || ''}
 						onChange={(value) =>
 							setAttributes({ labelContinue: value || undefined })
 						}
-						placeholder={__('Continue reading', 'reading-completionist')}
+						placeholder={__('Continue reading', 'lektrail')}
 					/>
 					<TextControl
-						label={__('Completed Label', 'reading-completionist')}
+						label={__('Completed Label', 'lektrail')}
 						value={labelCompleted || ''}
 						onChange={(value) =>
 							setAttributes({ labelCompleted: value || undefined })
 						}
-						placeholder={__('Completed', 'reading-completionist')}
+						placeholder={__('Completed', 'lektrail')}
 					/>
 					<TextControl
-						label={__('Suggestions Label', 'reading-completionist')}
+						label={__('Suggestions Label', 'lektrail')}
 						value={labelSuggestions || ''}
 						onChange={(value) =>
 							setAttributes({ labelSuggestions: value || undefined })
 						}
-						placeholder={__('Suggested reading', 'reading-completionist')}
+						placeholder={__('Suggested reading', 'lektrail')}
 					/>
 					<TextControl
-						label={__('Empty State Label', 'reading-completionist')}
+						label={__('Empty State Label', 'lektrail')}
 						value={labelEmpty || ''}
 						onChange={(value) =>
 							setAttributes({ labelEmpty: value || undefined })
 						}
 						placeholder={__(
 							'Start reading to track your progress!',
-							'reading-completionist'
+							'lektrail'
 						)}
 					/>
 					<TextControl
-						label={__('Loading Label', 'reading-completionist')}
+						label={__('Loading Label', 'lektrail')}
 						value={labelLoading || ''}
 						onChange={(value) =>
 							setAttributes({ labelLoading: value || undefined })
 						}
-						placeholder={__('Loading suggestions...', 'reading-completionist')}
+						placeholder={__('Loading suggestions...', 'lektrail')}
 					/>
 					<TextControl
-						label={__('Clear Button Label', 'reading-completionist')}
+						label={__('Clear Button Label', 'lektrail')}
 						value={labelClear || ''}
 						onChange={(value) =>
 							setAttributes({ labelClear: value || undefined })
 						}
-						placeholder={__('Clear history', 'reading-completionist')}
+						placeholder={__('Clear history', 'lektrail')}
 					/>
 				</PanelBody>
 
 				<PanelBody
-					title={__('Performance', 'reading-completionist')}
+					title={__('Performance', 'lektrail')}
 					initialOpen={false}
 				>
 					<RangeControl
-						label={__('Suggestions Cache (hours)', 'reading-completionist')}
+						label={__('Suggestions Cache (hours)', 'lektrail')}
 						value={suggestionsCacheHours}
 						onChange={(value) =>
 							setAttributes({ suggestionsCacheHours: value })
@@ -291,8 +291,8 @@ export default function Edit({ attributes, setAttributes }) {
 				) : (
 					<div
 						ref={containerRef}
-						id="completionist-editor-preview"
-						className="completionist-widget"
+						id="lektrail-editor-preview"
+						className="lektrail-widget"
 					/>
 				)}
 			</div>

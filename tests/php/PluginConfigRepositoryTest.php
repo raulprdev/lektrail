@@ -1,11 +1,11 @@
 <?php
 
-namespace Completionist\Tests;
+namespace LekTrail\Tests;
 
-use Completionist\PluginConfig;
-use Completionist\Tests\Mocks\MockLocale;
-use Completionist\Tests\Mocks\MockOptions;
-use Completionist\WordPress\PluginConfigRepository;
+use LekTrail\PluginConfig;
+use LekTrail\Tests\Mocks\MockLocale;
+use LekTrail\Tests\Mocks\MockOptions;
+use LekTrail\WordPress\PluginConfigRepository;
 use PHPUnit\Framework\TestCase;
 
 class PluginConfigRepositoryTest extends TestCase

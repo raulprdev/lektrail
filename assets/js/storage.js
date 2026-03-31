@@ -1,7 +1,7 @@
 (function () {
 	'use strict';
 
-	const STORAGE_KEY = 'completionist';
+	const STORAGE_KEY = 'lektrail';
 
 	function getData() {
 		try {
@@ -76,7 +76,7 @@
 		}
 	}
 
-	window.CompletionistStorage = {
+	window.LekTrailStorage = {
 		getViewedIds() {
 			return getData().viewed.map(function (v) {
 				return v.postId;

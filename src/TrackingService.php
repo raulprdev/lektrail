@@ -1,10 +1,10 @@
 <?php
 
-namespace Completionist;
+namespace LekTrail;
 
-use Completionist\Contracts\PluginConfigRepository;
-use Completionist\Contracts\TrackingRepository;
-use Completionist\Contracts\UserProvider;
+use LekTrail\Contracts\PluginConfigRepository;
+use LekTrail\Contracts\TrackingRepository;
+use LekTrail\Contracts\UserProvider;
 
 class TrackingService
 {

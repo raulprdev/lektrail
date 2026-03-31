@@ -57,7 +57,7 @@
 
 	function getStorage() {
 		return (
-			window.CompletionistStorage || {
+			window.LekTrailStorage || {
 				getViewedPosts() {
 					return [];
 				},
@@ -81,7 +81,7 @@
 		return createAsyncProvider(getStorage(), config.endpoint);
 	}
 
-	window.CompletionistDataProvider = {
+	window.LekTrailDataProvider = {
 		create,
 	};
 })();

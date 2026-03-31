@@ -5,7 +5,7 @@
 		deps = deps || {};
 
 		const providers = deps.providers || [
-			global.CompletionistBuiltInProvider,
+			global.LekTrailBuiltInProvider,
 		];
 		let activeProvider = null;
 
@@ -32,7 +32,7 @@
 
 		function isBuiltInProvider() {
 			const provider = getActiveProvider();
-			return provider === global.CompletionistBuiltInProvider;
+			return provider === global.LekTrailBuiltInProvider;
 		}
 
 		function onConsentChange(callback) {
@@ -45,9 +45,9 @@
 		function grantConsent() {
 			if (
 				isBuiltInProvider() &&
-				global.CompletionistBuiltInProvider.setConsent
+				global.LekTrailBuiltInProvider.setConsent
 			) {
-				global.CompletionistBuiltInProvider.setConsent(true);
+				global.LekTrailBuiltInProvider.setConsent(true);
 			}
 		}
 
@@ -60,7 +60,7 @@
 		};
 	}
 
-	global.CompletionistConsentManager = {
+	global.LekTrailConsentManager = {
 		create: createConsentManager,
 	};
 })(typeof window !== 'undefined' ? window : this);

@@ -1,13 +1,13 @@
 <?php
 
-namespace Completionist;
+namespace LekTrail;
 
-use Completionist\Contracts\Hooks;
-use Completionist\Contracts\PostQuery;
+use LekTrail\Contracts\Hooks;
+use LekTrail\Contracts\PostQuery;
 
 class PreviewEndpoint
 {
-    public const NAMESPACE = 'completionist/v1';
+    public const NAMESPACE = 'lektrail/v1';
     public const ROUTE = '/preview';
 
     private PostQuery $postQuery;

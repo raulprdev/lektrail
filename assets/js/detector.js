@@ -2,8 +2,8 @@
 	'use strict';
 
 	function getPostId(dom) {
-		const el = dom.querySelector('[data-completionist-post]');
-		return el ? parseInt(el.dataset.completionistPost, 10) : null;
+		const el = dom.querySelector('[data-lektrail-post]');
+		return el ? parseInt(el.dataset.lektrailPost, 10) : null;
 	}
 
 	function findArticle(dom) {
@@ -46,8 +46,8 @@
 		if (deps.notifier) {
 			return deps.notifier;
 		}
-		if (global.CompletionistNotifier) {
-			return global.CompletionistNotifier.create({ storage });
+		if (global.LekTrailNotifier) {
+			return global.LekTrailNotifier.create({ storage });
 		}
 		return { trackViewed() {}, trackRead() {} };
 	}
@@ -55,19 +55,19 @@
 	function trackViewed(postId, notifier, dispatch, postData) {
 		notifier.trackViewed(postId, postData);
 		if (dispatch) {
-			dispatch('completionist:viewed', { postId });
+			dispatch('lektrail:viewed', { postId });
 		}
 	}
 
 	function trackRead(postId, notifier, dispatch) {
 		notifier.trackRead(postId);
 		if (dispatch) {
-			dispatch('completionist:read', { postId });
+			dispatch('lektrail:read', { postId });
 		}
 	}
 
 	function getReadThreshold() {
-		const config = global.CompletionistConfig;
+		const config = global.LekTrailConfig;
 		if (config && typeof config.readThreshold === 'number') {
 			return config.readThreshold;
 		}
@@ -96,7 +96,7 @@
 	function createDetector(deps) {
 		deps = deps || {};
 		const dom = deps.dom || document;
-		const storage = deps.storage || global.CompletionistStorage;
+		const storage = deps.storage || global.LekTrailStorage;
 		const notifier = getNotifier(deps, storage);
 		const dispatch =
 			deps.dispatch ||
@@ -140,10 +140,10 @@
 			}
 
 			if (hasConsent() && shouldTrack(postId, storage, false)) {
-				if (!global.CompletionistPostData) {
+				if (!global.LekTrailPostData) {
 					// eslint-disable-next-line no-console
 					console.warn(
-						'Completionist: PostData not found, skipping tracking'
+						'LekTrail: PostData not found, skipping tracking'
 					);
 					return { success: false, reason: 'no-postdata' };
 				}
@@ -151,7 +151,7 @@
 					postId,
 					notifier,
 					dispatch,
-					global.CompletionistPostData
+					global.LekTrailPostData
 				);
 			}
 
@@ -194,7 +194,7 @@
 		};
 	}
 
-	global.CompletionistDetector = {
+	global.LekTrailDetector = {
 		getPostId,
 		findArticle,
 		shouldTrack,
@@ -206,14 +206,14 @@
 
 	if (typeof document !== 'undefined') {
 		let consentManager = null;
-		if (global.CompletionistConsentManager) {
-			consentManager = global.CompletionistConsentManager.create();
+		if (global.LekTrailConsentManager) {
+			consentManager = global.LekTrailConsentManager.create();
 		}
 
 		let notifier = null;
-		const config = global.CompletionistConfig;
-		if (config && config.trackingEndpoint && global.CompletionistNotifier) {
-			notifier = global.CompletionistNotifier.create({
+		const config = global.LekTrailConfig;
+		if (config && config.trackingEndpoint && global.LekTrailNotifier) {
+			notifier = global.LekTrailNotifier.create({
 				endpoint: config.trackingEndpoint,
 				nonce: config.trackingNonce,
 			});

@@ -1,22 +1,22 @@
 <?php
 
-namespace Completionist;
+namespace LekTrail;
 
-use Completionist\Contracts\PluginConfigRepository;
-use Completionist\Contracts\PostQuery;
-use Completionist\Contracts\ScriptLoader;
+use LekTrail\Contracts\PluginConfigRepository;
+use LekTrail\Contracts\PostQuery;
+use LekTrail\Contracts\ScriptLoader;
 
 class Assets
 {
-    public const HANDLE_STORAGE = 'completionist-storage';
-    public const HANDLE_DETECTOR = 'completionist-detector';
-    public const HANDLE_RENDER_ITEM = 'completionist-render-item';
-    public const HANDLE_DATA_PROVIDER = 'completionist-data-provider';
-    public const HANDLE_DATA_SOURCE = 'completionist-data-source';
-    public const HANDLE_WIDGET = 'completionist-widget';
-    public const HANDLE_CONSENT_BUILTIN = 'completionist-consent-builtin';
-    public const HANDLE_CONSENT_MANAGER = 'completionist-consent-manager';
-    public const HANDLE_NOTIFIER = 'completionist-notifier';
+    public const HANDLE_STORAGE = 'lektrail-storage';
+    public const HANDLE_DETECTOR = 'lektrail-detector';
+    public const HANDLE_RENDER_ITEM = 'lektrail-render-item';
+    public const HANDLE_DATA_PROVIDER = 'lektrail-data-provider';
+    public const HANDLE_DATA_SOURCE = 'lektrail-data-source';
+    public const HANDLE_WIDGET = 'lektrail-widget';
+    public const HANDLE_CONSENT_BUILTIN = 'lektrail-consent-builtin';
+    public const HANDLE_CONSENT_MANAGER = 'lektrail-consent-manager';
+    public const HANDLE_NOTIFIER = 'lektrail-notifier';
 
     private const SCRIPT_ARGS = ['in_footer' => true, 'strategy' => 'defer'];
 
@@ -59,7 +59,7 @@ class Assets
 
         $this->scripts->addInlineScript(
             self::HANDLE_DETECTOR,
-            sprintf('document.body.dataset.completionistPost = %d;', $postId),
+            sprintf('document.body.dataset.lektrailPost = %d;', $postId),
             'before'
         );
 
@@ -69,7 +69,7 @@ class Assets
         }
         $this->scripts->addInlineScript(
             self::HANDLE_DETECTOR,
-            sprintf('window.CompletionistPostData = %s;', json_encode($postData)),
+            sprintf('window.LekTrailPostData = %s;', json_encode($postData)),
             'before'
         );
 
@@ -81,7 +81,7 @@ class Assets
 
         $this->scripts->addInlineScript(
             self::HANDLE_DETECTOR,
-            sprintf('window.CompletionistConfig = %s;', json_encode($config)),
+            sprintf('window.LekTrailConfig = %s;', json_encode($config)),
             'before'
         );
     }
@@ -127,12 +127,12 @@ class Assets
             $config['serverSideTracking'] = true;
             $this->scripts->addInlineScript(
                 self::HANDLE_WIDGET,
-                'window.CompletionistInlineData = ' . json_encode($inlineData) . ';',
+                'window.LekTrailInlineData = ' . json_encode($inlineData) . ';',
                 'before'
             );
         }
 
-        $this->scripts->addInlineScript(self::HANDLE_WIDGET, 'window.CompletionistConfig = ' . json_encode($config) . ';', 'before');
+        $this->scripts->addInlineScript(self::HANDLE_WIDGET, 'window.LekTrailConfig = ' . json_encode($config) . ';', 'before');
 
         $this->scripts->enqueueStyle(
             self::HANDLE_WIDGET,
@@ -169,13 +169,13 @@ class Assets
 
         $this->scripts->addInlineScript(
             self::HANDLE_WIDGET,
-            'window.CompletionistConfig = ' . json_encode($config) . ';',
+            'window.LekTrailConfig = ' . json_encode($config) . ';',
             'before'
         );
 
         $this->scripts->addInlineScript(
             'wp-blocks',
-            'window.completionistDefaults = ' . json_encode($config) . ';',
+            'window.lektrailDefaults = ' . json_encode($config) . ';',
             'before'
         );
     }

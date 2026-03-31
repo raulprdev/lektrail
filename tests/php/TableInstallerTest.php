@@ -1,9 +1,9 @@
 <?php
 
-namespace Completionist\Tests;
+namespace LekTrail\Tests;
 
-use Completionist\TableInstaller;
-use Completionist\Tests\Mocks\MockDatabase;
+use LekTrail\TableInstaller;
+use LekTrail\Tests\Mocks\MockDatabase;
 use PHPUnit\Framework\TestCase;
 
 class TableInstallerTest extends TestCase
@@ -24,7 +24,7 @@ class TableInstallerTest extends TestCase
 
         $sql = $this->db->tables[0];
         $this->assertStringContainsString('CREATE TABLE', $sql);
-        $this->assertStringContainsString('wp_completionist_history', $sql);
+        $this->assertStringContainsString('wp_lektrail_history', $sql);
         $this->assertStringContainsString('user_id', $sql);
         $this->assertStringContainsString('post_id', $sql);
         $this->assertStringContainsString('status', $sql);
@@ -38,7 +38,7 @@ class TableInstallerTest extends TestCase
         $this->tableInstaller->dropTable();
 
         $tableName = $this->db->droppedTables[0];
-        $this->assertEquals('wp_completionist_history', $tableName);
+        $this->assertEquals('wp_lektrail_history', $tableName);
     }
 
     public function testUsesCorrectPrefix(): void
@@ -49,6 +49,6 @@ class TableInstallerTest extends TestCase
         $installer->createTable();
 
         $sql = $this->db->tables[0];
-        $this->assertStringContainsString('custom_completionist_history', $sql);
+        $this->assertStringContainsString('custom_lektrail_history', $sql);
     }
 }

@@ -52,7 +52,7 @@
 		};
 	}
 
-	window.CompletionistDataSource = {
+	window.LekTrailDataSource = {
 		create(options) {
 			if (options.inlineData) {
 				return createServerSideSource(options.inlineData);

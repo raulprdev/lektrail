@@ -1,8 +1,8 @@
 <?php
 
-namespace Completionist\WordPress;
+namespace LekTrail\WordPress;
 
-use Completionist\Contracts\Locale as LocaleInterface;
+use LekTrail\Contracts\Locale as LocaleInterface;
 
 class Locale implements LocaleInterface
 {

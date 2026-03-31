@@ -1,26 +1,26 @@
 <?php
 
-namespace Completionist\Tests;
+namespace LekTrail\Tests;
 
-use Completionist\AdminPage;
-use Completionist\Assets;
-use Completionist\Plugin;
-use Completionist\PreviewEndpoint;
-use Completionist\Shortcodes\WidgetShortcode;
-use Completionist\SuggestionsEndpoint;
-use Completionist\SuggestionsQuery;
-use Completionist\Tests\Mocks\MockContext;
-use Completionist\Tests\Mocks\MockHooks;
-use Completionist\Tests\Mocks\MockJsonResponse;
-use Completionist\Tests\Mocks\MockNonceVerifier;
-use Completionist\Tests\Mocks\MockPluginConfigRepository;
-use Completionist\Tests\Mocks\MockPostQuery;
-use Completionist\Tests\Mocks\MockScriptLoader;
-use Completionist\Tests\Mocks\MockTrackingRepository;
-use Completionist\Tests\Mocks\MockUserProvider;
-use Completionist\TrackingEndpoint;
-use Completionist\TrackingService;
-use Completionist\WidgetRenderer;
+use LekTrail\AdminPage;
+use LekTrail\Assets;
+use LekTrail\Plugin;
+use LekTrail\PreviewEndpoint;
+use LekTrail\Shortcodes\WidgetShortcode;
+use LekTrail\SuggestionsEndpoint;
+use LekTrail\SuggestionsQuery;
+use LekTrail\Tests\Mocks\MockContext;
+use LekTrail\Tests\Mocks\MockHooks;
+use LekTrail\Tests\Mocks\MockJsonResponse;
+use LekTrail\Tests\Mocks\MockNonceVerifier;
+use LekTrail\Tests\Mocks\MockPluginConfigRepository;
+use LekTrail\Tests\Mocks\MockPostQuery;
+use LekTrail\Tests\Mocks\MockScriptLoader;
+use LekTrail\Tests\Mocks\MockTrackingRepository;
+use LekTrail\Tests\Mocks\MockUserProvider;
+use LekTrail\TrackingEndpoint;
+use LekTrail\TrackingService;
+use LekTrail\WidgetRenderer;
 use PHPUnit\Framework\TestCase;
 
 class PluginTest extends TestCase

@@ -1,9 +1,9 @@
 <?php
 
-namespace Completionist\WordPress;
+namespace LekTrail\WordPress;
 
-use Completionist\Contracts\Database;
-use Completionist\Contracts\TrackingRepository as TrackingRepositoryContract;
+use LekTrail\Contracts\Database;
+use LekTrail\Contracts\TrackingRepository as TrackingRepositoryContract;
 
 class TrackingRepository implements TrackingRepositoryContract
 {
@@ -13,7 +13,7 @@ class TrackingRepository implements TrackingRepositoryContract
     public function __construct(Database $db)
     {
         $this->db = $db;
-        $this->table = $db->getPrefix() . 'completionist_history';
+        $this->table = $db->getPrefix() . 'lektrail_history';
     }
 
     public function track(int $userId, int $postId, string $status): void
