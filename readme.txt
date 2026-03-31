@@ -58,6 +58,10 @@ The widget displays three sections: "Continue Reading", "Completed", and "Sugges
 * Optional consent requirement with built-in banner
 * Performance caching for suggestions
 
+= Development =
+
+Source code and build tools are available on [GitHub](https://github.com/raulprdev/completionist).
+
 == Installation ==
 
 1. Upload `lektrail` to `/wp-content/plugins/`
