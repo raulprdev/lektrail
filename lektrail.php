@@ -7,7 +7,7 @@
  * Requires PHP:      7.4
  * Author:            raulprdev
  * License:           GPL v2 or later
- * Text Domain:       lektrail
+ * Text Domain:       lektrail-reading-tracker
  */
 
 defined('ABSPATH') || exit;
@@ -32,13 +32,13 @@ spl_autoload_register(function ($class) {
 
 add_action('init', function () {
     $locale = determine_locale();
-    $localeFile = __DIR__ . '/languages/lektrail-' . $locale . '.mo';
-    $fallbackFile = __DIR__ . '/languages/lektrail-es_ES.mo';
+    $localeFile = __DIR__ . '/languages/lektrail-reading-tracker-' . $locale . '.mo';
+    $fallbackFile = __DIR__ . '/languages/lektrail-reading-tracker-es_ES.mo';
 
     if (file_exists($localeFile)) {
-        load_textdomain('lektrail', $localeFile);
+        load_textdomain('lektrail-reading-tracker', $localeFile);
     } elseif (strpos($locale, 'es_') === 0 && file_exists($fallbackFile)) {
-        load_textdomain('lektrail', $fallbackFile);
+        load_textdomain('lektrail-reading-tracker', $fallbackFile);
     }
 });
 

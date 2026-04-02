@@ -112,11 +112,11 @@ export default function Edit({ attributes, setAttributes }) {
 		<>
 			<InspectorControls>
 				<PanelBody
-					title={__('Display Settings', 'lektrail')}
+					title={__('Display Settings', 'lektrail-reading-tracker')}
 					initialOpen={true}
 				>
 					<RangeControl
-						label={__('Max Viewed Posts', 'lektrail')}
+						label={__('Max Viewed Posts', 'lektrail-reading-tracker')}
 						value={maxViewed}
 						onChange={(value) => setAttributes({ maxViewed: value })}
 						min={1}
@@ -125,7 +125,7 @@ export default function Edit({ attributes, setAttributes }) {
 						resetFallbackValue={undefined}
 					/>
 					<RangeControl
-						label={__('Max Completed Posts', 'lektrail')}
+						label={__('Max Completed Posts', 'lektrail-reading-tracker')}
 						value={maxRead}
 						onChange={(value) => setAttributes({ maxRead: value })}
 						min={1}
@@ -134,7 +134,7 @@ export default function Edit({ attributes, setAttributes }) {
 						resetFallbackValue={undefined}
 					/>
 					<RangeControl
-						label={__('Max Suggestions', 'lektrail')}
+						label={__('Max Suggestions', 'lektrail-reading-tracker')}
 						value={maxSuggestions}
 						onChange={(value) => setAttributes({ maxSuggestions: value })}
 						min={1}
@@ -143,18 +143,18 @@ export default function Edit({ attributes, setAttributes }) {
 						resetFallbackValue={undefined}
 					/>
 					<ToggleControl
-						label={__('Show Excerpts', 'lektrail')}
+						label={__('Show Excerpts', 'lektrail-reading-tracker')}
 						checked={showExcerpt}
 						onChange={(value) => setAttributes({ showExcerpt: value })}
 					/>
 					<ToggleControl
-						label={__('Show Thumbnails', 'lektrail')}
+						label={__('Show Thumbnails', 'lektrail-reading-tracker')}
 						checked={showThumbnail}
 						onChange={(value) => setAttributes({ showThumbnail: value })}
 					/>
 					{showExcerpt && (
 						<RangeControl
-							label={__('Excerpt Length (words)', 'lektrail')}
+							label={__('Excerpt Length (words)', 'lektrail-reading-tracker')}
 							value={excerptLength}
 							onChange={(value) => setAttributes({ excerptLength: value })}
 							min={5}
@@ -166,35 +166,35 @@ export default function Edit({ attributes, setAttributes }) {
 				</PanelBody>
 
 				<PanelBody
-					title={__('Sections', 'lektrail')}
+					title={__('Sections', 'lektrail-reading-tracker')}
 					initialOpen={false}
 				>
 					<ToggleControl
-						label={__('Show Continue Reading', 'lektrail')}
+						label={__('Show Continue Reading', 'lektrail-reading-tracker')}
 						checked={viewedEnabled}
 						onChange={(value) => setAttributes({ viewedEnabled: value })}
 					/>
 					<ToggleControl
-						label={__('Show Completed', 'lektrail')}
+						label={__('Show Completed', 'lektrail-reading-tracker')}
 						checked={completedEnabled}
 						onChange={(value) => setAttributes({ completedEnabled: value })}
 					/>
 					<ToggleControl
-						label={__('Show Clear Button', 'lektrail')}
+						label={__('Show Clear Button', 'lektrail-reading-tracker')}
 						checked={showClearButton}
 						onChange={(value) => setAttributes({ showClearButton: value })}
 					/>
 					<SelectControl
-						label={__('Suggestion Order', 'lektrail')}
+						label={__('Suggestion Order', 'lektrail-reading-tracker')}
 						value={suggestionOrder}
 						options={[
 							{
-								label: __('Default (use global)', 'lektrail'),
+								label: __('Default (use global)', 'lektrail-reading-tracker'),
 								value: '',
 							},
-							{ label: __('Random', 'lektrail'), value: 'random' },
-							{ label: __('Recent', 'lektrail'), value: 'recent' },
-							{ label: __('Related', 'lektrail'), value: 'related' },
+							{ label: __('Random', 'lektrail-reading-tracker'), value: 'random' },
+							{ label: __('Recent', 'lektrail-reading-tracker'), value: 'recent' },
+							{ label: __('Related', 'lektrail-reading-tracker'), value: 'related' },
 						]}
 						onChange={(value) =>
 							setAttributes({ suggestionOrder: value || undefined })
@@ -203,68 +203,68 @@ export default function Edit({ attributes, setAttributes }) {
 				</PanelBody>
 
 				<PanelBody
-					title={__('Labels', 'lektrail')}
+					title={__('Labels', 'lektrail-reading-tracker')}
 					initialOpen={false}
 				>
 					<TextControl
-						label={__('Continue Reading Label', 'lektrail')}
+						label={__('Continue Reading Label', 'lektrail-reading-tracker')}
 						value={labelContinue || ''}
 						onChange={(value) =>
 							setAttributes({ labelContinue: value || undefined })
 						}
-						placeholder={__('Continue reading', 'lektrail')}
+						placeholder={__('Continue reading', 'lektrail-reading-tracker')}
 					/>
 					<TextControl
-						label={__('Completed Label', 'lektrail')}
+						label={__('Completed Label', 'lektrail-reading-tracker')}
 						value={labelCompleted || ''}
 						onChange={(value) =>
 							setAttributes({ labelCompleted: value || undefined })
 						}
-						placeholder={__('Completed', 'lektrail')}
+						placeholder={__('Completed', 'lektrail-reading-tracker')}
 					/>
 					<TextControl
-						label={__('Suggestions Label', 'lektrail')}
+						label={__('Suggestions Label', 'lektrail-reading-tracker')}
 						value={labelSuggestions || ''}
 						onChange={(value) =>
 							setAttributes({ labelSuggestions: value || undefined })
 						}
-						placeholder={__('Suggested reading', 'lektrail')}
+						placeholder={__('Suggested reading', 'lektrail-reading-tracker')}
 					/>
 					<TextControl
-						label={__('Empty State Label', 'lektrail')}
+						label={__('Empty State Label', 'lektrail-reading-tracker')}
 						value={labelEmpty || ''}
 						onChange={(value) =>
 							setAttributes({ labelEmpty: value || undefined })
 						}
 						placeholder={__(
 							'Start reading to track your progress!',
-							'lektrail'
+							'lektrail-reading-tracker'
 						)}
 					/>
 					<TextControl
-						label={__('Loading Label', 'lektrail')}
+						label={__('Loading Label', 'lektrail-reading-tracker')}
 						value={labelLoading || ''}
 						onChange={(value) =>
 							setAttributes({ labelLoading: value || undefined })
 						}
-						placeholder={__('Loading suggestions...', 'lektrail')}
+						placeholder={__('Loading suggestions...', 'lektrail-reading-tracker')}
 					/>
 					<TextControl
-						label={__('Clear Button Label', 'lektrail')}
+						label={__('Clear Button Label', 'lektrail-reading-tracker')}
 						value={labelClear || ''}
 						onChange={(value) =>
 							setAttributes({ labelClear: value || undefined })
 						}
-						placeholder={__('Clear history', 'lektrail')}
+						placeholder={__('Clear history', 'lektrail-reading-tracker')}
 					/>
 				</PanelBody>
 
 				<PanelBody
-					title={__('Performance', 'lektrail')}
+					title={__('Performance', 'lektrail-reading-tracker')}
 					initialOpen={false}
 				>
 					<RangeControl
-						label={__('Suggestions Cache (hours)', 'lektrail')}
+						label={__('Suggestions Cache (hours)', 'lektrail-reading-tracker')}
 						value={suggestionsCacheHours}
 						onChange={(value) =>
 							setAttributes({ suggestionsCacheHours: value })
