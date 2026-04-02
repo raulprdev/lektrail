@@ -209,6 +209,18 @@ class AssetsTest extends TestCase
         $this->assertStringContainsString('"serverSideTracking":true', $inline['code']);
     }
 
+    public function testEnqueueWidgetIncludesTrackingFieldsWhenServerSide(): void
+    {
+        $assets = $this->createAssets();
+        $inlineData = ['viewed' => [], 'read' => [], 'suggestions' => []];
+
+        $assets->enqueueWidget($inlineData);
+
+        $inline = $this->loader->inlineScripts[Assets::HANDLE_WIDGET];
+        $this->assertStringContainsString('trackingEndpoint', $inline['code']);
+        $this->assertStringContainsString('trackingNonce', $inline['code']);
+    }
+
     public function testEnqueueWidgetForEditorInjectsLekTrailConfig(): void
     {
         $assets = $this->createAssets();

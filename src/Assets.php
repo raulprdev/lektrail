@@ -125,6 +125,8 @@ class Assets
         if ($inlineData !== null) {
             $config['requireConsent'] = false;
             $config['serverSideTracking'] = true;
+            $config['trackingEndpoint'] = admin_url('admin-ajax.php?action=' . TrackingEndpoint::ACTION);
+            $config['trackingNonce'] = wp_create_nonce(TrackingEndpoint::ACTION);
             $this->scripts->addInlineScript(
                 self::HANDLE_WIDGET,
                 'window.LekTrailInlineData = ' . wp_json_encode($inlineData) . ';',
