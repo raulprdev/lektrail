@@ -21,6 +21,23 @@ class AdminPage
     {
         $hooks->addAction('admin_menu', [$this, 'addMenu']);
         $hooks->addAction('admin_init', [$this, 'registerSettings']);
+        $hooks->addAction('admin_enqueue_scripts', [$this, 'enqueueStyles']);
+    }
+
+    public function enqueueStyles(string $hookSuffix): void
+    {
+        if ($hookSuffix !== 'settings_page_' . self::MENU_SLUG) {
+            return;
+        }
+
+        $css = '.lektrail-settings .postbox .hndle {'
+            . 'padding: 10px 12px; margin: 0;'
+            . '}'
+            . '.lektrail-settings .postbox .inside {'
+            . 'padding: 0 12px 12px; margin: 0;'
+            . '}';
+
+        wp_add_inline_style('common', $css);
     }
 
     public function addMenu(): void

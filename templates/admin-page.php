@@ -1,14 +1,4 @@
 <?php defined('ABSPATH') || exit; ?>
-<style>
-    .lektrail-settings .postbox .hndle {
-        padding: 10px 12px;
-        margin: 0;
-    }
-    .lektrail-settings .postbox .inside {
-        padding: 0 12px 12px;
-        margin: 0;
-    }
-</style>
 <div class="wrap lektrail-settings">
     <h1><?php echo esc_html__('LekTrail Settings', 'lektrail-reading-tracker'); ?></h1>
 
