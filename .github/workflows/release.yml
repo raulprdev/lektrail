@@ -31,16 +31,16 @@ jobs:
 
       - name: Generate zip
         run: |
-          mkdir -p ../dist/lektrail
-          cp -r assets build languages src templates ../dist/lektrail/
-          cp lektrail.php composer.json package.json README.md readme.txt ../dist/lektrail/
-          rm -f ../dist/lektrail/src/Blocks/Widget/block.json ../dist/lektrail/src/Blocks/Widget/edit.js ../dist/lektrail/src/Blocks/Widget/index.js ../dist/lektrail/src/Blocks/Widget/editor.scss
-          cd ../dist && zip -r lektrail.zip lektrail
-          mv lektrail.zip $GITHUB_WORKSPACE/
+          mkdir -p ../dist/lektrail-reading-tracker
+          cp -r assets build languages src templates ../dist/lektrail-reading-tracker/
+          cp lektrail.php composer.json package.json README.md readme.txt ../dist/lektrail-reading-tracker/
+          find ../dist/lektrail-reading-tracker/src/Blocks -type f ! -name '*.php' -delete
+          cd ../dist && zip -r lektrail-reading-tracker.zip lektrail-reading-tracker
+          mv lektrail-reading-tracker.zip $GITHUB_WORKSPACE/
 
       - name: Upload release asset
         uses: softprops/action-gh-release@v2
         with:
-          files: lektrail.zip
+          files: lektrail-reading-tracker.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
