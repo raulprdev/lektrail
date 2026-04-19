@@ -63,6 +63,15 @@ describe('shouldTrack', () => {
     test('false when no storage', () => {
         expect(D.shouldTrack(123, null, false)).toBe(false);
     });
+
+    test('true in server-side mode even when localStorage has post tracked', () => {
+        const storage = mockStorage({ viewedPosts: [{ id: 123, title: 'Test', url: '/test' }] });
+        expect(D.shouldTrack(123, storage, false, true)).toBe(true);
+    });
+
+    test('false in server-side mode when already tracked this session', () => {
+        expect(D.shouldTrack(123, mockStorage(), true, true)).toBe(false);
+    });
 });
 
 describe('Detector: on page load', () => {
@@ -296,6 +305,76 @@ describe('Detector: consent', () => {
         detector.handleIntersection();
 
         expect(storage.addRead).not.toHaveBeenCalled();
+    });
+});
+
+describe('Detector: server-side mode', () => {
+    test('tracks viewed even when localStorage has post tracked', () => {
+        setPostData(123);
+        const storage = mockStorage({ viewedPosts: [{ id: 123, title: 'Test', url: '/test' }] });
+        const notifier = { trackViewed: jest.fn(), trackRead: jest.fn() };
+        const detector = D.createDetector({
+            dom: mockDom({ postId: 123, article: true }),
+            storage,
+            notifier,
+            serverSide: true,
+            Observer: null
+        });
+
+        detector.init();
+
+        expect(notifier.trackViewed).toHaveBeenCalled();
+    });
+
+    test('tracks read even when localStorage has post read', () => {
+        const storage = mockStorage({ readPosts: [{ id: 42, title: 'Test', url: '/test' }] });
+        const notifier = { trackViewed: jest.fn(), trackRead: jest.fn() };
+        const detector = D.createDetector({
+            dom: mockDom({ postId: 42, article: true }),
+            storage,
+            notifier,
+            serverSide: true,
+            Observer: null
+        });
+
+        detector.handleIntersection();
+
+        expect(notifier.trackRead).toHaveBeenCalledWith(42);
+    });
+
+    test('still skips viewed when already tracked this session', () => {
+        setPostData(123);
+        const storage = mockStorage();
+        const notifier = { trackViewed: jest.fn(), trackRead: jest.fn() };
+        const detector = D.createDetector({
+            dom: mockDom({ postId: 123, article: true }),
+            storage,
+            notifier,
+            serverSide: true,
+            Observer: null
+        });
+
+        detector.init();
+        notifier.trackViewed.mockClear();
+        detector.init();
+
+        expect(notifier.trackViewed).not.toHaveBeenCalled();
+    });
+
+    test('localStorage mode still consults storage', () => {
+        setPostData(123);
+        const storage = mockStorage({ viewedPosts: [{ id: 123, title: 'Test', url: '/test' }] });
+        const notifier = { trackViewed: jest.fn(), trackRead: jest.fn() };
+        const detector = D.createDetector({
+            dom: mockDom({ postId: 123, article: true }),
+            storage,
+            notifier,
+            Observer: null
+        });
+
+        detector.init();
+
+        expect(notifier.trackViewed).not.toHaveBeenCalled();
     });
 });
 

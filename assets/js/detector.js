@@ -10,7 +10,7 @@
 		return dom.querySelector('article') || dom.querySelector('main');
 	}
 
-	function shouldTrack(postId, storage, alreadyTracked) {
+	function shouldTrack(postId, storage, alreadyTracked, serverSide) {
 		if (alreadyTracked) {
 			return false;
 		}
@@ -20,13 +20,13 @@
 		if (!storage) {
 			return false;
 		}
-		if (storage.isTracked(postId)) {
+		if (!serverSide && storage.isTracked(postId)) {
 			return false;
 		}
 		return true;
 	}
 
-	function shouldMarkRead(postId, storage, alreadyMarkedRead) {
+	function shouldMarkRead(postId, storage, alreadyMarkedRead, serverSide) {
 		if (alreadyMarkedRead) {
 			return false;
 		}
@@ -36,7 +36,7 @@
 		if (!storage) {
 			return false;
 		}
-		if (storage.hasRead(postId)) {
+		if (!serverSide && storage.hasRead(postId)) {
 			return false;
 		}
 		return true;
@@ -105,7 +105,9 @@
 			};
 		const Observer = deps.Observer || global.IntersectionObserver;
 		const consentManager = deps.consentManager || null;
+		const serverSide = !!deps.serverSide;
 
+		let tracked = false;
 		let markedRead = false;
 
 		function hasConsent() {
@@ -120,7 +122,7 @@
 				return false;
 			}
 			const postId = getPostId(dom);
-			if (shouldMarkRead(postId, storage, markedRead)) {
+			if (shouldMarkRead(postId, storage, markedRead, serverSide)) {
 				trackRead(postId, notifier, dispatch);
 				markedRead = true;
 				return true;
@@ -139,7 +141,10 @@
 				};
 			}
 
-			if (hasConsent() && shouldTrack(postId, storage, false)) {
+			if (
+				hasConsent() &&
+				shouldTrack(postId, storage, tracked, serverSide)
+			) {
 				if (!global.LekTrailPostData) {
 					// eslint-disable-next-line no-console
 					console.warn(
@@ -153,6 +158,7 @@
 					dispatch,
 					global.LekTrailPostData
 				);
+				tracked = true;
 			}
 
 			const threshold = getReadThreshold();
@@ -222,6 +228,7 @@
 		const detector = createDetector({
 			consentManager,
 			notifier,
+			serverSide: !!(config && config.trackingEndpoint),
 		});
 		if (document.readyState === 'loading') {
 			document.addEventListener('DOMContentLoaded', function () {
