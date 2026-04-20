@@ -2,13 +2,13 @@
 
 namespace LekTrail\Tests\Shortcodes;
 
+use LekTrail\Renderers\ReadingListRenderer;
 use LekTrail\Shortcodes\ReadingListShortcode;
 use LekTrail\Tests\Mocks\MockHooks;
 use LekTrail\Tests\Mocks\MockPostQuery;
 use LekTrail\Tests\Mocks\MockReadingHistoryRepository;
 use LekTrail\Tests\Mocks\MockScriptLoader;
 use LekTrail\Tests\Mocks\MockUserProvider;
-use LekTrail\Renderers\ReadingListRenderer;
 use PHPUnit\Framework\TestCase;
 
 class ReadingListShortcodeTest extends TestCase

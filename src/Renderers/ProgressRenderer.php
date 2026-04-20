@@ -42,7 +42,7 @@ class ProgressRenderer
 
         $this->enqueueStyle();
 
-        $percentage = $stats->percentage();
+        $percentage = (string) $stats->percentage();
         $label = sprintf('%d of %d (%s%%)', $stats->read(), $stats->total(), $percentage);
 
         if ($wrapperAttributes) {

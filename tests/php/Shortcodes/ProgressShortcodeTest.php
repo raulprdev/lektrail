@@ -2,13 +2,13 @@
 
 namespace LekTrail\Tests\Shortcodes;
 
+use LekTrail\Renderers\ProgressRenderer;
 use LekTrail\Shortcodes\ProgressShortcode;
 use LekTrail\Tests\Mocks\MockHooks;
 use LekTrail\Tests\Mocks\MockPostCountRepository;
 use LekTrail\Tests\Mocks\MockReadingHistoryRepository;
 use LekTrail\Tests\Mocks\MockScriptLoader;
 use LekTrail\Tests\Mocks\MockUserProvider;
-use LekTrail\Renderers\ProgressRenderer;
 use PHPUnit\Framework\TestCase;
 
 class ProgressShortcodeTest extends TestCase
