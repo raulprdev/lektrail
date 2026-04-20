@@ -1,0 +1,33 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "lektrail/progress",
+  "version": "1.0.0",
+  "title": "LekTrail Reading Progress",
+  "category": "widgets",
+  "icon": "chart-bar",
+  "description": "Display a reading progress bar, filterable by category and year.",
+  "keywords": ["reading", "progress", "tracker", "stats"],
+  "textdomain": "lektrail-reading-tracker",
+  "supports": {
+    "html": false,
+    "align": ["wide", "full"],
+    "color": {
+      "background": true,
+      "text": true
+    },
+    "spacing": {
+      "padding": true,
+      "margin": true
+    },
+    "typography": {
+      "fontSize": true
+    }
+  },
+  "attributes": {
+    "category": { "type": "string", "default": "" },
+    "year": { "type": "number" }
+  },
+  "editorScript": "file:./index.js",
+  "style": "lektrail-dashboard"
+}

@@ -75,6 +75,25 @@ add_action('plugins_loaded', function () {
     $widgetBlock = new LekTrail\Blocks\Widget\WidgetBlock($widgetRenderer, $assets, $pluginPath);
     $widgetBlock->register($hooks);
 
+    $transients = new LekTrail\WordPress\Transients();
+    $readingHistory = new LekTrail\Dashboard\ReadingHistoryRepository($db);
+    $postCounts = new LekTrail\Dashboard\PostCountRepository($db, $transients);
+    $cacheInvalidator = new LekTrail\Dashboard\CacheInvalidator($postCounts);
+    $cacheInvalidator->register($hooks);
+
+    $progressRenderer = new LekTrail\Renderers\ProgressRenderer($readingHistory, $postCounts, $users, $scripts);
+    $readingListRenderer = new LekTrail\Renderers\ReadingListRenderer($readingHistory, $posts, $users, $scripts);
+
+    $progressShortcode = new LekTrail\Shortcodes\ProgressShortcode($progressRenderer);
+    $progressShortcode->register($hooks);
+    $readingListShortcode = new LekTrail\Shortcodes\ReadingListShortcode($readingListRenderer);
+    $readingListShortcode->register($hooks);
+
+    $progressBlock = new LekTrail\Blocks\Progress\ProgressBlock($progressRenderer, $pluginPath);
+    $progressBlock->register($hooks);
+    $readingListBlock = new LekTrail\Blocks\ReadingList\ReadingListBlock($readingListRenderer, $pluginPath);
+    $readingListBlock->register($hooks);
+
     $plugin = new LekTrail\Plugin($assets, $pluginConfigs, $context, $suggestions, $previewEndpoint, $shortcode, $adminPage, $hooks, $trackingService, $trackingEndpoint);
     $plugin->run();
 });

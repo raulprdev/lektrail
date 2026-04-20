@@ -1,0 +1,34 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "lektrail/reading-list",
+  "version": "1.0.0",
+  "title": "LekTrail Reading List",
+  "category": "widgets",
+  "icon": "list-view",
+  "description": "Display a filtered list of read or viewed posts.",
+  "keywords": ["reading", "list", "tracker", "history"],
+  "textdomain": "lektrail-reading-tracker",
+  "supports": {
+    "html": false,
+    "align": ["wide", "full"],
+    "color": {
+      "background": true,
+      "text": true
+    },
+    "spacing": {
+      "padding": true,
+      "margin": true
+    },
+    "typography": {
+      "fontSize": true
+    }
+  },
+  "attributes": {
+    "category": { "type": "string", "default": "" },
+    "year": { "type": "number" },
+    "status": { "type": "string", "enum": ["viewed", "read"] }
+  },
+  "editorScript": "file:./index.js",
+  "style": "lektrail-dashboard"
+}
