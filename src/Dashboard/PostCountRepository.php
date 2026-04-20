@@ -64,6 +64,6 @@ class PostCountRepository implements PostCountRepositoryContract
         $sql = "SELECT COUNT(DISTINCT p.ID) as cnt FROM {$prefix}posts p{$joins} WHERE {$where}";
         $results = $this->db->getResults($sql, ...$args);
 
-        return (int) ($results[0]->cnt ?? 0);
+        return (int) ($results[0]['cnt'] ?? 0);
     }
 }

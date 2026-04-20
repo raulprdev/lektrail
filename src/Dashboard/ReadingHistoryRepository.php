@@ -38,13 +38,13 @@ class ReadingHistoryRepository implements ReadingHistoryRepositoryContract
             $userId
         );
 
-        $this->cache = array_map(function (object $row): array {
-            $slugs = $row->slugs ? explode(',', $row->slugs) : [];
+        $this->cache = array_map(function (array $row): array {
+            $slugs = $row['slugs'] ? explode(',', $row['slugs']) : [];
             return [
-                'post_id' => (int) $row->post_id,
-                'status' => $row->status,
+                'post_id' => (int) $row['post_id'],
+                'status' => $row['status'],
                 'category_slugs' => $slugs,
-                'year' => (int) $row->year,
+                'year' => (int) $row['year'],
             ];
         }, $results);
 

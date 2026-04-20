@@ -12,8 +12,8 @@ class ReadingHistoryRepositoryTest extends TestCase
     {
         $db = new MockDatabase();
         $db->results = [[
-            (object) ['post_id' => 1, 'status' => 'read', 'year' => 2025, 'slugs' => 'php,tutorials'],
-            (object) ['post_id' => 2, 'status' => 'viewed', 'year' => 2024, 'slugs' => 'javascript'],
+            ['post_id' => 1, 'status' => 'read', 'year' => 2025, 'slugs' => 'php,tutorials'],
+            ['post_id' => 2, 'status' => 'viewed', 'year' => 2024, 'slugs' => 'javascript'],
         ]];
 
         $repo = new ReadingHistoryRepository($db);
@@ -30,7 +30,7 @@ class ReadingHistoryRepositoryTest extends TestCase
     {
         $db = new MockDatabase();
         $db->results = [[
-            (object) ['post_id' => 1, 'status' => 'read', 'year' => 2025, 'slugs' => null],
+            ['post_id' => 1, 'status' => 'read', 'year' => 2025, 'slugs' => null],
         ]];
 
         $repo = new ReadingHistoryRepository($db);
@@ -43,7 +43,7 @@ class ReadingHistoryRepositoryTest extends TestCase
     {
         $db = new MockDatabase();
         $db->results = [[
-            (object) ['post_id' => 1, 'status' => 'read', 'year' => 2025, 'slugs' => 'php'],
+            ['post_id' => 1, 'status' => 'read', 'year' => 2025, 'slugs' => 'php'],
         ]];
 
         $repo = new ReadingHistoryRepository($db);

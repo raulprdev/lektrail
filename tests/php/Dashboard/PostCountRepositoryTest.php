@@ -24,7 +24,7 @@ class PostCountRepositoryTest extends TestCase
     public function testQueriesOnCacheMiss(): void
     {
         $db = new MockDatabase();
-        $db->results = [[(object) ['cnt' => 15]]];
+        $db->results = [[['cnt' => 15]]];
         $transients = new MockTransients();
 
         $repo = new PostCountRepository($db, $transients);
@@ -36,7 +36,7 @@ class PostCountRepositoryTest extends TestCase
     public function testStoresResultInTransient(): void
     {
         $db = new MockDatabase();
-        $db->results = [[(object) ['cnt' => 15]]];
+        $db->results = [[['cnt' => 15]]];
         $transients = new MockTransients();
 
         $repo = new PostCountRepository($db, $transients);
@@ -49,7 +49,7 @@ class PostCountRepositoryTest extends TestCase
     public function testFilterByCategory(): void
     {
         $db = new MockDatabase();
-        $db->results = [[(object) ['cnt' => 8]]];
+        $db->results = [[['cnt' => 8]]];
         $transients = new MockTransients();
 
         $repo = new PostCountRepository($db, $transients);

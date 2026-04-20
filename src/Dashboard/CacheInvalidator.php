@@ -16,7 +16,7 @@ class CacheInvalidator
 
     public function register(Hooks $hooks): void
     {
-        $hooks->addAction('transition_post_status', [$this, 'onTransition']);
+        $hooks->addAction('transition_post_status', [$this, 'onTransition'], 10, 2);
     }
 
     public function onTransition(string $newStatus, string $oldStatus): void

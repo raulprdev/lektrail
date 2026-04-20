@@ -18,6 +18,7 @@ class CacheInvalidatorTest extends TestCase
         $invalidator->register($hooks);
 
         $this->assertArrayHasKey('transition_post_status', $hooks->actions);
+        $this->assertEquals(2, $hooks->actions['transition_post_status']['accepted_args']);
     }
 
     public function testClearsCacheOnPublish(): void
