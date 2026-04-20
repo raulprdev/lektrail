@@ -4,9 +4,7 @@
 	function createConsentManager(deps) {
 		deps = deps || {};
 
-		const providers = deps.providers || [
-			global.LekTrailBuiltInProvider,
-		];
+		const providers = deps.providers || [global.LekTrailBuiltInProvider];
 		let activeProvider = null;
 
 		function detectProvider() {

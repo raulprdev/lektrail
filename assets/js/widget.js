@@ -77,9 +77,7 @@
 
 	function renderLoading(container, config) {
 		container.innerHTML =
-			'<div class="lektrail-loading">' +
-			config.labels.loading +
-			'</div>';
+			'<div class="lektrail-loading">' + config.labels.loading + '</div>';
 	}
 
 	function renderSection(title, posts, className, count) {
@@ -102,9 +100,7 @@
 	}
 
 	function renderEmptyState(config) {
-		return (
-			'<div class="lektrail-empty">' + config.labels.empty + '</div>'
-		);
+		return '<div class="lektrail-empty">' + config.labels.empty + '</div>';
 	}
 
 	function renderClearButton(config) {
@@ -156,21 +152,23 @@
 			config.maxSuggestions
 		);
 
-		var classes = container.className ? container.className.split(' ') : [];
+		const classes = container.className
+			? container.className.split(' ')
+			: [];
 		if (classes.indexOf('lektrail-widget') === -1) {
 			classes.push('lektrail-widget');
 		}
 
-		var excerptIndex = classes.indexOf('lektrail-show-excerpt');
-		var hasExcerptClass = excerptIndex !== -1;
+		const excerptIndex = classes.indexOf('lektrail-show-excerpt');
+		const hasExcerptClass = excerptIndex !== -1;
 		if (config.showExcerpt && !hasExcerptClass) {
 			classes.push('lektrail-show-excerpt');
 		} else if (!config.showExcerpt && hasExcerptClass) {
 			classes.splice(excerptIndex, 1);
 		}
 
-		var thumbnailIndex = classes.indexOf('lektrail-show-thumbnail');
-		var hasThumbnailClass = thumbnailIndex !== -1;
+		const thumbnailIndex = classes.indexOf('lektrail-show-thumbnail');
+		const hasThumbnailClass = thumbnailIndex !== -1;
 		if (config.showThumbnail && !hasThumbnailClass) {
 			classes.push('lektrail-show-thumbnail');
 		} else if (!config.showThumbnail && hasThumbnailClass) {

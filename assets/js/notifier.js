@@ -32,7 +32,10 @@
 	window.LekTrailNotifier = {
 		create(options) {
 			if (options.endpoint) {
-				return createServerSideNotifier(options.endpoint, options.nonce);
+				return createServerSideNotifier(
+					options.endpoint,
+					options.nonce
+				);
 			}
 			return createLocalStorageNotifier(options.storage);
 		},
