@@ -17,6 +17,7 @@ class Assets
     public const HANDLE_CONSENT_BUILTIN = 'lektrail-consent-builtin';
     public const HANDLE_CONSENT_MANAGER = 'lektrail-consent-manager';
     public const HANDLE_NOTIFIER = 'lektrail-notifier';
+    public const HANDLE_DASHBOARD = 'lektrail-dashboard';
 
     private const SCRIPT_ARGS = ['in_footer' => true, 'strategy' => 'defer'];
 
@@ -253,6 +254,26 @@ class Assets
             $this->pluginUrl . 'assets/css/widget.css',
             [],
             $this->fileVersion('assets/css/widget.css')
+        );
+    }
+
+    public function registerDashboardStyle(): void
+    {
+        $this->scripts->registerStyle(
+            self::HANDLE_DASHBOARD,
+            $this->pluginUrl . 'assets/css/dashboard.css',
+            [],
+            $this->fileVersion('assets/css/dashboard.css')
+        );
+    }
+
+    public function enqueueDashboardStyle(): void
+    {
+        $this->scripts->enqueueStyle(
+            self::HANDLE_DASHBOARD,
+            $this->pluginUrl . 'assets/css/dashboard.css',
+            [],
+            $this->fileVersion('assets/css/dashboard.css')
         );
     }
 
