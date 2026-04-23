@@ -5,10 +5,11 @@ namespace LekTrail\Tests\Shortcodes;
 use LekTrail\Assets;
 use LekTrail\Renderers\ProgressRenderer;
 use LekTrail\Shortcodes\ProgressShortcode;
+use LekTrail\Tests\Mocks\MockCategoryResolver;
 use LekTrail\Tests\Mocks\MockHooks;
+use LekTrail\Tests\Mocks\MockPluginConfigRepository;
 use LekTrail\Tests\Mocks\MockPostCountRepository;
 use LekTrail\Tests\Mocks\MockPostQuery;
-use LekTrail\Tests\Mocks\MockPluginConfigRepository;
 use LekTrail\Tests\Mocks\MockReadingHistoryRepository;
 use LekTrail\Tests\Mocks\MockScriptLoader;
 use LekTrail\Tests\Mocks\MockUserProvider;
@@ -42,7 +43,8 @@ class ProgressShortcodeTest extends TestCase
             $this->history,
             $this->counts,
             $this->users,
-            $assets
+            $assets,
+            new MockCategoryResolver()
         );
         return new ProgressShortcode($renderer);
     }

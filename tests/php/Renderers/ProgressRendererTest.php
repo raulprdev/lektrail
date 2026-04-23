@@ -5,9 +5,10 @@ namespace LekTrail\Tests\Renderers;
 use LekTrail\Assets;
 use LekTrail\Dashboard\ReadingFilter;
 use LekTrail\Renderers\ProgressRenderer;
+use LekTrail\Tests\Mocks\MockCategoryResolver;
+use LekTrail\Tests\Mocks\MockPluginConfigRepository;
 use LekTrail\Tests\Mocks\MockPostCountRepository;
 use LekTrail\Tests\Mocks\MockPostQuery;
-use LekTrail\Tests\Mocks\MockPluginConfigRepository;
 use LekTrail\Tests\Mocks\MockReadingHistoryRepository;
 use LekTrail\Tests\Mocks\MockScriptLoader;
 use LekTrail\Tests\Mocks\MockUserProvider;
@@ -19,6 +20,7 @@ class ProgressRendererTest extends TestCase
     private MockReadingHistoryRepository $history;
     private MockPostCountRepository $counts;
     private MockScriptLoader $scripts;
+    private MockCategoryResolver $categoryResolver;
 
     protected function setUp(): void
     {
@@ -26,6 +28,7 @@ class ProgressRendererTest extends TestCase
         $this->history = new MockReadingHistoryRepository();
         $this->counts = new MockPostCountRepository();
         $this->scripts = new MockScriptLoader();
+        $this->categoryResolver = new MockCategoryResolver();
     }
 
     private function createRenderer(): ProgressRenderer
@@ -38,7 +41,7 @@ class ProgressRendererTest extends TestCase
             new MockPluginConfigRepository(),
             new MockPostQuery()
         );
-        return new ProgressRenderer($this->history, $this->counts, $this->users, $assets);
+        return new ProgressRenderer($this->history, $this->counts, $this->users, $assets, $this->categoryResolver);
     }
 
     public function testReturnsEmptyForAnonymousUser(): void
@@ -125,5 +128,23 @@ class ProgressRendererTest extends TestCase
 
         $this->assertArrayHasKey('lektrail-dashboard', $this->scripts->styles);
         $this->assertStringContainsString('dashboard.css', $this->scripts->styles['lektrail-dashboard']['url']);
+    }
+
+    public function testResolvesParentCategoryToIncludeChildren(): void
+    {
+        $this->users->userId = 42;
+        $this->categoryResolver->descendants = [
+            'programming' => ['programming', 'php', 'javascript'],
+        ];
+        $this->history->records = [
+            ['post_id' => 1, 'status' => 'read', 'category_slugs' => ['php'], 'year' => 2025],
+            ['post_id' => 2, 'status' => 'read', 'category_slugs' => ['javascript'], 'year' => 2025],
+            ['post_id' => 3, 'status' => 'read', 'category_slugs' => ['cooking'], 'year' => 2025],
+        ];
+        $this->counts->counts['cat:programming'] = 10;
+
+        $html = $this->createRenderer()->render(new ReadingFilter('programming'));
+
+        $this->assertStringContainsString('20%', $html);
     }
 }

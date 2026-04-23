@@ -103,4 +103,28 @@ class ReadingHistoryTest extends TestCase
         $this->assertEquals(0, $history->viewedCount());
         $this->assertEquals([], $history->postIds());
     }
+
+    public function testFilterByResolvedCategoriesIncludesChildren(): void
+    {
+        $records = [
+            ['post_id' => 1, 'status' => 'read', 'category_slugs' => ['php-basics'], 'year' => 2025],
+            ['post_id' => 2, 'status' => 'read', 'category_slugs' => ['php-advanced'], 'year' => 2025],
+            ['post_id' => 3, 'status' => 'read', 'category_slugs' => ['javascript'], 'year' => 2025],
+        ];
+        $history = new ReadingHistory($records);
+
+        $filter = new ReadingFilter('programming');
+        $resolved = $filter->withResolvedCategories(['programming', 'php-basics', 'php-advanced']);
+        $filtered = $history->filter($resolved);
+
+        $this->assertEquals([1, 2], $filtered->postIds());
+    }
+
+    public function testFilterWithoutResolvedCategoriesUsesSlug(): void
+    {
+        $history = new ReadingHistory($this->sampleRecords());
+        $filtered = $history->filter(new ReadingFilter('php'));
+
+        $this->assertEquals([1, 2, 4], $filtered->postIds());
+    }
 }

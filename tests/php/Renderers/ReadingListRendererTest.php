@@ -5,6 +5,7 @@ namespace LekTrail\Tests\Renderers;
 use LekTrail\Assets;
 use LekTrail\Dashboard\ReadingFilter;
 use LekTrail\Renderers\ReadingListRenderer;
+use LekTrail\Tests\Mocks\MockCategoryResolver;
 use LekTrail\Tests\Mocks\MockPluginConfigRepository;
 use LekTrail\Tests\Mocks\MockPostQuery;
 use LekTrail\Tests\Mocks\MockReadingHistoryRepository;
@@ -18,6 +19,7 @@ class ReadingListRendererTest extends TestCase
     private MockReadingHistoryRepository $history;
     private MockPostQuery $postQuery;
     private MockScriptLoader $scripts;
+    private MockCategoryResolver $categoryResolver;
 
     protected function setUp(): void
     {
@@ -25,6 +27,7 @@ class ReadingListRendererTest extends TestCase
         $this->history = new MockReadingHistoryRepository();
         $this->postQuery = new MockPostQuery();
         $this->scripts = new MockScriptLoader();
+        $this->categoryResolver = new MockCategoryResolver();
     }
 
     private function createRenderer(): ReadingListRenderer
@@ -37,7 +40,7 @@ class ReadingListRendererTest extends TestCase
             new MockPluginConfigRepository(),
             new MockPostQuery()
         );
-        return new ReadingListRenderer($this->history, $this->postQuery, $this->users, $assets);
+        return new ReadingListRenderer($this->history, $this->postQuery, $this->users, $assets, $this->categoryResolver);
     }
 
     public function testReturnsEmptyForAnonymousUser(): void
@@ -121,5 +124,25 @@ class ReadingListRendererTest extends TestCase
 
         $this->assertArrayHasKey('lektrail-dashboard', $this->scripts->styles);
         $this->assertStringContainsString('dashboard.css', $this->scripts->styles['lektrail-dashboard']['url']);
+    }
+
+    public function testResolvesParentCategoryToIncludeChildren(): void
+    {
+        $this->users->userId = 42;
+        $this->categoryResolver->descendants = [
+            'programming' => ['programming', 'php', 'javascript'],
+        ];
+        $this->history->records = [
+            ['post_id' => 1, 'status' => 'read', 'category_slugs' => ['php'], 'year' => 2025],
+            ['post_id' => 2, 'status' => 'read', 'category_slugs' => ['cooking'], 'year' => 2025],
+        ];
+        $this->postQuery->postData = [
+            1 => ['id' => 1, 'title' => 'PHP Post', 'url' => '/php'],
+        ];
+
+        $html = $this->createRenderer()->render(new ReadingFilter('programming'));
+
+        $this->assertStringContainsString('PHP Post', $html);
+        $this->assertStringNotContainsString('cooking', $html);
     }
 }

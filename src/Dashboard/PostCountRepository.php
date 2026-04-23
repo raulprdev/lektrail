@@ -48,12 +48,14 @@ class PostCountRepository implements PostCountRepositoryContract
         $joins = '';
         $args = [];
 
-        if ($filter->categorySlug() !== null) {
+        if ($filter->categorySlugs() !== null) {
+            $slugs = $filter->categorySlugs();
             $joins .= " INNER JOIN {$prefix}term_relationships tr ON p.ID = tr.object_id"
                      . " INNER JOIN {$prefix}term_taxonomy tt ON tr.term_taxonomy_id = tt.term_taxonomy_id AND tt.taxonomy = 'category'"
                      . " INNER JOIN {$prefix}terms t ON tt.term_id = t.term_id";
-            $where .= ' AND t.slug = %s';
-            $args[] = $filter->categorySlug();
+            $placeholders = implode(', ', array_fill(0, count($slugs), '%s'));
+            $where .= " AND t.slug IN ({$placeholders})";
+            array_push($args, ...$slugs);
         }
 
         if ($filter->year() !== null) {

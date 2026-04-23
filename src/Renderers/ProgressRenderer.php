@@ -3,6 +3,7 @@
 namespace LekTrail\Renderers;
 
 use LekTrail\Assets;
+use LekTrail\Contracts\CategoryResolver;
 use LekTrail\Contracts\PostCountRepository;
 use LekTrail\Contracts\ReadingHistoryRepository;
 use LekTrail\Contracts\UserProvider;
@@ -16,17 +17,20 @@ class ProgressRenderer
     private PostCountRepository $counts;
     private UserProvider $users;
     private Assets $assets;
+    private CategoryResolver $categoryResolver;
 
     public function __construct(
         ReadingHistoryRepository $history,
         PostCountRepository $counts,
         UserProvider $users,
-        Assets $assets
+        Assets $assets,
+        CategoryResolver $categoryResolver
     ) {
         $this->history = $history;
         $this->counts = $counts;
         $this->users = $users;
         $this->assets = $assets;
+        $this->categoryResolver = $categoryResolver;
     }
 
     public function render(ReadingFilter $filter, string $wrapperAttributes = ''): string
@@ -35,6 +39,7 @@ class ProgressRenderer
             return '';
         }
 
+        $filter = $this->resolveCategories($filter);
         $records = $this->history->getAllForUser($this->users->getCurrentUserId());
         $history = new ReadingHistory($records);
         $calculator = new ProgressCalculator();
@@ -62,5 +67,15 @@ class ProgressRenderer
             esc_html($label),
             esc_attr($percentage)
         );
+    }
+
+    private function resolveCategories(ReadingFilter $filter): ReadingFilter
+    {
+        if ($filter->categorySlug() === null) {
+            return $filter;
+        }
+
+        $slugs = $this->categoryResolver->getSlugsWithDescendants($filter->categorySlug());
+        return $filter->withResolvedCategories($slugs);
     }
 }

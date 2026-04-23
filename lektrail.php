@@ -81,8 +81,9 @@ add_action('plugins_loaded', function () {
     $cacheInvalidator = new LekTrail\Dashboard\CacheInvalidator($postCounts);
     $cacheInvalidator->register($hooks);
 
-    $progressRenderer = new LekTrail\Renderers\ProgressRenderer($readingHistory, $postCounts, $users, $assets);
-    $readingListRenderer = new LekTrail\Renderers\ReadingListRenderer($readingHistory, $posts, $users, $assets);
+    $categoryResolver = new LekTrail\WordPress\CategoryResolver();
+    $progressRenderer = new LekTrail\Renderers\ProgressRenderer($readingHistory, $postCounts, $users, $assets, $categoryResolver);
+    $readingListRenderer = new LekTrail\Renderers\ReadingListRenderer($readingHistory, $posts, $users, $assets, $categoryResolver);
 
     $progressShortcode = new LekTrail\Shortcodes\ProgressShortcode($progressRenderer);
     $progressShortcode->register($hooks);

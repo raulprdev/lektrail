@@ -70,4 +70,33 @@ class ReadingFilterTest extends TestCase
         $filter = ReadingFilter::fromArray(['category' => '  ']);
         $this->assertNull($filter->categorySlug());
     }
+
+    public function testCategorySlugsReturnsNullWithoutCategory(): void
+    {
+        $filter = new ReadingFilter();
+        $this->assertNull($filter->categorySlugs());
+    }
+
+    public function testCategorySlugsReturnsSingleSlugAsArray(): void
+    {
+        $filter = new ReadingFilter('php');
+        $this->assertEquals(['php'], $filter->categorySlugs());
+    }
+
+    public function testWithResolvedCategoriesReturnsNewFilter(): void
+    {
+        $filter = new ReadingFilter('programming');
+        $resolved = $filter->withResolvedCategories(['programming', 'php', 'javascript']);
+
+        $this->assertEquals(['programming', 'php', 'javascript'], $resolved->categorySlugs());
+        $this->assertEquals(['programming'], $filter->categorySlugs());
+    }
+
+    public function testResolvedCategoriesPreserveCacheKey(): void
+    {
+        $filter = new ReadingFilter('programming', 2025);
+        $resolved = $filter->withResolvedCategories(['programming', 'php']);
+
+        $this->assertEquals('cat:programming|year:2025', $resolved->cacheKey());
+    }
 }

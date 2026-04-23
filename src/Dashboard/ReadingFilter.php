@@ -7,6 +7,7 @@ class ReadingFilter
     private ?string $categorySlug;
     private ?int $year;
     private ?string $status;
+    private ?array $resolvedCategorySlugs = null;
 
     public function __construct(?string $categorySlug = null, ?int $year = null, ?string $status = null)
     {
@@ -47,6 +48,24 @@ class ReadingFilter
     public function status(): ?string
     {
         return $this->status;
+    }
+
+    /** @return string[]|null */
+    public function categorySlugs(): ?array
+    {
+        if ($this->resolvedCategorySlugs !== null) {
+            return $this->resolvedCategorySlugs;
+        }
+
+        return $this->categorySlug !== null ? [$this->categorySlug] : null;
+    }
+
+    /** @param string[] $slugs */
+    public function withResolvedCategories(array $slugs): self
+    {
+        $copy = clone $this;
+        $copy->resolvedCategorySlugs = $slugs;
+        return $copy;
     }
 
     public function cacheKey(): string

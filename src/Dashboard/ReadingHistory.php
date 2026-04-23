@@ -15,9 +15,9 @@ class ReadingHistory
     {
         $filtered = $this->records;
 
-        if ($filter->categorySlug() !== null) {
-            $slug = $filter->categorySlug();
-            $filtered = array_filter($filtered, fn (array $r) => in_array($slug, $r['category_slugs'], true));
+        if ($filter->categorySlugs() !== null) {
+            $slugs = $filter->categorySlugs();
+            $filtered = array_filter($filtered, fn (array $r) => !empty(array_intersect($slugs, $r['category_slugs'])));
         }
 
         if ($filter->year() !== null) {

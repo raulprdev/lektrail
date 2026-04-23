@@ -5,6 +5,7 @@ namespace LekTrail\Tests\Shortcodes;
 use LekTrail\Assets;
 use LekTrail\Renderers\ReadingListRenderer;
 use LekTrail\Shortcodes\ReadingListShortcode;
+use LekTrail\Tests\Mocks\MockCategoryResolver;
 use LekTrail\Tests\Mocks\MockHooks;
 use LekTrail\Tests\Mocks\MockPluginConfigRepository;
 use LekTrail\Tests\Mocks\MockPostQuery;
@@ -41,7 +42,8 @@ class ReadingListShortcodeTest extends TestCase
             $this->history,
             $this->postQuery,
             $this->users,
-            $assets
+            $assets,
+            new MockCategoryResolver()
         );
         return new ReadingListShortcode($renderer);
     }

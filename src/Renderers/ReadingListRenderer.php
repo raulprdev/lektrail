@@ -3,6 +3,7 @@
 namespace LekTrail\Renderers;
 
 use LekTrail\Assets;
+use LekTrail\Contracts\CategoryResolver;
 use LekTrail\Contracts\PostQuery;
 use LekTrail\Contracts\ReadingHistoryRepository;
 use LekTrail\Contracts\UserProvider;
@@ -15,17 +16,20 @@ class ReadingListRenderer
     private PostQuery $postQuery;
     private UserProvider $users;
     private Assets $assets;
+    private CategoryResolver $categoryResolver;
 
     public function __construct(
         ReadingHistoryRepository $history,
         PostQuery $postQuery,
         UserProvider $users,
-        Assets $assets
+        Assets $assets,
+        CategoryResolver $categoryResolver
     ) {
         $this->history = $history;
         $this->postQuery = $postQuery;
         $this->users = $users;
         $this->assets = $assets;
+        $this->categoryResolver = $categoryResolver;
     }
 
     public function render(ReadingFilter $filter, string $wrapperAttributes = ''): string
@@ -34,6 +38,7 @@ class ReadingListRenderer
             return '';
         }
 
+        $filter = $this->resolveCategories($filter);
         $records = $this->history->getAllForUser($this->users->getCurrentUserId());
         $history = new ReadingHistory($records);
         $filtered = $history->filter($filter);
@@ -71,5 +76,15 @@ class ReadingListRenderer
         $html .= '</ul>';
 
         return $html;
+    }
+
+    private function resolveCategories(ReadingFilter $filter): ReadingFilter
+    {
+        if ($filter->categorySlug() === null) {
+            return $filter;
+        }
+
+        $slugs = $this->categoryResolver->getSlugsWithDescendants($filter->categorySlug());
+        return $filter->withResolvedCategories($slugs);
     }
 }

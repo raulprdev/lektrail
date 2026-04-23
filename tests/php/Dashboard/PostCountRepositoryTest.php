@@ -71,4 +71,21 @@ class PostCountRepositoryTest extends TestCase
 
         $this->assertFalse($transients->get('lektrail_post_counts'));
     }
+
+    public function testFilterByResolvedCategories(): void
+    {
+        $db = new MockDatabase();
+        $db->results = [[['cnt' => 12]]];
+        $transients = new MockTransients();
+
+        $filter = new ReadingFilter('programming');
+        $resolved = $filter->withResolvedCategories(['programming', 'php', 'javascript']);
+
+        $repo = new PostCountRepository($db, $transients);
+        $count = $repo->getCount($resolved);
+
+        $this->assertEquals(12, $count);
+        $sql = $db->queries[0]['sql'];
+        $this->assertStringContainsString('IN', $sql);
+    }
 }
