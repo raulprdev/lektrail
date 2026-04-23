@@ -39,3 +39,20 @@
 .lektrail-reading-list a {
     text-decoration: none;
 }
+
+.lektrail-reading-list__item::before {
+    display: inline-block;
+    margin-right: 0.5em;
+    font-size: 0.75em;
+    vertical-align: middle;
+}
+
+.lektrail-reading-list__item--read::before {
+    content: "\2713";
+    color: #4caf50;
+}
+
+.lektrail-reading-list__item--viewed::before {
+    content: "\25cb";
+    color: #999;
+}

@@ -95,6 +95,24 @@ class ReadingListRendererTest extends TestCase
         $this->assertStringContainsString('lektrail-reading-list', $html);
     }
 
+    public function testItemsHaveStatusClass(): void
+    {
+        $this->users->userId = 42;
+        $this->history->records = [
+            ['post_id' => 1, 'status' => 'read', 'category_slugs' => [], 'year' => 2025],
+            ['post_id' => 2, 'status' => 'viewed', 'category_slugs' => [], 'year' => 2025],
+        ];
+        $this->postQuery->postData = [
+            1 => ['id' => 1, 'title' => 'Read Post', 'url' => '/read'],
+            2 => ['id' => 2, 'title' => 'Viewed Post', 'url' => '/viewed'],
+        ];
+
+        $html = $this->createRenderer()->render(new ReadingFilter());
+
+        $this->assertStringContainsString('lektrail-reading-list__item--read', $html);
+        $this->assertStringContainsString('lektrail-reading-list__item--viewed', $html);
+    }
+
     public function testEnqueuesDashboardStyle(): void
     {
         $this->users->userId = 42;

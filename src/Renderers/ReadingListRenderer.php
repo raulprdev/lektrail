@@ -42,7 +42,8 @@ class ReadingListRenderer
         $this->assets->enqueueDashboardStyle();
 
         $items = empty($postIds) ? [] : $this->postQuery->getPostsDataByIds($postIds);
-        $listHtml = $this->renderItems($items);
+        $statusMap = $filtered->statusMap();
+        $listHtml = $this->renderItems($items, $statusMap);
 
         if ($wrapperAttributes) {
             return sprintf('<div %s>%s</div>', $wrapperAttributes, $listHtml);
@@ -51,7 +52,7 @@ class ReadingListRenderer
         return sprintf('<div class="lektrail-reading-list">%s</div>', $listHtml);
     }
 
-    private function renderItems(array $items): string
+    private function renderItems(array $items, array $statusMap): string
     {
         if (empty($items)) {
             return '';
@@ -59,8 +60,10 @@ class ReadingListRenderer
 
         $html = '<ul>';
         foreach ($items as $item) {
+            $status = $statusMap[$item['id']] ?? 'viewed';
             $html .= sprintf(
-                '<li><a href="%s">%s</a></li>',
+                '<li class="lektrail-reading-list__item lektrail-reading-list__item--%s"><a href="%s">%s</a></li>',
+                esc_attr($status),
                 esc_url($item['url']),
                 esc_html($item['title'])
             );

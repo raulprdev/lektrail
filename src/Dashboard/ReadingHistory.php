@@ -47,4 +47,14 @@ class ReadingHistory
     {
         return array_map(fn (array $r) => $r['post_id'], $this->records);
     }
+
+    /** @return array<int, string> post_id => status */
+    public function statusMap(): array
+    {
+        $map = [];
+        foreach ($this->records as $r) {
+            $map[$r['post_id']] = $r['status'];
+        }
+        return $map;
+    }
 }

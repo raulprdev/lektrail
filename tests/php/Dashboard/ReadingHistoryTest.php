@@ -84,6 +84,17 @@ class ReadingHistoryTest extends TestCase
         $this->assertEquals([1, 2, 3, 4], $filtered->postIds());
     }
 
+    public function testStatusMap(): void
+    {
+        $history = new ReadingHistory($this->sampleRecords());
+        $map = $history->statusMap();
+
+        $this->assertEquals('read', $map[1]);
+        $this->assertEquals('viewed', $map[2]);
+        $this->assertEquals('read', $map[3]);
+        $this->assertEquals('viewed', $map[4]);
+    }
+
     public function testEmptyHistory(): void
     {
         $history = new ReadingHistory([]);
