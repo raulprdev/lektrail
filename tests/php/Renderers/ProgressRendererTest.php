@@ -133,7 +133,7 @@ class ProgressRendererTest extends TestCase
         $this->assertStringContainsString('dashboard.css', $this->scripts->styles['lektrail-dashboard']['url']);
     }
 
-    public function testRemainingModeShowsUnreadCount(): void
+    public function testRemainingModeShowsUnreadCountAndTotal(): void
     {
         $this->users->userId = 42;
         $this->history->records = [
@@ -144,11 +144,12 @@ class ProgressRendererTest extends TestCase
 
         $html = $this->createRenderer()->render(new ReadingFilter(), '', new DisplayMode('remaining'));
 
-        $this->assertStringContainsString('lektrail-progress__hero', $html);
         $this->assertStringContainsString('>8<', $html);
+        $this->assertStringContainsString('of 10', $html);
+        $this->assertStringNotContainsString('8 ', $this->extractDetail($html));
     }
 
-    public function testCountModeShowsReadCount(): void
+    public function testCountModeShowsReadCountAndTotal(): void
     {
         $this->users->userId = 42;
         $this->history->records = [
@@ -160,8 +161,15 @@ class ProgressRendererTest extends TestCase
 
         $html = $this->createRenderer()->render(new ReadingFilter(), '', new DisplayMode('count'));
 
-        $this->assertStringContainsString('lektrail-progress__hero', $html);
         $this->assertStringContainsString('>3<', $html);
+        $this->assertStringContainsString('of 10', $html);
+        $this->assertStringNotContainsString('3 ', $this->extractDetail($html));
+    }
+
+    private function extractDetail(string $html): string
+    {
+        preg_match('/lektrail-progress__detail">(.*?)</', $html, $matches);
+        return $matches[1] ?? '';
     }
 
     public function testProgressModeShowsPercentage(): void

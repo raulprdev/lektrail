@@ -254,10 +254,5 @@ msgstr "%1$d de %2$d entradas leídas"
 
 #: src/Renderers/ProgressRenderer.php
 #, php-format
-msgid "%1$d posts to read"
-msgstr "%1$d entradas por leer"
-
-#: src/Renderers/ProgressRenderer.php
-#, php-format
-msgid "%1$d posts read"
-msgstr "%1$d entradas leídas"
+msgid "of %1$d posts"
+msgstr "de %1$d entradas"

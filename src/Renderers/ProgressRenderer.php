@@ -82,16 +82,12 @@ class ProgressRenderer
 
     private function buildDetail(DisplayMode $mode, ReadingStats $stats): string
     {
-        if ($mode->isRemaining()) {
-            /* translators: 1: total posts, 2: number of posts read */
-            return sprintf(__('%1$d posts to read', 'lektrail-reading-tracker'), $stats->total() - $stats->read());
+        if ($mode->isProgress()) {
+            /* translators: 1: number of posts read, 2: total posts */
+            return sprintf(__('%1$d of %2$d posts read', 'lektrail-reading-tracker'), $stats->read(), $stats->total());
         }
-        if ($mode->isCount()) {
-            /* translators: 1: number of posts read */
-            return sprintf(__('%1$d posts read', 'lektrail-reading-tracker'), $stats->read());
-        }
-        /* translators: 1: number of posts read, 2: total posts */
-        return sprintf(__('%1$d of %2$d posts read', 'lektrail-reading-tracker'), $stats->read(), $stats->total());
+        /* translators: 1: total posts */
+        return sprintf(__('of %1$d posts', 'lektrail-reading-tracker'), $stats->total());
     }
 
     private function resolveCategories(ReadingFilter $filter): ReadingFilter
