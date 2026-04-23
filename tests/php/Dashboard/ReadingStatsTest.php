@@ -32,6 +32,17 @@ class ReadingStatsTest extends TestCase
         $this->assertEquals(0.0, $stats->percentage());
     }
 
+    public function testPercentageRoundsToWholeNumber(): void
+    {
+        $history = new ReadingHistory([
+            ['post_id' => 1, 'status' => 'read', 'category_slugs' => [], 'year' => 2025],
+        ]);
+
+        $stats = ReadingStats::create($history, 306);
+
+        $this->assertEquals(0.0, $stats->percentage());
+    }
+
     public function testFullyReadPercentage(): void
     {
         $history = new ReadingHistory([

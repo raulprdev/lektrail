@@ -47,25 +47,22 @@ class ProgressRenderer
 
         $this->assets->enqueueDashboardStyle();
 
-        $percentage = (string) $stats->percentage();
-        /* translators: 1: number of posts read, 2: total posts, 3: percentage */
-        $label = sprintf(__('%1$d of %2$d posts read (%3$s%%)', 'lektrail-reading-tracker'), $stats->read(), $stats->total(), $percentage);
-
-        if ($wrapperAttributes) {
-            return sprintf(
-                '<div %s><div class="lektrail-progress__label">%s</div>'
-                . '<div class="lektrail-progress__bar"><div class="lektrail-progress__fill" style="width:%s%%"></div></div></div>',
-                $wrapperAttributes,
-                esc_html($label),
-                esc_attr($percentage)
-            );
-        }
+        $percentage = (int) $stats->percentage();
+        $fillWidth = max($percentage, $percentage > 0 ? 2 : 0);
+        /* translators: 1: number of posts read, 2: total posts */
+        $detail = sprintf(__('%1$d of %2$d posts read', 'lektrail-reading-tracker'), $stats->read(), $stats->total());
+        $wrapper = $wrapperAttributes ?: 'class="lektrail-progress"';
 
         return sprintf(
-            '<div class="lektrail-progress"><div class="lektrail-progress__label">%s</div>'
-            . '<div class="lektrail-progress__bar"><div class="lektrail-progress__fill" style="width:%s%%"></div></div></div>',
-            esc_html($label),
-            esc_attr($percentage)
+            '<div %s>'
+            . '<div class="lektrail-progress__percentage">%d%%</div>'
+            . '<div class="lektrail-progress__detail">%s</div>'
+            . '<div class="lektrail-progress__bar"><div class="lektrail-progress__fill" style="width:%d%%"></div></div>'
+            . '</div>',
+            $wrapper,
+            $percentage,
+            esc_html($detail),
+            $fillWidth
         );
     }
 

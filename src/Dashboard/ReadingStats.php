@@ -21,7 +21,7 @@ class ReadingStats
     {
         $read = $history->readCount();
         $viewed = $history->viewedCount();
-        $percentage = $totalPosts > 0 ? round(($read / $totalPosts) * 100, 1) : 0.0;
+        $percentage = $totalPosts > 0 ? round(($read / $totalPosts) * 100) : 0.0;
 
         return new self($totalPosts, $read, $viewed, $percentage);
     }

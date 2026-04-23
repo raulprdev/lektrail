@@ -249,5 +249,5 @@ msgstr "Etiqueta del botón"
 
 #: src/Renderers/ProgressRenderer.php
 #, php-format
-msgid "%1$d of %2$d posts read (%3$s%%)"
-msgstr "%1$d de %2$d entradas leídas (%3$s%%)"
+msgid "%1$d of %2$d posts read"
+msgstr "%1$d de %2$d entradas leídas"

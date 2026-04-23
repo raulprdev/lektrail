@@ -65,6 +65,8 @@ class ProgressRendererTest extends TestCase
         $html = $this->createRenderer()->render(new ReadingFilter());
 
         $this->assertStringContainsString('lektrail-progress', $html);
+        $this->assertStringContainsString('lektrail-progress__percentage', $html);
+        $this->assertStringContainsString('lektrail-progress__detail', $html);
         $this->assertStringContainsString('20%', $html);
         $this->assertStringContainsString('width:20%', $html);
     }
