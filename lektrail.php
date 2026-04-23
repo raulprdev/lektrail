@@ -103,6 +103,9 @@ add_action('plugins_loaded', function () {
     $readingListBlock = new LekTrail\Blocks\ReadingList\ReadingListBlock($readingListRenderer, $pluginPath);
     $readingListBlock->register($hooks);
 
+    $patterns = new LekTrail\Blocks\Patterns();
+    $patterns->register($hooks);
+
     $plugin = new LekTrail\Plugin($assets, $pluginConfigs, $context, $suggestions, $previewEndpoint, $shortcode, $adminPage, $hooks, $trackingService, $trackingEndpoint);
     $plugin->run();
 });
