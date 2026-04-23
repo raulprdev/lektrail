@@ -3,6 +3,7 @@
 namespace LekTrail\Blocks\Progress;
 
 use LekTrail\Contracts\Hooks;
+use LekTrail\Dashboard\DisplayMode;
 use LekTrail\Dashboard\ReadingFilter;
 use LekTrail\Renderers\ProgressRenderer;
 
@@ -36,7 +37,8 @@ class ProgressBlock
             'category' => $attributes['category'] ?? null,
             'year' => $attributes['year'] ?? null,
         ]);
+        $mode = DisplayMode::fromArray($attributes);
         $wrapperAttributes = get_block_wrapper_attributes();
-        return $this->renderer->render($filter, $wrapperAttributes);
+        return $this->renderer->render($filter, $wrapperAttributes, $mode);
     }
 }

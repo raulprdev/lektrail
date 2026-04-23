@@ -3,6 +3,7 @@
 namespace LekTrail\Tests\Renderers;
 
 use LekTrail\Assets;
+use LekTrail\Dashboard\DisplayMode;
 use LekTrail\Dashboard\ReadingFilter;
 use LekTrail\Renderers\ProgressRenderer;
 use LekTrail\Tests\Mocks\MockCategoryResolver;
@@ -65,7 +66,7 @@ class ProgressRendererTest extends TestCase
         $html = $this->createRenderer()->render(new ReadingFilter());
 
         $this->assertStringContainsString('lektrail-progress', $html);
-        $this->assertStringContainsString('lektrail-progress__percentage', $html);
+        $this->assertStringContainsString('lektrail-progress__hero', $html);
         $this->assertStringContainsString('lektrail-progress__detail', $html);
         $this->assertStringContainsString('20%', $html);
         $this->assertStringContainsString('width:20%', $html);
@@ -130,6 +131,51 @@ class ProgressRendererTest extends TestCase
 
         $this->assertArrayHasKey('lektrail-dashboard', $this->scripts->styles);
         $this->assertStringContainsString('dashboard.css', $this->scripts->styles['lektrail-dashboard']['url']);
+    }
+
+    public function testRemainingModeShowsUnreadCount(): void
+    {
+        $this->users->userId = 42;
+        $this->history->records = [
+            ['post_id' => 1, 'status' => 'read', 'category_slugs' => [], 'year' => 2025],
+            ['post_id' => 2, 'status' => 'read', 'category_slugs' => [], 'year' => 2025],
+        ];
+        $this->counts->counts['_global'] = 10;
+
+        $html = $this->createRenderer()->render(new ReadingFilter(), '', new DisplayMode('remaining'));
+
+        $this->assertStringContainsString('lektrail-progress__hero', $html);
+        $this->assertStringContainsString('>8<', $html);
+    }
+
+    public function testCountModeShowsReadCount(): void
+    {
+        $this->users->userId = 42;
+        $this->history->records = [
+            ['post_id' => 1, 'status' => 'read', 'category_slugs' => [], 'year' => 2025],
+            ['post_id' => 2, 'status' => 'read', 'category_slugs' => [], 'year' => 2025],
+            ['post_id' => 3, 'status' => 'read', 'category_slugs' => [], 'year' => 2025],
+        ];
+        $this->counts->counts['_global'] = 10;
+
+        $html = $this->createRenderer()->render(new ReadingFilter(), '', new DisplayMode('count'));
+
+        $this->assertStringContainsString('lektrail-progress__hero', $html);
+        $this->assertStringContainsString('>3<', $html);
+    }
+
+    public function testProgressModeShowsPercentage(): void
+    {
+        $this->users->userId = 42;
+        $this->history->records = [
+            ['post_id' => 1, 'status' => 'read', 'category_slugs' => [], 'year' => 2025],
+        ];
+        $this->counts->counts['_global'] = 10;
+
+        $html = $this->createRenderer()->render(new ReadingFilter(), '', new DisplayMode('progress'));
+
+        $this->assertStringContainsString('lektrail-progress__hero', $html);
+        $this->assertStringContainsString('10%', $html);
     }
 
     public function testResolvesParentCategoryToIncludeChildren(): void

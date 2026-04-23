@@ -1,5 +1,10 @@
 import { useBlockProps, InspectorControls } from '@wordpress/block-editor';
-import { PanelBody, ComboboxControl, TextControl } from '@wordpress/components';
+import {
+	PanelBody,
+	ComboboxControl,
+	TextControl,
+	SelectControl,
+} from '@wordpress/components';
 import { useSelect } from '@wordpress/data';
 import { useMemo } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
@@ -60,6 +65,34 @@ export default function Edit({ attributes, setAttributes }) {
 							'Filter by post publish year.',
 							'lektrail-reading-tracker'
 						)}
+					/>
+					<SelectControl
+						label={__('Display Mode', 'lektrail-reading-tracker')}
+						value={attributes.mode || 'progress'}
+						options={[
+							{
+								label: __(
+									'Progress (percentage)',
+									'lektrail-reading-tracker'
+								),
+								value: 'progress',
+							},
+							{
+								label: __(
+									'Remaining (posts to read)',
+									'lektrail-reading-tracker'
+								),
+								value: 'remaining',
+							},
+							{
+								label: __(
+									'Count (posts read)',
+									'lektrail-reading-tracker'
+								),
+								value: 'count',
+							},
+						]}
+						onChange={(value) => setAttributes({ mode: value })}
 					/>
 				</PanelBody>
 			</InspectorControls>

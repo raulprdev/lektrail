@@ -3,6 +3,7 @@
 namespace LekTrail\Shortcodes;
 
 use LekTrail\Contracts\Hooks;
+use LekTrail\Dashboard\DisplayMode;
 use LekTrail\Dashboard\ReadingFilter;
 use LekTrail\Renderers\ProgressRenderer;
 
@@ -25,6 +26,7 @@ class ProgressShortcode
     public function render(array $atts): string
     {
         $filter = ReadingFilter::fromArray($atts);
-        return $this->renderer->render($filter);
+        $mode = DisplayMode::fromArray($atts);
+        return $this->renderer->render($filter, '', $mode);
     }
 }
