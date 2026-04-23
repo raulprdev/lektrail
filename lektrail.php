@@ -72,6 +72,14 @@ add_action('plugins_loaded', function () {
     $nonceVerifier = new LekTrail\WordPress\NonceVerifier();
     $trackingEndpoint = new LekTrail\TrackingEndpoint($trackingService, $response, $nonceVerifier);
 
+    add_filter('block_categories_all', function (array $categories): array {
+        $categories[] = [
+            'slug' => 'lektrail',
+            'title' => 'LekTrail',
+        ];
+        return $categories;
+    });
+
     $widgetBlock = new LekTrail\Blocks\Widget\WidgetBlock($widgetRenderer, $assets, $pluginPath);
     $widgetBlock->register($hooks);
 

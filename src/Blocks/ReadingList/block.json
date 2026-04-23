@@ -4,7 +4,7 @@
   "name": "lektrail/reading-list",
   "version": "1.0.0",
   "title": "LekTrail Reading List",
-  "category": "widgets",
+  "category": "lektrail",
   "icon": "list-view",
   "description": "Display a filtered list of read or viewed posts.",
   "keywords": ["reading", "list", "tracker", "history"],

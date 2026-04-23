@@ -4,7 +4,7 @@
   "name": "lektrail/widget",
   "version": "1.0.0",
   "title": "LekTrail Reading Tracker",
-  "category": "widgets",
+  "category": "lektrail",
   "icon": "book-alt",
   "description": "Display reading progress and suggestions for your visitors.",
   "keywords": ["reading", "progress", "tracker", "suggestions"],

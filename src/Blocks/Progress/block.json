@@ -4,7 +4,7 @@
   "name": "lektrail/progress",
   "version": "1.0.0",
   "title": "LekTrail Reading Progress",
-  "category": "widgets",
+  "category": "lektrail",
   "icon": "chart-bar",
   "description": "Display a reading progress bar, filterable by category and year.",
   "keywords": ["reading", "progress", "tracker", "stats"],
