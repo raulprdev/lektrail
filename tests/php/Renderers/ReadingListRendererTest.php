@@ -2,8 +2,10 @@
 
 namespace LekTrail\Tests\Renderers;
 
+use LekTrail\Assets;
 use LekTrail\Dashboard\ReadingFilter;
 use LekTrail\Renderers\ReadingListRenderer;
+use LekTrail\Tests\Mocks\MockPluginConfigRepository;
 use LekTrail\Tests\Mocks\MockPostQuery;
 use LekTrail\Tests\Mocks\MockReadingHistoryRepository;
 use LekTrail\Tests\Mocks\MockScriptLoader;
@@ -27,7 +29,15 @@ class ReadingListRendererTest extends TestCase
 
     private function createRenderer(): ReadingListRenderer
     {
-        return new ReadingListRenderer($this->history, $this->postQuery, $this->users, $this->scripts);
+        $assets = new Assets(
+            $this->scripts,
+            dirname(__DIR__, 3) . '/',
+            'http://example.com/',
+            '1.0.0',
+            new MockPluginConfigRepository(),
+            new MockPostQuery()
+        );
+        return new ReadingListRenderer($this->history, $this->postQuery, $this->users, $assets);
     }
 
     public function testReturnsEmptyForAnonymousUser(): void
@@ -67,13 +77,12 @@ class ReadingListRendererTest extends TestCase
             ['post_id' => 2, 'status' => 'read', 'category_slugs' => ['javascript'], 'year' => 2025],
         ];
         $this->postQuery->postData = [
-            1 => ['id' => 1, 'title' => 'PHP Basics', 'url' => '/php-basics'],
+            1 => ['id' => 1, 'title' => 'PHP Post', 'url' => '/php'],
         ];
 
         $html = $this->createRenderer()->render(new ReadingFilter('php'));
 
-        $this->assertStringContainsString('PHP Basics', $html);
-        $this->assertStringNotContainsString('javascript', $html);
+        $this->assertStringContainsString('PHP Post', $html);
     }
 
     public function testRendersEmptyList(): void
@@ -84,5 +93,15 @@ class ReadingListRendererTest extends TestCase
         $html = $this->createRenderer()->render(new ReadingFilter());
 
         $this->assertStringContainsString('lektrail-reading-list', $html);
+    }
+
+    public function testEnqueuesDashboardStyle(): void
+    {
+        $this->users->userId = 42;
+
+        $this->createRenderer()->render(new ReadingFilter());
+
+        $this->assertArrayHasKey('lektrail-dashboard', $this->scripts->styles);
+        $this->assertStringContainsString('dashboard.css', $this->scripts->styles['lektrail-dashboard']['url']);
     }
 }

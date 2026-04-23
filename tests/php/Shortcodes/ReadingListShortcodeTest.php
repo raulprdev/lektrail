@@ -2,9 +2,11 @@
 
 namespace LekTrail\Tests\Shortcodes;
 
+use LekTrail\Assets;
 use LekTrail\Renderers\ReadingListRenderer;
 use LekTrail\Shortcodes\ReadingListShortcode;
 use LekTrail\Tests\Mocks\MockHooks;
+use LekTrail\Tests\Mocks\MockPluginConfigRepository;
 use LekTrail\Tests\Mocks\MockPostQuery;
 use LekTrail\Tests\Mocks\MockReadingHistoryRepository;
 use LekTrail\Tests\Mocks\MockScriptLoader;
@@ -27,11 +29,19 @@ class ReadingListShortcodeTest extends TestCase
 
     private function createShortcode(): ReadingListShortcode
     {
+        $assets = new Assets(
+            new MockScriptLoader(),
+            dirname(__DIR__, 3) . '/',
+            'http://example.com/',
+            '1.0.0',
+            new MockPluginConfigRepository(),
+            new MockPostQuery()
+        );
         $renderer = new ReadingListRenderer(
             $this->history,
             $this->postQuery,
             $this->users,
-            new MockScriptLoader()
+            $assets
         );
         return new ReadingListShortcode($renderer);
     }

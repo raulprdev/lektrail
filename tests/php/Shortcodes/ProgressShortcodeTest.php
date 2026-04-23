@@ -2,10 +2,13 @@
 
 namespace LekTrail\Tests\Shortcodes;
 
+use LekTrail\Assets;
 use LekTrail\Renderers\ProgressRenderer;
 use LekTrail\Shortcodes\ProgressShortcode;
 use LekTrail\Tests\Mocks\MockHooks;
 use LekTrail\Tests\Mocks\MockPostCountRepository;
+use LekTrail\Tests\Mocks\MockPostQuery;
+use LekTrail\Tests\Mocks\MockPluginConfigRepository;
 use LekTrail\Tests\Mocks\MockReadingHistoryRepository;
 use LekTrail\Tests\Mocks\MockScriptLoader;
 use LekTrail\Tests\Mocks\MockUserProvider;
@@ -27,11 +30,19 @@ class ProgressShortcodeTest extends TestCase
 
     private function createShortcode(): ProgressShortcode
     {
+        $assets = new Assets(
+            new MockScriptLoader(),
+            dirname(__DIR__, 3) . '/',
+            'http://example.com/',
+            '1.0.0',
+            new MockPluginConfigRepository(),
+            new MockPostQuery()
+        );
         $renderer = new ProgressRenderer(
             $this->history,
             $this->counts,
             $this->users,
-            new MockScriptLoader()
+            $assets
         );
         return new ProgressShortcode($renderer);
     }

@@ -2,9 +2,9 @@
 
 namespace LekTrail\Renderers;
 
+use LekTrail\Assets;
 use LekTrail\Contracts\PostCountRepository;
 use LekTrail\Contracts\ReadingHistoryRepository;
-use LekTrail\Contracts\ScriptLoader;
 use LekTrail\Contracts\UserProvider;
 use LekTrail\Dashboard\ProgressCalculator;
 use LekTrail\Dashboard\ReadingFilter;
@@ -15,18 +15,18 @@ class ProgressRenderer
     private ReadingHistoryRepository $history;
     private PostCountRepository $counts;
     private UserProvider $users;
-    private ScriptLoader $scripts;
+    private Assets $assets;
 
     public function __construct(
         ReadingHistoryRepository $history,
         PostCountRepository $counts,
         UserProvider $users,
-        ScriptLoader $scripts
+        Assets $assets
     ) {
         $this->history = $history;
         $this->counts = $counts;
         $this->users = $users;
-        $this->scripts = $scripts;
+        $this->assets = $assets;
     }
 
     public function render(ReadingFilter $filter, string $wrapperAttributes = ''): string
@@ -40,10 +40,10 @@ class ProgressRenderer
         $calculator = new ProgressCalculator();
         $stats = $calculator->calculate($history, $this->counts, $filter);
 
-        $this->enqueueStyle();
+        $this->assets->enqueueDashboardStyle();
 
         $percentage = (string) $stats->percentage();
-        $label = sprintf('%d of %d (%s%%)', $stats->read(), $stats->total(), $percentage);
+        $label = sprintf('%d of %d posts read (%s%%)', $stats->read(), $stats->total(), $percentage);
 
         if ($wrapperAttributes) {
             return sprintf(
@@ -61,10 +61,5 @@ class ProgressRenderer
             esc_html($label),
             esc_attr($percentage)
         );
-    }
-
-    private function enqueueStyle(): void
-    {
-        $this->scripts->enqueueStyle('lektrail-dashboard', '', [], '');
     }
 }

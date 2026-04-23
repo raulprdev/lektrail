@@ -2,9 +2,9 @@
 
 namespace LekTrail\Renderers;
 
+use LekTrail\Assets;
 use LekTrail\Contracts\PostQuery;
 use LekTrail\Contracts\ReadingHistoryRepository;
-use LekTrail\Contracts\ScriptLoader;
 use LekTrail\Contracts\UserProvider;
 use LekTrail\Dashboard\ReadingFilter;
 use LekTrail\Dashboard\ReadingHistory;
@@ -14,18 +14,18 @@ class ReadingListRenderer
     private ReadingHistoryRepository $history;
     private PostQuery $postQuery;
     private UserProvider $users;
-    private ScriptLoader $scripts;
+    private Assets $assets;
 
     public function __construct(
         ReadingHistoryRepository $history,
         PostQuery $postQuery,
         UserProvider $users,
-        ScriptLoader $scripts
+        Assets $assets
     ) {
         $this->history = $history;
         $this->postQuery = $postQuery;
         $this->users = $users;
-        $this->scripts = $scripts;
+        $this->assets = $assets;
     }
 
     public function render(ReadingFilter $filter, string $wrapperAttributes = ''): string
@@ -39,7 +39,7 @@ class ReadingListRenderer
         $filtered = $history->filter($filter);
         $postIds = $filtered->postIds();
 
-        $this->enqueueStyle();
+        $this->assets->enqueueDashboardStyle();
 
         $items = empty($postIds) ? [] : $this->postQuery->getPostsDataByIds($postIds);
         $listHtml = $this->renderItems($items);
@@ -68,10 +68,5 @@ class ReadingListRenderer
         $html .= '</ul>';
 
         return $html;
-    }
-
-    private function enqueueStyle(): void
-    {
-        $this->scripts->enqueueStyle('lektrail-dashboard', '', [], '');
     }
 }

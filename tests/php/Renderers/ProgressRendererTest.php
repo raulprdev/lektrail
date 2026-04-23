@@ -2,9 +2,12 @@
 
 namespace LekTrail\Tests\Renderers;
 
+use LekTrail\Assets;
 use LekTrail\Dashboard\ReadingFilter;
 use LekTrail\Renderers\ProgressRenderer;
 use LekTrail\Tests\Mocks\MockPostCountRepository;
+use LekTrail\Tests\Mocks\MockPostQuery;
+use LekTrail\Tests\Mocks\MockPluginConfigRepository;
 use LekTrail\Tests\Mocks\MockReadingHistoryRepository;
 use LekTrail\Tests\Mocks\MockScriptLoader;
 use LekTrail\Tests\Mocks\MockUserProvider;
@@ -27,7 +30,15 @@ class ProgressRendererTest extends TestCase
 
     private function createRenderer(): ProgressRenderer
     {
-        return new ProgressRenderer($this->history, $this->counts, $this->users, $this->scripts);
+        $assets = new Assets(
+            $this->scripts,
+            dirname(__DIR__, 3) . '/',
+            'http://example.com/',
+            '1.0.0',
+            new MockPluginConfigRepository(),
+            new MockPostQuery()
+        );
+        return new ProgressRenderer($this->history, $this->counts, $this->users, $assets);
     }
 
     public function testReturnsEmptyForAnonymousUser(): void
@@ -53,6 +64,19 @@ class ProgressRendererTest extends TestCase
         $this->assertStringContainsString('lektrail-progress', $html);
         $this->assertStringContainsString('20%', $html);
         $this->assertStringContainsString('width:20%', $html);
+    }
+
+    public function testRendersLabelWithContext(): void
+    {
+        $this->users->userId = 42;
+        $this->history->records = [
+            ['post_id' => 1, 'status' => 'read', 'category_slugs' => [], 'year' => 2025],
+        ];
+        $this->counts->counts['_global'] = 10;
+
+        $html = $this->createRenderer()->render(new ReadingFilter());
+
+        $this->assertStringContainsString('read', $html);
     }
 
     public function testRendersFilteredProgress(): void
@@ -90,5 +114,16 @@ class ProgressRendererTest extends TestCase
         $html = $this->createRenderer()->render(new ReadingFilter());
 
         $this->assertStringContainsString('0%', $html);
+    }
+
+    public function testEnqueuesDashboardStyle(): void
+    {
+        $this->users->userId = 42;
+        $this->counts->counts['_global'] = 10;
+
+        $this->createRenderer()->render(new ReadingFilter());
+
+        $this->assertArrayHasKey('lektrail-dashboard', $this->scripts->styles);
+        $this->assertStringContainsString('dashboard.css', $this->scripts->styles['lektrail-dashboard']['url']);
     }
 }
