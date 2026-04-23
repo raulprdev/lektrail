@@ -43,7 +43,8 @@ class ProgressRenderer
         $this->assets->enqueueDashboardStyle();
 
         $percentage = (string) $stats->percentage();
-        $label = sprintf('%d of %d posts read (%s%%)', $stats->read(), $stats->total(), $percentage);
+        /* translators: 1: number of posts read, 2: total posts, 3: percentage */
+        $label = sprintf(__('%1$d of %2$d posts read (%3$s%%)', 'lektrail-reading-tracker'), $stats->read(), $stats->total(), $percentage);
 
         if ($wrapperAttributes) {
             return sprintf(
