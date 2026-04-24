@@ -3,7 +3,7 @@ Contributors: raulprdev
 Tags: reading progress, tracking, engagement, recently viewed, suggestions
 Requires at least: 6.3
 Tested up to: 6.9
-Stable tag: 1.0.0
+Stable tag: 1.1.0
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -89,7 +89,25 @@ Any post type: posts, pages, WooCommerce products, custom post types. Configure 
 
 The widget uses minimal styling. Add your own CSS targeting `.lektrail-widget`, `.lektrail-continue`, `.lektrail-completed`, and `.lektrail-suggestions`.
 
+== Screenshots ==
+
+1. Suggested reading widget showing unread posts with excerpts.
+2. All LekTrail blocks and patterns in the Gutenberg block inserter.
+3. Reading dashboard with category breakdown, display modes, and reading lists with status indicators.
+4. Settings page with tracking, display, consent, and suggestion options.
+
 == Changelog ==
+
+= 1.1.0 =
+* Reading dashboard blocks for logged-in users: progress bar and reading list
+* Three display modes: progress (percentage), remaining (posts to read), count (posts read)
+* Per-category progress with automatic child category inclusion
+* Category dropdown selector in block editor (replaces text input)
+* Status indicators on reading lists (checkmark for read, circle for viewed)
+* Block patterns: Category Breakdown, Year Overview, Simple Dashboard
+* Custom LekTrail block category in the block inserter
+* Spanish translations for dashboard labels
+* Fix: server-side tracking no longer blocked by localStorage checks
 
 = 1.0.0 =
 * Initial release

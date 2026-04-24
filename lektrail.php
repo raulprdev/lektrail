@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       LekTrail Reading Tracker
  * Description:       Track reading progress and suggest unread posts.
- * Version:           1.0.0
+ * Version:           1.1.0
  * Requires at least: 6.3
  * Requires PHP:      7.4
  * Author:            raulprdev
@@ -45,7 +45,7 @@ add_action('init', function () {
 add_action('plugins_loaded', function () {
     $pluginPath = plugin_dir_path(__FILE__);
     $pluginUrl = plugin_dir_url(__FILE__);
-    $version = '1.0.0';
+    $version = '1.1.0';
 
     $scripts = new LekTrail\WordPress\ScriptLoader();
     $options = new LekTrail\WordPress\Options();
